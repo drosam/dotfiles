@@ -25,6 +25,7 @@ return {
         },
         file_browser = {
           hidden = true,
+          grouped =true,
         },
       }
       opts.pickers = {
