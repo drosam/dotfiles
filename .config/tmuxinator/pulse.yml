@@ -51,13 +51,13 @@ windows:
       root: ~/Developer/pulse-app/api
       panes:
         - nvim
-        - ls
+        # - ls
   - frontend:
       layout: 574d,274x64,0,0[274x47,0,0,1,274x16,0,48,4]
       root: ~/Developer/pulse-app/frontend
       panes:
         - nvim
-        - ls
+        # - ls
   # - config:
   #     layout: main-horizontal
   #     root: ~/.config
