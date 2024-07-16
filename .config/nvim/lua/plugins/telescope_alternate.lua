@@ -39,7 +39,14 @@ return {
 
       local ruby_mappings = {}
 
-      for _, mapping in ipairs({ "controllers", "models", "mailers", "serializers", "policies", "jobs" }) do
+      for _, mapping in ipairs({
+        "models",
+        "mailers",
+        "serializers",
+        "policies",
+        "jobs",
+        "helpers",
+      }) do
         ruby_mappings = mergeArrays(ruby_mappings, generate_spec_mapping("app", mapping))
       end
 
@@ -49,6 +56,31 @@ return {
 
       require("telescope-alternate").setup({
         mappings = mergeArrays({
+          {
+            "app/controllers(.*)/(.*)_controller.rb",
+            {
+              { "app/models/[2:singularize].rb", "Model" },
+              { "app/views/[1][2]/*.html.erb", "View" },
+              { "app/helpers/**/*[2]_helper.rb", "Helper" },
+              { "app/serializers/[2:singularize]_serializer.rb", "Serializer", true },
+              { "spec/controllers[1]/[2]_controller_spec.rb", "Test", true },
+              { "spec/requests[1]/[2]_spec.rb", "Request", true },
+            },
+          },
+          {
+            "spec/controllers(.*)/(.*)_spec.rb",
+            {
+              { "app/controllers[1]/[2].rb", "Controller" },
+            },
+          },
+          {
+            "app/views/(.*)/(.*).html.(.*)",
+            {
+              { "app/controllers/**/*[1]_controller.rb", "Controller" },
+              { "app/models/[1:singularize].rb", "Model" },
+              { "app/helpers/**/*[1]_helper.rb", "Helper" },
+            },
+          },
           {
             "app/components/(.*).hbs",
             {
