@@ -70,8 +70,12 @@ return {
     opts = {
       inlay_hints = { enabled = false },
       servers = {
+        ruby_lsp = {
+          enabled = false,
+        },
         solargraph = {
           cmd = { os.getenv("HOME") .. "/.rbenv/shims/solargraph", "stdio" },
+          enabled = true,
         },
       },
     },
