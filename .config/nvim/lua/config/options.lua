@@ -4,4 +4,4 @@
 
 vim.g.autoformat = false
 vim.g.root_spec = { "cwd" }
-
+vim.opt.undofile = false
