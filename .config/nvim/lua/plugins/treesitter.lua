@@ -1,4 +1,7 @@
 return {
+	{ "nvim-treesitter/nvim-treesitter-context", opts = {
+		enable = false,
+	} },
 	"nvim-treesitter/nvim-treesitter-textobjects",
 	"windwp/nvim-ts-autotag", -- Automatically close tags
 	"RRethy/nvim-treesitter-endwise", -- Automatically close blocks
@@ -21,7 +24,7 @@ return {
 					"ruby",
 					"markdown",
 					"markdown_inline",
-          "glimmer",
+					"glimmer",
 				},
 
 				-- Install parsers synchronously (only applied to `ensure_installed`)
@@ -36,7 +39,7 @@ return {
 				-- 	enable_close_on_slash = false,
 				-- },
 
-        matchup = { enable = true },
+				matchup = { enable = true },
 
 				-- List of parsers to ignore installing (for "all")
 
