@@ -77,7 +77,7 @@ set("v", ">", ">gv")
 -- new file
 set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
--- Cupy current relative path (relative)
+-- Copy current relative path (relative)
 set(
   "n",
   "<leader>fp",
@@ -123,3 +123,10 @@ set("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 set("n", "<leader>tl", "<cmd>lua require'nano_tests'.run_line()<CR>", { desc = "Run tests for line", remap = true })
 set("n", "<leader>tt", "<cmd>lua require'nano_tests'.run_file()<CR>", { desc = "Run tests for file", remap = true })
 set("n", "<leader>ty", "<cmd>lua require'nano_tests'.run_last()<CR>", { desc = "Run last test", remap = true })
+
+-- Enable/Disable
+set("n", "<leader>uce", "<cmd>Copilot enable<CR>", { desc = "Enable", remap = true })
+set("n", "<leader>ucd", "<cmd>Copilot disable<CR>", { desc = "Disable", remap = true })
+set("n", "<leader>ute", "<cmd>TSContextEnable<CR>", { desc = "Enable", remap = true })
+set("n", "<leader>utd", "<cmd>TSContextDisable<CR>", { desc = "Disable", remap = true })
+
