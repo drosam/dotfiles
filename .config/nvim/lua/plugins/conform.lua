@@ -20,6 +20,7 @@ return {
 				fish = { "fish_indent" },
 				sh = { "shfmt" },
 				ruby = { "prettier" },
+				javascript = { "prettier" },
 				handlebars = { "prettier" },
 			},
 			formatters = {
