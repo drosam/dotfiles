@@ -130,3 +130,9 @@ set("n", "<leader>ucd", "<cmd>Copilot disable<CR>", { desc = "Disable", remap = 
 set("n", "<leader>ute", "<cmd>TSContextEnable<CR>", { desc = "Enable", remap = true })
 set("n", "<leader>utd", "<cmd>TSContextDisable<CR>", { desc = "Disable", remap = true })
 
+-- Clear search
+set({ "i", "n", "s" }, "<esc>", function()
+  vim.cmd("noh")
+  return "<esc>"
+end, { expr = true, desc = "Escape and Clear hlsearch" })
+
