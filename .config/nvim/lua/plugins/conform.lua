@@ -21,6 +21,7 @@ return {
 				sh = { "shfmt" },
 				ruby = { "prettier" },
 				javascript = { "prettier" },
+				typescript = { "prettier" },
 				handlebars = { "prettier" },
 			},
 			formatters = {
