@@ -4,19 +4,10 @@ local set = vim.keymap.set
 set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 -- Prevent deleting from also copying
--- set({'n', 'v'}, 'd', '"_d', { noremap = true })
--- set({'n', 'v'}, 'D', '"_D', { noremap = true })
--- set('n', 'dd', '"_dd', { noremap = true })
 set({'n', 'v'}, 'p', 'P', { noremap = true })
 set({'n', 'v'}, 'c', '"_c', { noremap = true })
 set({'n', 'v'}, 'C', '"_C', { noremap = true })
 set({'n', 'v'}, '<Del>', '"_x', { noremap = true })
-
--- -- Close other buffers
--- set("n", "<leader>bo", ":%bd|e#|bd#<CR>|'", { desc = "Delete other buffers", silent = true })
---
--- -- Close all buffers
--- set("n", "<leader>ba", ":%bd<CR>|'", { desc = "Delete all buffers", silent = true })
 
 -- better up/down
 set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
