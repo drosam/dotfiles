@@ -4,10 +4,10 @@ local set = vim.keymap.set
 set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 -- Prevent deleting from also copying
-set({'n', 'v'}, 'p', 'P', { noremap = true })
-set({'n', 'v'}, 'c', '"_c', { noremap = true })
-set({'n', 'v'}, 'C', '"_C', { noremap = true })
-set({'n', 'v'}, '<Del>', '"_x', { noremap = true })
+set({ "n", "v" }, "p", "P", { noremap = true })
+set({ "n", "v" }, "c", '"_c', { noremap = true })
+set({ "n", "v" }, "C", '"_C', { noremap = true })
+set({ "n", "v" }, "<Del>", '"_x', { noremap = true })
 
 -- better up/down
 set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -43,13 +43,13 @@ set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 set("n", "<leader>bd", function()
-  Snacks.bufdelete()
+	Snacks.bufdelete()
 end, { desc = "Delete Buffer" })
 set("n", "<leader>bo", function()
-  Snacks.bufdelete.other()
+	Snacks.bufdelete.other()
 end, { desc = "Delete Other Buffers" })
 set("n", "<leader>ba", function()
-  Snacks.bufdelete.all()
+	Snacks.bufdelete.all()
 end, { desc = "Delete All Buffers" })
 set("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 
@@ -69,20 +69,15 @@ set("v", ">", ">gv")
 set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
 -- Copy current relative path (relative)
-set(
-  "n",
-  "<leader>fp",
-  ":let @+=expand('%')<CR>",
-  { desc = "Copy current file path (relative)", silent = true }
-)
+set("n", "<leader>fp", ":let @+=expand('%')<CR>", { desc = "Copy current file path (relative)", silent = true })
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
-  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-  severity = severity and vim.diagnostic.severity[severity] or nil
-  return function()
-    go({ severity = severity })
-  end
+	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+	severity = severity and vim.diagnostic.severity[severity] or nil
+	return function()
+		go({ severity = severity })
+	end
 end
 set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 set("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
@@ -93,11 +88,21 @@ set("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 set("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
 -- lazygit
-set("n", "<leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
-set("n", "<leader>gf", function() Snacks.lazygit.log_file() end, { desc = "Lazygit Current File History" })
-set("n", "<leader>gl", function() Snacks.lazygit.log() end, { desc = "Lazygit Log" })
-set("n", "<leader>gb", function() Snacks.git.blame_line() end, { desc = "Git Blame Line" })
-set({ "n", "x" }, "<leader>gB", function() Snacks.gitbrowse() end, { desc = "Git Browse (open)" })
+set("n", "<leader>gg", function()
+	Snacks.lazygit()
+end, { desc = "Lazygit" })
+set("n", "<leader>gf", function()
+	Snacks.lazygit.log_file()
+end, { desc = "Lazygit Current File History" })
+set("n", "<leader>gl", function()
+	Snacks.lazygit.log()
+end, { desc = "Lazygit Log" })
+set("n", "<leader>gb", function()
+	Snacks.git.blame_line()
+end, { desc = "Git Blame Line" })
+set({ "n", "x" }, "<leader>gB", function()
+	Snacks.gitbrowse()
+end, { desc = "Git Browse (open)" })
 
 -- quit
 set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
@@ -114,6 +119,10 @@ set("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 set("n", "<leader>tl", "<cmd>lua require'nano_tests'.run_line()<CR>", { desc = "Run tests for line", remap = true })
 set("n", "<leader>tt", "<cmd>lua require'nano_tests'.run_file()<CR>", { desc = "Run tests for file", remap = true })
 set("n", "<leader>ty", "<cmd>lua require'nano_tests'.run_last()<CR>", { desc = "Run last test", remap = true })
+set("n", "<leader>to", function()
+  require'nano_tests'.open_terminal()
+  vim.cmd("TmuxNavigateDown")
+end, { desc = "Open terminal" })
 
 -- Enable/Disable
 set("n", "<leader>uce", "<cmd>Copilot enable<CR>", { desc = "Enable", remap = true })
@@ -123,7 +132,6 @@ set("n", "<leader>utd", "<cmd>TSContextDisable<CR>", { desc = "Disable", remap =
 
 -- Clear search
 set({ "i", "n", "s" }, "<esc>", function()
-  vim.cmd("noh")
-  return "<esc>"
+	vim.cmd("noh")
+	return "<esc>"
 end, { expr = true, desc = "Escape and Clear hlsearch" })
-
