@@ -23,10 +23,10 @@ return {
 			mapping["<CR>"] = nil
 			mapping = vim.tbl_extend("force", mapping, {
 				["<Tab>"] = cmp.mapping(function(fallback)
-					if require("copilot.suggestion").is_visible() then
-					  require("copilot.suggestion").accept()
-					elseif cmp.visible() then
-					-- if cmp.visible() then
+					-- if require("copilot.suggestion").is_visible() then
+					--   require("copilot.suggestion").accept()
+					-- elseif cmp.visible() then
+					if cmp.visible() then
 						-- You could replace select_next_item() with confirm({ select = true }) to get VS Code autocompletion behavior
 						-- cmp.select_next_item()
 						cmp.confirm({ select = true })
