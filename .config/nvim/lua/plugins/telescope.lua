@@ -102,6 +102,13 @@ return {
 				{ desc = "Word" }
 			)
 			vim.keymap.set("n", "<leader>ds", vim.lsp.buf.document_symbol, { desc = "Goto Symbol" })
+      			vim.keymap.set(
+				"n",
+				"<leader>cs",
+				"<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>",
+				{ desc = "Symbols" }
+			)
+
 
 			local file_browser = require("telescope").extensions.file_browser
 			vim.keymap.set("n", "<leader>fd", function()
