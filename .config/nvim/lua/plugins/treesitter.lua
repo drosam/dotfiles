@@ -7,6 +7,9 @@ return {
 	"RRethy/nvim-treesitter-endwise", -- Automatically close blocks
 	{
 		"nvim-treesitter/nvim-treesitter",
+		branch = "master",
+		lazy = false,
+    build = ":TSUpdate",
 		init = function()
 			require("nvim-treesitter.configs").setup({
 				endwise = {
