@@ -11,6 +11,7 @@ Installation MacOS
 ==================
 
 ```
+brew install --cask font-meslo-lg-nerd-font
 brew install git git-delta gnu-sed alacritty neovim rbenv ruby-build tmux tmuxinator jesseduffield/lazygit/lazygit ripgrep koekeishiya/formulae/skhd
 skhd --start-service
 ```
