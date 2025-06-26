@@ -11,5 +11,6 @@ Installation MacOS
 ==================
 
 ```
-brew install git git-delta gnu-sed alacritty neovim rbenv ruby-build tmux tmuxinator jesseduffield/lazygit/lazygit ripgrep
+brew install git git-delta gnu-sed alacritty neovim rbenv ruby-build tmux tmuxinator jesseduffield/lazygit/lazygit ripgrep koekeishiya/formulae/skhd
+skhd --start-service
 ```
