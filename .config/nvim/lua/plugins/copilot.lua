@@ -2,7 +2,7 @@ return {
   {
     "zbirenbaum/copilot.lua",
     opts = {
-      copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v20.19.0/bin/node", -- Node.js version must be > 20
+      copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v22.17.1/bin/node", -- Node.js version must be > 20
       suggestion = {
         enabled = true,
         auto_trigger = true,
