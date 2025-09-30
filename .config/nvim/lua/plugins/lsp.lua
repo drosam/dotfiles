@@ -169,9 +169,7 @@ return {
 				ember = {},
 				rust_analyzer = {},
 				-- lua_ls = {},
-				solargraph = {
-					cmd = { os.getenv("HOME") .. "/.rbenv/shims/solargraph", "stdio" },
-				},
+        ruby_lsp = {},
 				emmet_ls = {},
 				elixirls = {},
 				-- clangd = {},
