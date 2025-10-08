@@ -52,6 +52,7 @@ set("n", "<leader>ba", function()
 	Snacks.bufdelete.all()
 end, { desc = "Delete All Buffers" })
 set("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
+set("n", "<leader>bt", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 set("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
@@ -108,10 +109,12 @@ end, { desc = "Git Browse (open)" })
 set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
 
 -- windows
-set("n", "<leader>w", "<c-w>", { desc = "Windows", remap = true })
-set("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
-set("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
-set("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
+-- Disable windows
+set('n', '<C-w>', '<nop>')
+-- set("n", "<leader>w", "<c-w>", { desc = "Windows", remap = true })
+-- set("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
+-- set("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
+-- set("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 -- Snacks.toggle.zoom():map("<leader>wm"):map("<leader>uZ")
 -- Snacks.toggle.zen():map("<leader>uz")
 
