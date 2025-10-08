@@ -14,7 +14,7 @@ local function open_terminal()
 	local in_mode = vim.fn.system(check_cmd)
 
 	if in_mode == nil or in_mode == "" then
-		os.execute("tmux split-window -dv -l 20%")
+		os.execute("tmux split-window -dv -l 25%")
 	else
 		in_mode = in_mode:match("^%s*(.-)%s*$")
 

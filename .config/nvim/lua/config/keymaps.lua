@@ -122,16 +122,16 @@ set('n', '<C-w>', '<nop>')
 set("n", "<leader>tl", "<cmd>lua require'nano_tests'.run_line()<CR>", { desc = "Run tests for line", remap = true })
 set("n", "<leader>tt", "<cmd>lua require'nano_tests'.run_file()<CR>", { desc = "Run tests for file", remap = true })
 set("n", "<leader>ty", "<cmd>lua require'nano_tests'.run_last()<CR>", { desc = "Run last test", remap = true })
-set("n", "<leader>to", function()
+
+-- Enable/Disable
+set("n", "<leader>uec", "<cmd>Copilot enable<CR>", { desc = "Enable copilot", remap = true })
+set("n", "<leader>udc", "<cmd>Copilot disable<CR>", { desc = "Disable copilot", remap = true })
+set("n", "<leader>uet", "<cmd>TSContext enable<CR>", { desc = "Enable treesitter-context", remap = true })
+set("n", "<leader>udt", "<cmd>TSContext disable<CR>", { desc = "Disable treesitter-context", remap = true })
+set("n", "<leader>ut", function()
   require'nano_tests'.open_terminal()
   vim.cmd("TmuxNavigateDown")
 end, { desc = "Open terminal" })
-
--- Enable/Disable
-set("n", "<leader>uce", "<cmd>Copilot enable<CR>", { desc = "Enable", remap = true })
-set("n", "<leader>ucd", "<cmd>Copilot disable<CR>", { desc = "Disable", remap = true })
-set("n", "<leader>ute", "<cmd>TSContextEnable<CR>", { desc = "Enable", remap = true })
-set("n", "<leader>utd", "<cmd>TSContextDisable<CR>", { desc = "Disable", remap = true })
 
 -- Clear search
 set({ "i", "n", "s" }, "<esc>", function()
