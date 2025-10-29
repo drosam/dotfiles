@@ -36,10 +36,10 @@ set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc 
 set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
 -- buffers
-set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+-- set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+-- set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+-- set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+-- set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 set("n", "<leader>bd", function()
