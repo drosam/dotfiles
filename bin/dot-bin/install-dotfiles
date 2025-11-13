@@ -1,0 +1,15 @@
+#!/bin/bash
+
+folders=(
+  "alacritty" 
+  "delta" 
+  "gitconfig" 
+  "nvim" 
+  "skhd" 
+  "tmux.conf"
+  "tmuxinator" 
+  "zshrc" 
+  "bin"
+)
+
+stow --dotfiles -t $HOME "${folders[@]}"
