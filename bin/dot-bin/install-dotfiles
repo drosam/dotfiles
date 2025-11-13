@@ -1,0 +1,2 @@
+#!/bin/bash
+stow --dotfiles -t $HOME alacritty delta gitconfig nvim skhd tmux.conf tmuxinator zshrc bin
