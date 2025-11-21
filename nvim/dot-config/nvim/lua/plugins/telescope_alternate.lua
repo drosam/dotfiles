@@ -30,7 +30,19 @@ return {
 			--
 
 			local function append_project_root(paths)
-				local project_root = vim.fn.expand("$HOME/Developer")
+				-- local project_root = vim.fn.expand("$HOME/Developer")
+
+				local function run(cmd)
+					local h = io.popen(cmd .. " 2>/dev/null")
+					local out = h:read("*l")
+					h:close()
+					return out
+				end
+
+				-- If we're inside a linked worktree, .git will point to
+				-- something like: <root>/.git/worktrees/<worktree-name>
+				local project_root = run("git rev-parse --show-toplevel")
+
 				local new_paths = {}
 				for _, path in ipairs(paths) do
 					table.insert(new_paths, project_root .. "/" .. path)
@@ -38,9 +50,8 @@ return {
 				return new_paths
 			end
 
-			local ruby_api_projects = append_project_root({ "pulse-app/api" })
-			local ruby_fs_projects = append_project_root({ "satchel-thrive", "workout_bro" })
-			local ember_projects = append_project_root({ "pulse-app/frontend" })
+			local ruby_api_projects = append_project_root({ "api" })
+			local ember_projects = append_project_root({ "frontend" })
 
 			local ruby_mappings = {}
 
@@ -240,7 +251,7 @@ return {
 					"app/components/(.*).hbs",
 					{
 						{ "tests/integration/components/[1]-test.js", "Component test", true },
-            { "tests/helpers/page/components/[1]-component.js", "Page", true },
+						{ "tests/helpers/page/components/[1]-component.js", "Page", true },
 						{ "app/components/[1].js", "Component JS", true },
 						{ "app/components/[1].ts", "Component TS", true },
 					},
@@ -300,8 +311,6 @@ return {
 
 			if in_table(ruby_api_projects, vim.fn.getcwd()) then
 				selected_mappings = ruby_api_mappings
-			elseif in_table(ruby_fs_projects, vim.fn.getcwd()) then
-				selected_mappings = ruby_fs_mappings
 			elseif in_table(ember_projects, vim.fn.getcwd()) then
 				selected_mappings = ember_mappings
 			end

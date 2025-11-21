@@ -47,27 +47,17 @@ root: ~/Developer/pulse-app
 
 windows:
   - api:
-      # layout: 7f2b,273x66,0,0[273x52,0,0,0,273x13,0,53,2]
-      root: ~/Developer/pulse-app/api
+      root:  ~/Developer/pulse-app/develop/api
       panes:
         - nvim
-        # - ls
   - frontend:
-      # layout: ff2d,273x66,0,0[273x52,0,0,1,273x13,0,53,3]
-      root: ~/Developer/pulse-app/frontend
+      root:  ~/Developer/pulse-app/develop/frontend
       panes:
         - nvim
-        # - ls
   - servers:
-      # layout: main-vertical
       layout: 152d,273x66,0,0{136x66,0,0,3,136x66,137,0,6}
       panes:
         - frontend:
-          - cd ~/Developer/pulse-app/frontend
+          - cd ~/Developer/pulse-app/develop/frontend
         - api:
-          - cd ~/Developer/pulse-app/api
-  # - config:
-  #     layout: main-horizontal
-  #     root: ~/.config
-  #     panes:
-  #       - nvim
+          - cd ~/Developer/pulse-app/develop/api

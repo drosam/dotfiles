@@ -104,6 +104,8 @@ end, { desc = "Git Blame Line" })
 set({ "n", "x" }, "<leader>gB", function()
 	Snacks.gitbrowse()
 end, { desc = "Git Browse (open)" })
+set('n', '<leader>gws', ':Telescope git_worktree git_worktrees<CR>')
+set('n', '<leader>gwc', ':Telescope git_worktree create_git_worktree<CR>')
 
 -- quit
 set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
