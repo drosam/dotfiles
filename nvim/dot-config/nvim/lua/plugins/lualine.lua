@@ -26,6 +26,27 @@ return {
 						"mode",
 					},
 					lualine_b = {
+						function()
+							local function run(cmd)
+								local h = io.popen(cmd .. " 2>/dev/null")
+								local out = h:read("*l")
+								h:close()
+								return out
+							end
+
+							-- If we're inside a linked worktree, .git will point to
+							-- something like: <root>/.git/worktrees/<worktree-name>
+							local gitdir = run("git rev-parse --git-dir")
+
+							local prefix = gitdir:match("(.*/)worktrees/([^/]+)")
+							if prefix then
+								local wt = gitdir:match("worktrees/([^/]+)")
+
+								return "  " .. wt
+							else
+								return ""
+							end
+						end,
 						"branch",
 						"diff",
 						"diagnostics",

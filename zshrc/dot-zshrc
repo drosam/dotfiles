@@ -119,6 +119,41 @@ alias_with_show() {
     alias $1="echo $2; $2"
 }
 
+git_branch_info() {
+  local worktree
+  worktree=$(git_worktree)
+  branch=$(git_current_branch)
+  if [[ "$worktree" ]]; then
+    echo "   $worktree   $branch"
+  else
+    if [[ "$branch" ]]; then
+      echo "  $branch"
+    fi
+  fi
+
+}
+
+git_worktree() {
+  # Resolve the real .git directory (handles worktrees correctly)
+  local gitdir
+  gitdir=$(git rev-parse --git-dir 2>/dev/null) || return
+
+  # If we're inside a linked worktree, .git will point to
+  # something like: <root>/.git/worktrees/<worktree-name>
+  case "$gitdir" in
+    */worktrees/*)
+      # extract worktree name from path
+      local wt
+      wt=${gitdir##*/worktrees/}
+      echo "$wt"
+      ;;
+    *)
+      # main worktree → no special name
+      return
+      ;;
+  esac
+}
+
 alias_with_show 'run-s1-frontend' 'ember s --port=4200 --proxy http://0.0.0.0:6050 --live-reload-port 49161'
 alias_with_show 'run-s1-admin-frontend' 'ember s --port=4201 --proxy http://0.0.0.0:6051 --live-reload-port 49160'
 alias_with_show 'run-s1-api' "DEBUG_QUERIES=true PORT=6050 bundle exec puma -C '/Users/davidrosa/Developer/show-app/backend/smhw-api/config/puma/minimal.rb'"
@@ -152,4 +187,4 @@ export PATH="$HOME/.bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/openssl/bin/:$PATH"
 export EDITOR='nvim'
-PROMPT='%F{blue}%n %F{green}%~%f %F{yellow}$(git_current_branch) %F{green}$ %f'
+PROMPT='%F{blue}%n %F{green}%~%f%F{yellow}$(git_branch_info) %F{green}$ %f'
