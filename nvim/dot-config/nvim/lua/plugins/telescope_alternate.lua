@@ -43,6 +43,10 @@ return {
 				-- something like: <root>/.git/worktrees/<worktree-name>
 				local project_root = run("git rev-parse --show-toplevel")
 
+				if not project_root or string.len(project_root) == 0 then
+					return {}
+				end
+
 				local new_paths = {}
 				for _, path in ipairs(paths) do
 					table.insert(new_paths, project_root .. "/" .. path)
