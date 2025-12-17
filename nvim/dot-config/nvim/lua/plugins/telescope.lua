@@ -92,7 +92,7 @@ return {
 			vim.keymap.set(
 				"n",
 				"<leader>sw",
-				"<cmd>lua require('telescope.builtin').grep_string()<CR>",
+				"<cmd>lua require('telescope.builtin').grep_string({word_match = '-w'})<CR>",
 				{ desc = "Word" }
 			)
 			vim.keymap.set(
