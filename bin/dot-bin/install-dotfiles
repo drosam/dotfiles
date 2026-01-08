@@ -2,6 +2,7 @@
 
 folders=(
   "alacritty" 
+  "ghostty"
   "delta" 
   "gitconfig" 
   "nvim" 

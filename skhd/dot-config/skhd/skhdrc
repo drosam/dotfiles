@@ -105,7 +105,7 @@
 #    "qutebrowser"
 # ]
 
-ctrl + shift - t: open -a /Applications/Alacritty.app
+ctrl + shift - t: open -a /Applications/Ghostty.app
 ctrl + shift - b: open -a /Applications/Arc.app
 ctrl + shift - s: open -a /Applications/Slack.app
 ctrl + shift - f: open -a /System/Library/CoreServices/Finder.app
