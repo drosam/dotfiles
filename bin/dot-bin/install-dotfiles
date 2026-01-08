@@ -10,6 +10,7 @@ folders=(
   "tmuxinator" 
   "zshrc" 
   "bin"
+  "starship"
 )
 
 stow --dotfiles -t $HOME "${folders[@]}"

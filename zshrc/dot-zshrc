@@ -121,7 +121,7 @@ alias_with_show() {
 
 git_branch_info() {
   local worktree
-  worktree=$(git_worktree)
+  worktree=$(git-worktree-name)
   branch=$(git_current_branch)
   if [[ "$worktree" ]]; then
     echo "   $worktree   $branch"
@@ -131,27 +131,6 @@ git_branch_info() {
     fi
   fi
 
-}
-
-git_worktree() {
-  # Resolve the real .git directory (handles worktrees correctly)
-  local gitdir
-  gitdir=$(git rev-parse --git-dir 2>/dev/null) || return
-
-  # If we're inside a linked worktree, .git will point to
-  # something like: <root>/.git/worktrees/<worktree-name>
-  case "$gitdir" in
-    */worktrees/*)
-      # extract worktree name from path
-      local wt
-      wt=${gitdir##*/worktrees/}
-      echo "$wt"
-      ;;
-    *)
-      # main worktree → no special name
-      return
-      ;;
-  esac
 }
 
 alias_with_show 'run-s1-frontend' 'ember s --port=4200 --proxy http://0.0.0.0:6050 --live-reload-port 49161'
@@ -188,3 +167,5 @@ export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/openssl/bin/:$PATH"
 export EDITOR='nvim'
 PROMPT='%F{blue}%n %F{green}%~%f%F{yellow}$(git_branch_info) %F{green}$ %f'
+
+eval "$(starship init zsh)"

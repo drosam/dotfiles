@@ -1,0 +1,117 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](green)\
+$os\
+${custom.docker_container}\
+$username\
+[](bg:color_fg0 fg:green)\
+[](bg:blue fg:color_fg0)\
+$directory\
+[](bg:color_fg0 fg:blue)\
+[](bg:peach fg:color_fg0)\
+${custom.git_worktree}\
+$git_branch\
+$git_status\
+[ ](fg:peach)\
+$cmd_duration\
+$line_break\
+$character"""
+
+palette = 'nano'
+# add_newline=false
+
+[os]
+disabled = false
+style = "bg:green fg:color_fg0"
+
+[os.symbols]
+Windows = ""
+Ubuntu = ""
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+AOSC = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[username]
+show_always = true
+style_user = "bg:green fg:color_fg0"
+style_root = "bg:green fg:color_fg0"
+format = '[ $user ]($style)'
+
+[directory]
+style = "bg:blue fg:color_fg0"
+format = "[ $path ]($style)"
+truncate_to_repo = false
+truncation_length = 5
+truncation_symbol = "…/"
+
+[custom.git_worktree]
+command = 'git-worktree-name'
+when = 'git-worktree-name'
+symbol = ''
+style = "bg:peach"
+format = '[[ $symbol $output ❯](fg:color_fg0 bg:peach)]($style)'
+disabled = false
+
+[git_branch]
+symbol = ""
+style = "bg:peach"
+format = '[[ $symbol $branch ](fg:color_fg0 bg:peach)]($style)'
+
+[git_status]
+style = "bg:peach"
+format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:peach)]($style)'
+
+[custom.docker_container]
+command = '[[ -f /.dockerenv ]] && echo "Docker"'
+when = '[[ -f /.dockerenv ]] && echo "Docker"'
+symbol = ''
+format = '[[  $symbol](fg:color_fg0 bg:green)]($style)'
+disabled = false
+
+[line_break]
+disabled = true
+
+[character]
+disabled = false
+success_symbol = '[❯](bold fg:green)'
+error_symbol = '[❯](bold fg:red)'
+vimcmd_symbol = '[❮](bold fg:green)'
+vimcmd_replace_one_symbol = '[❮](bold fg:lavender)'
+vimcmd_replace_symbol = '[❮](bold fg:lavender)'
+vimcmd_visual_symbol = '[❮](bold fg:yellow)'
+
+[cmd_duration]
+show_milliseconds = true
+format = " in $duration "
+style = "bg:lavender"
+disabled = false
+show_notifications = true
+min_time_to_notify = 45000
+
+[palettes.nano]
+yellow = "#f9e2af"
+peach = "#fab387"
+green = "#a6e3a1"
+blue = "#74c7ec"
+maroon = "#eba0ac"
+lavender = "#b4befe"
+color_fg0 = "#11111b"
+red = "#f38ba8"
+sapphire = "#74c7ec"
+

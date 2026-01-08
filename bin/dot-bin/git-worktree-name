@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Exit if not inside a Git repo
+gitdir=$(git rev-parse --git-dir 2>/dev/null) || exit 1
+
+# If we're inside a linked worktree, .git will point to something like:
+# <root>/.git/worktrees/<worktree-name>
+case "$gitdir" in
+  */worktrees/*)
+    # extract worktree name from path
+    wt=${gitdir##*/worktrees/}
+    echo "$wt"
+    ;;
+  *)
+    exit 1
+    ;;
+esac
+
