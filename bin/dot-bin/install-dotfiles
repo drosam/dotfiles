@@ -12,6 +12,7 @@ folders=(
   "nvim" 
   "skhd" 
   "tmux.conf"
+  "tmux"
   "tmuxinator" 
   "zshrc" 
   "bin"
