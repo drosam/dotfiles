@@ -112,7 +112,7 @@ export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 alias la='ls -a'
 alias ll='ls -l'
 alias lla='ls -la'
-alias ls='ls -G'
+alias ls='ls -G  --color=auto'
 
 #Satchel aliases
 alias_with_show() {
@@ -169,3 +169,8 @@ export EDITOR='nvim'
 PROMPT='%F{blue}%n %F{green}%~%f%F{yellow}$(git_branch_info) %F{green}$ %f'
 
 eval "$(starship init zsh)"
+
+# Activate mise if available
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi

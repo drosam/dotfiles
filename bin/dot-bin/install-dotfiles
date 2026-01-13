@@ -1,5 +1,9 @@
 #!/bin/bash
 
+cd ~/Developer/dotfiles
+
+rm ~/.zshrc
+
 folders=(
   "alacritty" 
   "ghostty"
@@ -15,3 +19,5 @@ folders=(
 )
 
 stow --dotfiles -t $HOME "${folders[@]}"
+
+cd -
