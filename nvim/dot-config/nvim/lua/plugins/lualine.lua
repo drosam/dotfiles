@@ -2,6 +2,7 @@ return {
 	{
 		"nvim-lualine/lualine.nvim",
 		init = function()
+      local status_icons = require("helpers/status_os_icons")
 			require("lualine").setup({
 				options = {
 					icons_enabled = true,
@@ -67,7 +68,7 @@ return {
 							path = 1,
 						},
 					},
-					lualine_x = { "encoding", "filetype" },
+					lualine_x = { "encoding", "filetype", {status_icons.docker_os_icon} },
 					lualine_y = { "progress" },
 					lualine_z = { "location" },
 				},
