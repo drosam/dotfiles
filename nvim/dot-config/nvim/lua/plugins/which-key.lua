@@ -24,7 +24,6 @@ return {
 					{ "<leader>ue", group = "enable" },
 					{ "<leader>ud", group = "disable" },
 					{ "<leader>x", group = "diagnostics/quickfix", icon = { icon = "󱖫 ", color = "green" } },
-          { "<leader>o", group = "opencode" },
 					{ "[", group = "prev" },
 					{ "]", group = "next" },
 					{ "g", group = "goto" },
