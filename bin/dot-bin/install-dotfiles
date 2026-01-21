@@ -4,20 +4,34 @@ cd ~/Developer/dotfiles
 
 rm ~/.zshrc
 
-folders=(
-  "alacritty" 
-  "ghostty"
-  "delta" 
-  "gitconfig" 
-  "nvim" 
-  "skhd" 
-  "tmux.conf"
-  "tmux"
-  "tmuxinator" 
-  "zshrc" 
-  "bin"
-  "starship"
-)
+if [ -f /.dockerenv ]; then
+  folders=(
+    "delta"
+    "gitconfig"
+    "nvim"
+    "tmux.conf"
+    "tmux"
+    "tmuxinator"
+    "zshrc"
+    "bin"
+    "starship"
+  )
+else
+  folders=(
+    "alacritty"
+    "ghostty"
+    "delta"
+    "gitconfig"
+    "nvim"
+    "skhd"
+    "tmux.conf"
+    "tmux"
+    "tmuxinator"
+    "zshrc"
+    "bin"
+    "starship"
+  )
+fi
 
 stow --dotfiles -t $HOME "${folders[@]}"
 
