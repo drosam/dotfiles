@@ -15,11 +15,11 @@ esac
 
 # Detect Docker
 if [ -f /.dockerenv ] || grep -qE "(docker|kubepods)" /proc/1/cgroup 2>/dev/null; then
-  DOCKER_ICON="  "
+  DOCKER_ICON="  "
 else
   DOCKER_ICON=""
 fi
 
 # Print stacked icons (Catppuccin will color them)
-printf "#[fg=#{@thm_green}]#[fg=#{@thm_crust},bg=#{@thm_green}]%s%s" "$OS_ICON" "$DOCKER_ICON"
+printf "#[fg=#{@thm_green}]#[fg=#{@thm_crust},bg=#{@thm_green}]%s%s" "$DOCKER_ICON" "$OS_ICON"
 

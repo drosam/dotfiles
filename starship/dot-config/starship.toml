@@ -2,8 +2,8 @@
 
 format = """
 [](green)\
-$os\
 ${custom.docker_container}\
+$os\
 $username\
 [](bg:color_fg0 fg:green)\
 [](bg:blue fg:color_fg0)\
@@ -24,6 +24,7 @@ palette = 'nano'
 [os]
 disabled = false
 style = "bg:green fg:color_fg0"
+format = '[$symbol]($style)'
 
 [os.symbols]
 Windows = ""
@@ -65,7 +66,7 @@ command = 'git-worktree-name'
 when = 'git-worktree-name'
 symbol = ''
 style = "bg:peach"
-format = '[[ $symbol $output ❯](fg:color_fg0 bg:peach)]($style)'
+format = '[[ $symbol $output ](fg:color_fg0 bg:peach)]($style)'
 disabled = false
 
 [git_branch]
@@ -81,7 +82,7 @@ format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:peach)]($style)'
 command = '[[ -f /.dockerenv ]] && echo "Docker"'
 when = '[[ -f /.dockerenv ]] && echo "Docker"'
 symbol = ''
-format = '[[  $symbol](fg:color_fg0 bg:green)]($style)'
+format = '[[$symbol  ](fg:color_fg0 bg:green)]($style)'
 disabled = false
 
 [line_break]

@@ -23,7 +23,7 @@ function M.docker_os_icon()
   -- Detect Docker
   local f_docker = io.open("/.dockerenv")
   if f_docker then
-    docker_icon = "  "
+    docker_icon = "  "
     f_docker:close()
   else
     -- fallback check for cgroup
@@ -32,13 +32,13 @@ function M.docker_os_icon()
       local content = f_cgroup:read("*a")
       f_cgroup:close()
       if content:match("docker") or content:match("kubepods") then
-        docker_icon = "  "
+        docker_icon = "  "
       end
     end
   end
 
   -- Return stacked icons
-  return os_icon .. docker_icon
+  return docker_icon .. os_icon 
 end
 
 return M
