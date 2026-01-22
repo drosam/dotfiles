@@ -19,4 +19,8 @@ git clone -b v2.1.3 https://github.com/catppuccin/tmux.git ~/.tmux/plugins/catpp
 
 skhd --start-service
 ./bin/dot-bin/install-dotfiles
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
+
 ```
+
