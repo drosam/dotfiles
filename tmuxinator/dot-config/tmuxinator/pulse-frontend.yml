@@ -1,7 +1,7 @@
-# /Users/davidrosa/.config/tmuxinator/pulse.yml
+# /Users/davidrosa/.config/tmuxinator/pulse-frontend.yml
 
-name: pulse
-root: ~/Developer/pulse-app/develop
+name: pulse-frontend
+root: ~/Developer/pulse-app/develop/frontend
 
 # Optional tmux socket
 # socket_name: foo
@@ -46,18 +46,10 @@ root: ~/Developer/pulse-app/develop
 
 
 windows:
-  - api:
-      root:  ~/Developer/pulse-app/develop/api
-      panes:
-        - nvim
   - frontend:
-      root:  ~/Developer/pulse-app/develop/frontend
       panes:
         - nvim
-  - servers:
-      layout: 152d,273x66,0,0{136x66,0,0,3,136x66,137,0,6}
+  - server:
+  - ai:
       panes:
-        - frontend:
-          - cd ~/Developer/pulse-app/develop/frontend
-        - api:
-          - cd ~/Developer/pulse-app/develop/api
+        - claude
