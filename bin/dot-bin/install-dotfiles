@@ -15,6 +15,7 @@ if [ -f /.dockerenv ]; then
     "zshrc"
     "bin"
     "starship"
+    "opencode"
   )
 else
   folders=(
@@ -30,6 +31,7 @@ else
     "zshrc"
     "bin"
     "starship"
+    "opencode"
   )
 fi
 

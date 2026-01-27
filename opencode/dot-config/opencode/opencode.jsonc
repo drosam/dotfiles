@@ -1,0 +1,44 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-gemini-auth@latest", "opencode-openai-codex-auth@latest"],
+  // Theme configuration
+  "theme": "catppuccin",
+  "model": "anthropic/claude-sonnet-4-5",
+  "autoupdate": false,
+  "permission": {
+     "*": "ask",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow"
+    },
+    "bash": {
+      "*": "ask",
+      "git status *": "allow",
+      "git diff *": "allow",
+      "git show *": "allow",
+      "git merge *": "deny",
+      "git rebase *": "deny",
+      "git push *": "deny",
+      "git branch -d *": "deny",
+      "git branch -D *": "deny",
+      "grep *": "allow",
+      "find *": "allow",
+      "head *": "allow",
+      "pwd*": "allow",
+      "bundle exec rspec *": "allow",
+      "rm *": "deny",
+      "sudo *": "deny"
+    },
+    "glob": "allow",
+    "edit": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "task": "allow",
+    "lsp": "allow",
+    "todoread": "allow",
+    "todowrite": "allow"
+  }
+}
+
