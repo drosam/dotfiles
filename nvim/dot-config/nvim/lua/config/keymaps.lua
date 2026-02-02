@@ -70,7 +70,8 @@ set("v", ">", ">gv")
 set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
 -- Copy current relative path (relative)
-set("n", "<leader>fp", ":let @+=expand('%')<CR>", { desc = "Copy current file path (relative)", silent = true })
+set("n", "<leader>fp", ":let @+=expand('%:.')<CR>", { desc = "Copy current file path (relative)", silent = true })
+set("n", "<leader>fP", ":let @+=expand('%:.') . ':' . line('.')<CR>", { desc = "Copy current file path:line (relative)", silent = true })
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
