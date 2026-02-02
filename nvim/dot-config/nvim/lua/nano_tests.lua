@@ -24,8 +24,17 @@ local function open_terminal()
 	end
 end
 
+local function get_test_runner(file)
+	if file:match("%.feature$") or file:match("%.feature:") then
+		return "cucumber"
+	else
+		return "rspec"
+	end
+end
+
 local function run(command)
-	local terminal_cmd = "tmux send -t 2 'bundle exec rspec " .. command .. "' Enter"
+	local runner = get_test_runner(command)
+	local terminal_cmd = "tmux send -t 2 'bundle exec " .. runner .. " " .. command .. "' Enter"
 
 	open_terminal()
 
