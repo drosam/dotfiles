@@ -70,7 +70,28 @@ set("v", ">", ">gv")
 set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
 -- Copy current relative path (relative)
-set("n", "<leader>fp", ":let @+=expand('%')<CR>", { desc = "Copy current file path (relative)", silent = true })
+set("n", "<leader>fp", function()
+  vim.cmd("let @+=expand('%:.')")
+  vim.notify("Copied file path to clipboard", vim.log.levels.INFO)
+end, { desc = "Copy current file path (relative)", silent = true })
+set("n", "<leader>fP", function()
+  vim.cmd("let @+=expand('%:.') . ':' . line('.')")
+  vim.notify("Copied file path:line to clipboard", vim.log.levels.INFO)
+end, { desc = "Copy current file path:line (relative)", silent = true })
+-- Create command to handle visual range properly
+vim.api.nvim_create_user_command('CopyFilePathLineRange', function(opts)
+  local start_line = opts.line1
+  local end_line = opts.line2
+  local file_path = vim.fn.expand('%:.')
+  local range_str = file_path .. ':' .. start_line
+  if start_line ~= end_line then
+    range_str = range_str .. '-' .. end_line
+  end
+  vim.fn.setreg('+', range_str)
+  vim.notify("Copied file path:line range to clipboard", vim.log.levels.INFO)
+end, { range = true })
+
+set("x", "<leader>fP", ":CopyFilePathLineRange<CR>", { desc = "Copy current file path:line-range (relative)", silent = true })
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
