@@ -5,7 +5,9 @@ return {
  		local function get_mappings()
 				local cwd = vim.fn.getcwd()
 
-				if cwd:find("/pulse%-app/") and cwd:find("/api") then
+				if cwd:find("/booqable") then
+					return require("helpers.telescope_alternate.booqable_mappings")
+				elseif cwd:find("/pulse%-app/") and cwd:find("/api") then
 					return require("helpers.telescope_alternate.ruby_api_mappings")
 				elseif cwd:find("/pulse%-app/") and cwd:find("/frontend") then
 					return require("helpers.telescope_alternate.ember_mappings")
