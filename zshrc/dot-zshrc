@@ -166,6 +166,9 @@ export PATH="$HOME/.bin:$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/openssl/bin/:$PATH"
 export EDITOR='nvim'
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
 PROMPT='%F{blue}%n %F{green}%~%f%F{yellow}$(git_branch_info) %F{green}$ %f'
 
 eval "$(starship init zsh)"

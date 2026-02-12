@@ -1,0 +1,6 @@
+# Config relating to the Lazygit UI
+gui:
+  # Height of the command log view
+  commandLogSize: 16
+git:
+  autoFetch: false
