@@ -17,6 +17,7 @@ return {
 					{ "<leader>g", group = "git" },
 					{ "<leader>gh", group = "hunks" },
 					{ "<leader>gw", group = "worktree" },
+					{ "<leader>o", group = "opencode" },
 					{ "<leader>q", group = "quit/session" },
 					{ "<leader>s", group = "search" },
 					{ "<leader>t", group = "tests" },

@@ -1,10 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "default_agent": "plan",
   "plugin": ["opencode-gemini-auth@latest", "opencode-openai-codex-auth@latest"],
   // Theme configuration
   "theme": "catppuccin",
   "model": "anthropic/claude-sonnet-4-5",
   "autoupdate": false,
+  "formatter": false,
   "permission": {
      "*": "ask",
     "read": {
@@ -18,6 +20,8 @@
       "git status *": "allow",
       "git diff *": "allow",
       "git show *": "allow",
+      "git log *": "allow",
+      "git status *": "allow",
       "git merge *": "deny",
       "git rebase *": "deny",
       "git push *": "deny",
@@ -28,6 +32,13 @@
       "head *": "allow",
       "pwd*": "allow",
       "bundle exec rspec *": "allow",
+      "bin/rspec *": "allow",
+      "bundle exec cucumber *": "allow",
+      "bin/cucumber *": "allow",
+      "BROWSER=headless_chrome bundle exec cucumber *": "allow",
+      "BROWSER=headless_chrome bin/cucumber *": "allow",
+      "yarn test *": "allow",
+      "yarn run eslint *": "allow",
       "rm *": "deny",
       "sudo *": "deny"
     },

@@ -54,8 +54,13 @@ windows:
       root:  ~/Developer/booqable
       panes:
         - nvim
-  - AI:
+  - claude:
       root:  ~/Developer/booqable
       panes:
         - claude
+  - opencode:
+      root:  ~/Developer/booqable
+      panes:
+        - opencode --port
+
 
