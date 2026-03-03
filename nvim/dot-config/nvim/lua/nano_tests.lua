@@ -27,6 +27,8 @@ end
 local function get_test_runner(file)
 	if file:match("%.feature$") or file:match("%.feature:") then
 		return "cucumber"
+	elseif file:match("%.[jt]sx?$") and (file:match("%.test%.[jt]sx?") or file:match("%.spec%.[jt]sx?")) then
+		return "jest"
 	else
 		return "rspec"
 	end
@@ -34,10 +36,16 @@ end
 
 local function run(command)
 	local runner = get_test_runner(command)
-	local terminal_cmd = "tmux send -t 2 'bundle exec " .. runner .. " " .. command .. "' Enter"
+	local terminal_cmd
+
+	if runner == "jest" then
+		local file = command:match("^(.-):%d+$") or command
+		terminal_cmd = "tmux send -t 2 'yarn test " .. file .. "' Enter"
+	else
+		terminal_cmd = "tmux send -t 2 'bundle exec " .. runner .. " " .. command .. "' Enter"
+	end
 
 	open_terminal()
-
 	os.execute(terminal_cmd)
 end
 
