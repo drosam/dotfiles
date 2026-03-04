@@ -15,12 +15,6 @@ set({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr =
 set({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 set({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
--- Move to window using the <ctrl> hjkl keys
-set("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
-set("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
-set("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
-set("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
-
 -- Resize window using <ctrl> arrow keys
 set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
 set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
