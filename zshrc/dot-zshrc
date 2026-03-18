@@ -165,6 +165,7 @@ alias_with_show 'run-pulse-api' 'foreman start -f Procfile.dev '
 export PATH="$HOME/.bin:$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/openssl/bin/:$PATH"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export EDITOR='nvim'
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
