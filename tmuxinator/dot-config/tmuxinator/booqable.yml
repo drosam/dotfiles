@@ -1,7 +1,7 @@
 # /Users/davidrosa/.config/tmuxinator/booqable.yml
 
 name: booqable
-root: ~/Developer/booqable
+root: ~/Developer/booqable/develop
 
 # Optional tmux socket
 # socket_name: foo
@@ -47,20 +47,18 @@ root: ~/Developer/booqable
 
 windows:
   - server:
-      root:  ~/Developer/booqable
+      root: ~/Developer/booqable/develop
       panes:
-        - bin/dev
+        - ls
   - code:
-      root:  ~/Developer/booqable
+      root: ~/Developer/booqable/develop
       panes:
         - nvim
   - claude:
-      root:  ~/Developer/booqable
+      root: ~/Developer/booqable/develop
       panes:
         - claude
   - opencode:
-      root:  ~/Developer/booqable
+      root: ~/Developer/booqable/develop
       panes:
         - opencode --port
-
-
