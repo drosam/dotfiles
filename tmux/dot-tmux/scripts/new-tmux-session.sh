@@ -33,10 +33,10 @@ elif [[ $SELECTED == *"booqable-worktree"* ]]; then
     if ! git -C "$HOME/Developer/booqable" worktree add "$WORKTREE_NAME"; then
       tmux display-message "git worktree add failed"
       exit 1
+    else
+      "$HOME/.bin/setup-booqable-worktree" "$WORKTREE_DIR"
     fi
   fi
-
-  mise trust "$WORKTREE_DIR"
 
   tmux new-session -d -s "$WORKTREE_NAME" -c "$WORKTREE_DIR" -n server
   tmux send-keys -t "$WORKTREE_NAME:server" "ls" Enter

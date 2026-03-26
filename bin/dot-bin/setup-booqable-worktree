@@ -1,0 +1,45 @@
+#!/bin/bash
+set -euo pipefail
+# Called with the worktree directory as $1
+WORKTREE_DIR="${1:?worktree dir required}"
+MAIN_DIR="$HOME/Developer/booqable/develop"
+
+# --- Copy config files from main worktree ---
+cp "$MAIN_DIR/.env.local" "$WORKTREE_DIR/.env.local" 2>/dev/null || true
+cp "$MAIN_DIR/.env.test.local" "$WORKTREE_DIR/.env.test.local" 2>/dev/null || true
+
+# --- Worktree index (number of non-main worktrees, including this one) ---
+WORKTREE_COUNT=$(( $(git -C "$WORKTREE_DIR" worktree list | wc -l | tr -d ' ') - 1 ))
+
+# --- Patch vite ports ---
+NEW_VITE_PORT=$(( 3036 + WORKTREE_COUNT ))
+sed -i '' "s/\"port\": 3036/\"port\": $NEW_VITE_PORT/g" "$WORKTREE_DIR/config/vite.json"
+sed -i '' "s/port: 3036/port: $NEW_VITE_PORT/g" "$WORKTREE_DIR/vite.config.mts"
+
+# --- Patch .env.local: uncomment and increment all *PORT* variables ---
+awk -v offset="$WORKTREE_COUNT" '
+  /^#+[[:space:]]*[A-Za-z0-9_]*PORT[A-Za-z0-9_]*=[0-9]/ {
+    sub(/^#+[[:space:]]*/, "")
+    n = index($0, "=")
+    print substr($0, 1, n) substr($0, n+1) + offset
+    next
+  }
+  { print }
+' "$WORKTREE_DIR/.env.local" > "$WORKTREE_DIR/.env.local.tmp" \
+  && mv "$WORKTREE_DIR/.env.local.tmp" "$WORKTREE_DIR/.env.local"
+
+# --- Patch .env.test.local: uncomment TEST_ENV_NUMBER and set to worktree count ---
+awk -v value="$WORKTREE_COUNT" '
+  /^#+[[:space:]]*TEST_ENV_NUMBER=/ { print "TEST_ENV_NUMBER=" value; next }
+  { print }
+' "$WORKTREE_DIR/.env.test.local" > "$WORKTREE_DIR/.env.test.local.tmp" \
+  && mv "$WORKTREE_DIR/.env.test.local.tmp" "$WORKTREE_DIR/.env.test.local"
+
+# --- Symlinks ---
+ln -sf "$MAIN_DIR/config/master.key" "$WORKTREE_DIR/config/master.key"
+ln -sf "$MAIN_DIR/.claude" "$WORKTREE_DIR/.claude"
+ln -sf "$MAIN_DIR/.bundle" "$WORKTREE_DIR/.bundle"
+
+# --- mise trust ---
+mise trust "$WORKTREE_DIR"
+
