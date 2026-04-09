@@ -1,9 +1,10 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "default_agent": "plan",
-  "plugin": ["opencode-gemini-auth@latest", "opencode-openai-codex-auth@latest"],
-  // Theme configuration
-  "theme": "catppuccin",
+  "plugin": [
+    "opencode-gemini-auth@latest",
+    "opencode-openai-codex-auth@latest"
+  ],
   "model": "anthropic/claude-sonnet-4-5",
   "autoupdate": false,
   "formatter": false,
@@ -37,19 +38,22 @@
       "bin/cucumber *": "allow",
       "BROWSER=headless_chrome bundle exec cucumber *": "allow",
       "BROWSER=headless_chrome bin/cucumber *": "allow",
-      "yarn test *": "allow",
-      "yarn run eslint *": "allow",
+      "pnpm test *": "allow",
+      "pnpm run eslint *": "allow",
       "rm *": "deny",
       "sudo *": "deny"
     },
     "glob": "allow",
-    "edit": "allow",
+    "edit": "ask",
     "grep": "allow",
     "list": "allow",
     "task": "allow",
     "lsp": "allow",
     "todoread": "allow",
     "todowrite": "allow"
+  },
+  "experimental": {
+    "disable_paste_summary": true,
   }
 }
 
