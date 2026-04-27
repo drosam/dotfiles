@@ -26,6 +26,8 @@
       "git merge *": "deny",
       "git rebase *": "deny",
       "git push *": "deny",
+      "git merge-base *": "allow",
+      "git branch --show-current": "allow",
       "git branch -d *": "deny",
       "git branch -D *": "deny",
       "grep *": "allow",
