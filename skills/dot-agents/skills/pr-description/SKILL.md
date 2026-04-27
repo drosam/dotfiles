@@ -42,6 +42,8 @@ Write only the PR "Why" section. Do not create, edit, or update the PR.
 - Focus on motivation, not implementation.
 - Do not summarize every changed file.
 - Do not mention tests unless testing is central to the motivation.
+- When referencing code inline, wrap it in single backticks (for example, `Feature.coupons_improvements?`).
+- When including a code block, wrap it in triple backticks.
 
 ## Failure handling
 
