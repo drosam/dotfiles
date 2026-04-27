@@ -18,6 +18,7 @@ if [ -f /.dockerenv ]; then
     "opencode"
     "lazygit"
     "pi"
+    "skills"
   )
 else
   folders=(
@@ -36,6 +37,7 @@ else
     "opencode"
     "lazygit"
     "pi"
+    "skills"
   )
 fi
 
