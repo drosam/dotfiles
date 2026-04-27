@@ -17,6 +17,7 @@ if [ -f /.dockerenv ]; then
     "starship"
     "opencode"
     "lazygit"
+    "pi"
   )
 else
   folders=(
@@ -34,6 +35,7 @@ else
     "starship"
     "opencode"
     "lazygit"
+    "pi"
   )
 fi
 
