@@ -40,7 +40,7 @@ local function run(command)
 
 	if runner == "jest" then
 		local file = command:match("^(.-):%d+$") or command
-		terminal_cmd = "tmux send -t 2 'yarn test " .. file .. "' Enter"
+		terminal_cmd = "tmux send -t 2 'pnpm test " .. file .. "' Enter"
 	else
 		terminal_cmd = "tmux send -t 2 'bundle exec " .. runner .. " " .. command .. "' Enter"
 	end
