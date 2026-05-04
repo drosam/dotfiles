@@ -1,5 +1,5 @@
 {
-  "theme": "catppuccin-mocha",
+  "theme": "dark",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "medium",
@@ -12,5 +12,5 @@
   "packages": [
     "https://github.com/MasuRii/pi-permission-system"
   ],
-  "lastChangelogVersion": "0.70.2"
+  "lastChangelogVersion": "0.72.1"
 }
