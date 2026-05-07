@@ -6,11 +6,10 @@
   "enabledModels": [
     "anthropic/claude-sonnet-4-6",
     "anthropic/claude-opus-4-7",
-    "openai-codex/gpt-5.5",
-    "google-gemini-cli/gemini-3.1-pro-preview"
+    "openai-codex/gpt-5.5"
   ],
   "packages": [
     "https://github.com/MasuRii/pi-permission-system"
   ],
-  "lastChangelogVersion": "0.72.1"
+  "lastChangelogVersion": "0.74.0"
 }
