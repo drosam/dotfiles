@@ -55,6 +55,7 @@
     "BROWSER=headless_chrome bin/cucumber *": "allow",
     "pnpm test *": "allow",
     "pnpm run eslint *": "allow",
+    "pnpm exec eslint *": "allow",
     "rm *": "deny",
     "sudo *": "deny"
   },
