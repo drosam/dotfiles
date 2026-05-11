@@ -1,8 +1,33 @@
 return {
   {
     "sindrets/diffview.nvim",
-    depencencies = "nvim-lua/plenary.nvim",
+    dependencies = "nvim-lua/plenary.nvim",
+    opts = {
+      enhanced_diff_hl = true,
+    },
     init = function()
+      -- Better intra-line diffs and less noisy filler blocks in Diffview.
+      vim.opt.diffopt = {
+        "internal",
+        "filler",
+        "closeoff",
+        "algorithm:histogram",
+        "indent-heuristic",
+        "linematch:60",
+        "context:999999",
+      }
+      vim.opt.fillchars:append({ diff = " " })
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "DiffviewDiffBufWinEnter",
+        callback = function()
+          -- Show full files in Diffview; don't fold unchanged sections.
+          vim.wo.foldenable = false
+          vim.wo.foldlevel = 999
+
+        end,
+      })
+
       local function git_output(args)
         local output = vim.fn.systemlist(args)
 

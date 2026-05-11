@@ -5,6 +5,22 @@ return {
     priority = 1000,
     opts = {
       flavour = "mocha",
+      custom_highlights = function(colors)
+        return {
+          -- High-contrast diffs. Catppuccin defaults are too subtle in side-by-side Diffview.
+          DiffAdd = { bg = "#244B3A" },
+          DiffDelete = { bg = "#5A2733" },
+          DiffChange = { bg = "#313A5C" },
+          DiffText = { bg = "#5B4F24", style = { "bold" } },
+
+          DiffviewDiffAdd = { bg = "#244B3A" },
+          DiffviewDiffDelete = { bg = "#5A2733" },
+          DiffviewDiffAddAsDelete = { bg = "#5A2733" },
+          DiffviewDiffDeleteDim = { fg = colors.overlay1, bg = "#352334" },
+          DiffviewDiffChange = { bg = "#313A5C" },
+          DiffviewDiffText = { bg = "#5B4F24", style = { "bold" } },
+        }
+      end,
       integrations = {
         aerial = true,
         alpha = true,
@@ -53,8 +69,8 @@ return {
         end,
       },
     },
-    config = function()
-      require("catppuccin").setup()
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
 
       -- setup must be called before loading
       vim.cmd.colorscheme("catppuccin-mocha")
