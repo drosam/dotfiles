@@ -3,7 +3,7 @@
 	email = david.rosamoncayo@gmail.com
 
 [include]
-  path = ~/.config/delta/catpuccin.gitconfig0
+  path = ~/.config/delta/catppuccin.gitconfig
 
 [delta]
   features = catppuccin-mocha
@@ -11,7 +11,7 @@
 [core]
   pager = delta
 
-[iteractive]
+[interactive]
   diffFilter = delta --color-only
 
 [delta]

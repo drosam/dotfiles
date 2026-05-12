@@ -1,4 +1,3 @@
-[ax-theme = "Catppuccin Latte"
 [delta "catppuccin-frappe"]
 	blame-palette = "#303446 #292c3c #232634 #414559 #51576d"
 	commit-decoration-style = "box ul"
@@ -91,7 +90,8 @@
 		bold cyan => syntax "#384d5e", \
 	 bold yellow => syntax "#544f4e"
 	# Should match the name of the bat theme
-	syntax-theme = "Catppuccin Mocha" delta "catppuccin-latte"]
+	syntax-theme = "Catppuccin Mocha"
+[delta "catppuccin-latte"]
 	blame-palette = "#eff1f5 #e6e9ef #dce0e8 #ccd0da #bcc0cc"
 	commit-decoration-style = "box ul"
 	dark = false
@@ -121,4 +121,4 @@
 		bold cyan => syntax "#b4dff2", \
 		bold yellow => syntax "#ebd9bf"
 	# Should match the name of the bat theme
-  syntax-theme = "Catppuccin Mocha"
+	syntax-theme = "Catppuccin Latte"

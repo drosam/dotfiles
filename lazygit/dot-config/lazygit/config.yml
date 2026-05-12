@@ -4,3 +4,6 @@ gui:
   commandLogSize: 16
 git:
   autoFetch: false
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never
