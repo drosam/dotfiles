@@ -2,9 +2,27 @@ return {
   {
     "sindrets/diffview.nvim",
     dependencies = "nvim-lua/plenary.nvim",
-    opts = {
-      enhanced_diff_hl = true,
-    },
+    opts = function()
+      local actions = require("diffview.actions")
+
+      return {
+        enhanced_diff_hl = true,
+        keymaps = {
+          file_panel = {
+            -- Open selected file and move focus into the diff pane.
+            ["<cr>"] = actions.focus_entry,
+            -- Close whole Diffview from the file tree.
+            ["<esc>"] = function()
+              vim.cmd("DiffviewClose")
+            end,
+          },
+          view = {
+            -- Return focus to the file tree from the diff pane.
+            ["<esc>"] = actions.focus_files,
+          },
+        },
+      }
+    end,
     init = function()
       -- Better intra-line diffs and less noisy filler blocks in Diffview.
       vim.opt.diffopt = {
@@ -18,13 +36,25 @@ return {
       }
       vim.opt.fillchars:append({ diff = " " })
 
+      -- Mouse hover changes active window. Needed so wheel scroll over either
+      -- diff pane scrolls that pane and keeps scrollbind synced, no <C-l> first.
+      vim.opt.mousefocus = true
+
       vim.api.nvim_create_autocmd("User", {
         pattern = "DiffviewDiffBufWinEnter",
-        callback = function()
+        callback = function(event)
           -- Show full files in Diffview; don't fold unchanged sections.
           vim.wo.foldenable = false
           vim.wo.foldlevel = 999
+          vim.wo.scrollbind = true
 
+          -- VS Code-like chunk navigation inside Diffview.
+          vim.keymap.set("n", "<Down>", function()
+            vim.cmd.normal({ "]c", bang = true })
+          end, { buffer = event.buf, desc = "Next diff chunk" })
+          vim.keymap.set("n", "<Up>", function()
+            vim.cmd.normal({ "[c", bang = true })
+          end, { buffer = event.buf, desc = "Previous diff chunk" })
         end,
       })
 
