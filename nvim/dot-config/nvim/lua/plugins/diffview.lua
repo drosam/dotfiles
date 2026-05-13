@@ -40,6 +40,33 @@ return {
       -- diff pane scrolls that pane and keeps scrollbind synced, no <C-l> first.
       vim.opt.mousefocus = true
 
+     local function scroll_mouse_window(keys)
+        local mouse = vim.fn.getmousepos()
+
+        if mouse.winid and mouse.winid ~= 0 then
+          vim.fn.win_gotoid(mouse.winid)
+        end
+
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), "n", false)
+      end
+
+      local diffview_mapped_buffers = {}
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "DiffviewViewClosed",
+        callback = function()
+          for bufnr in pairs(diffview_mapped_buffers) do
+            if vim.api.nvim_buf_is_valid(bufnr) then
+              pcall(vim.keymap.del, "n", "<ScrollWheelDown>", { buffer = bufnr })
+              pcall(vim.keymap.del, "n", "<ScrollWheelUp>", { buffer = bufnr })
+            end
+          end
+
+          diffview_mapped_buffers = {}
+          vim.wo.scrollbind = false
+        end,
+      })
+
       vim.api.nvim_create_autocmd("User", {
         pattern = "DiffviewDiffBufWinEnter",
         callback = function(event)
@@ -47,14 +74,16 @@ return {
           vim.wo.foldenable = false
           vim.wo.foldlevel = 999
           vim.wo.scrollbind = true
+          diffview_mapped_buffers[event.buf] = true
 
-          -- VS Code-like chunk navigation inside Diffview.
-          vim.keymap.set("n", "<Down>", function()
-            vim.cmd.normal({ "]c", bang = true })
-          end, { buffer = event.buf, desc = "Next diff chunk" })
-          vim.keymap.set("n", "<Up>", function()
-            vim.cmd.normal({ "[c", bang = true })
-          end, { buffer = event.buf, desc = "Previous diff chunk" })
+          -- Mouse wheel must focus the pane under the pointer first; otherwise
+          -- Neovim can scroll that pane directly without triggering scrollbind.
+          vim.keymap.set("n", "<ScrollWheelDown>", function()
+            scroll_mouse_window("<C-e>")
+          end, { buffer = event.buf, desc = "Scroll synced diff down" })
+          vim.keymap.set("n", "<ScrollWheelUp>", function()
+            scroll_mouse_window("<C-y>")
+          end, { buffer = event.buf, desc = "Scroll synced diff up" })
         end,
       })
 
