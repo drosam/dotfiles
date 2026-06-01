@@ -172,6 +172,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 PROMPT='%F{blue}%n %F{green}%~%f%F{yellow}$(git_branch_info) %F{green}$ %f'
 
+
+export HEROKU_ORGANIZATION="booqable"
+
 eval "$(starship init zsh)"
 
 # Activate mise if available
