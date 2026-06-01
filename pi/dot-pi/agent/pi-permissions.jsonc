@@ -53,10 +53,12 @@
     "bin/cucumber *": "allow",
     "BROWSER=headless_chrome bundle exec cucumber *": "allow",
     "BROWSER=headless_chrome bin/cucumber *": "allow",
+    "bundle exec rubocop *": "allow",
+    "bin/rubocop *": "allow",
     "pnpm test *": "allow",
     "pnpm run eslint *": "allow",
     "pnpm exec eslint *": "allow",
-    "rm *": "deny",
+    "rm *": "ask",
     "sudo *": "deny"
   },
   "mcp": {
