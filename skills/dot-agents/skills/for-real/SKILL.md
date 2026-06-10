@@ -1,6 +1,6 @@
 ---
 name: for-real
-description: "Force a skeptical second pass on your own work. Because 'it should work' has never once been true."
+description: Force a skeptical second pass before declaring work done. Use when user says "for real", asks to verify work, challenges confidence, or wants proof through diff review, tests, build, and focused manual checks.
 disable-model-invocation: true
 ---
 

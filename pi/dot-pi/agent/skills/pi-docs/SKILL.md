@@ -79,6 +79,7 @@ Useful local paths:
 
 - Read before changing.
 - Prefer extension APIs over guessing JSON settings.
+- GitHub CLI (`gh`) is available and acceptable to use when useful.
 - For extension examples in this repo, match local import convention: `@mariozechner/pi-coding-agent` and `@mariozechner/pi-tui`.
 - Use `/reload` after extension/skill/theme changes in interactive pi.
 - Verify with a cheap command when possible, e.g. `pi --list-models <model> --extension <path> --offline`.

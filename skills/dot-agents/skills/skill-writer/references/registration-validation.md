@@ -4,28 +4,29 @@ Apply repository registration and quality checks before completion.
 
 ## Registration checklist
 
-1. Inspect the workspace and identify the canonical skill root for this repository before editing skill files.
+1. Inspect the workspace and identify the canonical skill root before editing skill files.
 2. Create/update `<skill-root>/SKILL.md` and any bundled `references/`, `scripts/`, or `assets/` beneath that root.
-3. Add/update canonical skill in `README.md` Available Skills table (alphabetical; exclude alias/symlink entries).
-4. Add/update `Skill(sentry-skills:<name>)` in `.claude/settings.json`.
-5. Add/update the skill allowlist in this repository's canonical `claude-settings-audit` skill.
+3. Update live symlinks only when the skill should be exposed to that runtime.
+4. Do not add README tables or provider settings unless this repository actually uses them for skill discovery.
 
-For this repository today:
+For this dotfiles repository today:
 
-- skill sources live under `plugins/sentry-skills/skills/`
-- `.agents/skills` is a symlinked mirror of that tree, not a separate registration target
-- repository-level registration files still live at `README.md` and `.claude/settings.json`
+- general skill sources live under `skills/dot-agents/skills/`
+- pi-specific skill sources live under `pi/dot-pi/agent/skills/`
+- live agent skills usually mirror general skills under `~/.agents/skills/`
+- live Claude skills usually mirror the subset exposed to Claude under `~/.claude/skills/`
+- live Pi skills usually mirror pi-specific skills under `~/.pi/agent/skills/`
+- symlink targets must point back to canonical repo paths, not to another live mirror
 
 ## Validation checklist
 
 1. Run:
 
 ```bash
-uv run scripts/quick_validate.py <path/to/skill-directory> --strict-depth
+uv run skills/dot-agents/skills/skill-writer/scripts/quick_validate.py <path/to/skill-directory> --strict-depth
 ```
 
-Use the skill-root-relative form above when running from the `skill-writer` directory.
-If you must run the validator from another working directory, convert both paths to the correct relative path from that directory instead of introducing absolute or host-specific paths into the skill docs.
+Run from the repository root when possible. If running from another directory, convert both paths to relative paths from that directory instead of introducing absolute or host-specific paths into skill docs.
 
 2. Confirm for authoring/generator skills:
 - transformed examples exist in references (happy-path, secure/robust, anti-pattern+fix)

@@ -1,6 +1,6 @@
 ---
 name: deslop
-description: Review recently written code for over-engineering, paranoia, defensive chaff, and LLM-generated slop. Scans a diff (staged changes, last N commits, or user-specified range), checks each candidate against local codebase idiom (Chesterton's fence), proposes a numbered verdict list, and applies only what the user explicitly picks. Use after implementing a feature, before opening a PR, or when asked to "deslop", "trim chaff", "trim the fat", "cut cruft", "remove paranoia", "check for over-engineering", "simplify what I just wrote", or "critical review of what I wrote".
+description: Review recently written code for over-engineering, paranoia, defensive chaff, and LLM-generated slop. Scans a diff, checks each candidate against local codebase idiom, proposes a numbered verdict list, and applies only what the user explicitly picks. Use when asked to "deslop", "trim chaff", "trim the fat", "cut cruft", "remove paranoia", "check for over-engineering", "simplify what I just wrote", or review fresh code before a PR.
 disable-model-invocation: true
 ---
 

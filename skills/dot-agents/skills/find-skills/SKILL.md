@@ -1,22 +1,11 @@
 ---
 name: find-skills
-description: Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.
+description: Discover, evaluate, and optionally install agent skills from the open skills ecosystem. Use when the user asks "find a skill", "is there a skill", "can you do X with a skill", "how do I do X", or wants to extend agent capabilities with installable skills.
 ---
 
 # Find Skills
 
-This skill helps you discover and install skills from the open agent skills ecosystem.
-
-## When to Use This Skill
-
-Use this skill when the user:
-
-- Asks "how do I do X" where X might be a common task with an existing skill
-- Says "find a skill for X" or "is there a skill for X"
-- Asks "can you do X" where X is a specialized capability
-- Expresses interest in extending agent capabilities
-- Wants to search for tools, templates, or workflows
-- Mentions they wish they had help with a specific domain (design, testing, deployment, etc.)
+Discover and vet installable skills. Ask before installing anything.
 
 ## What is the Skills CLI?
 
@@ -80,22 +69,23 @@ When you find relevant skills, present them to the user with:
 3. The install command they can run
 4. A link to learn more at skills.sh
 
-Example response:
+Use this format:
 
-```
-I found a skill that might help! The "react-best-practices" skill provides
-React and Next.js performance optimization guidelines from Vercel Engineering.
-(185K installs)
+```markdown
+found:
+1. `<skill>` — <what it does>
+   - match: <why it fits>
+   - trust: <install count/source/stars/activity>
+   - install: `npx skills add <package> -g -y`
+   - link: <url>
 
-To install it:
-npx skills add vercel-labs/agent-skills@react-best-practices
-
-Learn more: https://skills.sh/vercel-labs/agent-skills/react-best-practices
+recommend: <best option or no-install recommendation>
+next: install it?
 ```
 
 ### Step 6: Offer to Install
 
-If the user wants to proceed, you can install the skill for them:
+Ask for explicit approval before installing. If the user wants to proceed, run:
 
 ```bash
 npx skills add <owner/repo@skill> -g -y

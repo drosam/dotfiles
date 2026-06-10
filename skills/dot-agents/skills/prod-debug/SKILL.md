@@ -1,23 +1,40 @@
 ---
 name: prod-debug
-description: Read-only production debugging workflow for investigating production errors, logs, Rails console observations, and live data symptoms. Use when asked to find or explain a production bug. Strictly forbids DB writes and code changes until user explicitly says coding is allowed.
+description: Read-only production debugging workflow for production incidents, prod bugs, Sentry errors, logs, Rails console observations, and live data symptoms. Use when asked to investigate, find, explain, or verify a production issue. Strictly forbids production mutation and copies required production commands/snippets to clipboard for the user to run.
 ---
 
 # Prod Debug
 
 Use this skill for production incident/debug tasks where safety matters more than speed.
 
+Default stance: inspect local code read-only, but do not run anything against production. When production data, logs, console output, or operational command output is needed, prepare the exact read-only command/snippet, copy it to the clipboard, and ask the user to paste/run it.
+
 ## Hard Safety Rules
 
 - Read-only task until user explicitly says code changes are allowed.
 - Do not change code, config, migrations, seeds, scripts, feature flags, env vars, jobs, queues, caches, or production data.
-- Do not run any command that can create/edit/delete DB data, enqueue jobs, send emails/webhooks, mutate cache, call external write APIs, or trigger side effects.
+- Do not run any production command yourself. The user runs all production commands.
+- Do not run any command that can create/edit/delete DB data, enqueue jobs, send emails/webhooks, mutate cache, call external write APIs, retry/replay events, acknowledge incidents, toggle flags, or trigger side effects.
 - Do not run Rails console commands directly against production.
 - Do not run Rails runner directly against production.
 - Do not run migrations, rake tasks, backfills, data fixes, or admin scripts.
 - Do not use `save`, `save!`, `update`, `update!`, `create`, `create!`, `destroy`, `destroy!`, `delete`, `delete_all`, `update_all`, `insert`, `upsert`, `touch`, `increment!`, `decrement!`, `deliver_now`, `deliver_later`, `perform_later`, or similar mutators.
 - Treat indirect writes as writes. Avoid methods with callbacks, tracking, audit logs, counters, timestamps, network calls, or job enqueues.
 - If unsure whether action mutates state, do not run it. Ask user or propose safer alternative.
+
+## Allowed Local Actions
+
+Allowed for the assistant:
+
+- Read and search local code/docs.
+- Inspect local git status, diff, log, and blame.
+- Copy read-only commands/snippets to clipboard.
+
+Not allowed unless the user explicitly asks the assistant to run it:
+
+- Any command using production/staging credentials.
+- Any command that starts app runtime, console, runner, jobs, workers, servers, or tests against live services.
+- Any command where environment or side effects are uncertain.
 
 ## Goal
 
@@ -41,12 +58,17 @@ Find likely bug from production error/symptom, explain cause, impact, evidence, 
    - Identify data assumptions and edge cases.
    - List evidence for/against each hypothesis.
 5. Request production observations only when needed.
-6. For Rails console needs:
+6. For any production command/snippet/log query:
+   - Do not run it yourself.
+   - Make it read-only and narrowly scoped.
+   - Copy it to the clipboard with `pbcopy` so the user only has to paste.
+   - Wait for the user to paste the result before continuing.
+7. For Rails console needs:
    - Do not run console yourself.
    - Propose one read-only snippet.
    - Copy snippet to clipboard with `pbcopy` so user can paste it.
    - Wait for user to paste result.
-7. Final output:
+8. Final output:
    - `bug:` concise root cause.
    - `evidence:` bullets.
    - `impact:` affected users/data/path.
@@ -90,7 +112,9 @@ nil
 
 ## Clipboard Step
 
-After proposing a Rails console snippet, copy exactly that snippet to clipboard using local shell:
+After proposing any production observation command, log query, or Rails console snippet, copy exactly that text to clipboard using local shell.
+
+For Rails snippets:
 
 ```bash
 cat <<'RUBY' | pbcopy
@@ -98,7 +122,18 @@ cat <<'RUBY' | pbcopy
 RUBY
 ```
 
-Then say: `snippet copied to clipboard. Paste into Rails console, then paste output here.`
+For shell/log commands:
+
+```bash
+cat <<'COMMAND' | pbcopy
+# command here
+COMMAND
+```
+
+Then say one of:
+
+- `snippet copied to clipboard. Paste into Rails console, then paste output here.`
+- `command copied to clipboard. Run it, then paste output here.`
 
 ## Prohibited Output
 
