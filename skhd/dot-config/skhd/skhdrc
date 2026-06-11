@@ -105,7 +105,7 @@
 #    "qutebrowser"
 # ]
 
-alt - t: open -a /Applications/Ghostty.app
+alt - return: open -a /Applications/Ghostty.app
 alt - b: open -a /Applications/Arc.app
 alt - w: open -a /Applications/WhatsApp.app
 alt - s: open -a /Applications/Slack.app
