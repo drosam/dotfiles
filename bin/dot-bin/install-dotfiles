@@ -1,9 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-cd ~/Developer/dotfiles
+repo_dir="${DOTFILES_DIR:-$HOME/Developer/dotfiles}"
+cd "$repo_dir"
 
-rm ~/.zshrc
+# ~/.zshrc is commonly created by oh-my-zsh. Remove it so stow can own the link.
+rm -f "$HOME/.zshrc"
 
+# Docker/dev containers do not need GUI app config.
 if [ -f /.dockerenv ]; then
   folders=(
     "delta"
@@ -41,6 +45,4 @@ else
   )
 fi
 
-stow --dotfiles -t $HOME "${folders[@]}"
-
-cd -
+stow --dotfiles -t "$HOME" "${folders[@]}"
