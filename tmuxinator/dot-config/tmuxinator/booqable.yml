@@ -58,10 +58,6 @@ windows:
       root: ~/Developer/booqable/develop
       panes:
         - claude
-  - opencode:
-      root: ~/Developer/booqable/develop
-      panes:
-        - opencode --port
   - π:
       root: ~/Developer/booqable/develop
       panes:
