@@ -105,13 +105,23 @@
 #    "qutebrowser"
 # ]
 
-alt - return: open -a /Applications/Ghostty.app
-alt - b: open -a /Applications/Arc.app
-alt - w: open -a /Applications/WhatsApp.app
-alt - s: open -a /Applications/Slack.app
-alt - f: open -a /System/Library/CoreServices/Finder.app
-alt - d: open -a /Applications/TablePlus.app
-alt - m: open -a /System/Applications/Music.app
-alt - 1: open -a /Applications/1Password.app
-alt - p: open -a /Applications/Bitwarden.app
+# alt - t: open -a /Applications/Ghostty.app
+# alt - b: open -a /Applications/Arc.app
+# alt - w: open -a /Applications/WhatsApp.app
+# alt - s: open -a /Applications/Slack.app
+# alt - f: open -a /System/Library/CoreServices/Finder.app
+# alt - d: open -a /Applications/TablePlus.app
+# alt - m: open -a /System/Applications/Music.app
+# alt - 1: open -a /Applications/1Password.app
+# alt - p: open -a /Applications/Bitwarden.app
+
+ctrl + alt + shift + cmd - return: open -a /Applications/Ghostty.app
+ctrl + alt + shift + cmd - b: open -a /Applications/Arc.app
+ctrl + alt + shift + cmd - w: open -a /Applications/WhatsApp.app
+ctrl + alt + shift + cmd - s: open -a /Applications/Slack.app
+ctrl + alt + shift + cmd - f: open -a /System/Library/CoreServices/Finder.app
+ctrl + alt + shift + cmd - d: open -a /Applications/TablePlus.app
+ctrl + alt + shift + cmd - m: open -a /System/Applications/Music.app
+ctrl + alt + shift + cmd - o: open -a /Applications/1Password.app
+ctrl + alt + shift + cmd - p: open -a /Applications/Bitwarden.app
 
