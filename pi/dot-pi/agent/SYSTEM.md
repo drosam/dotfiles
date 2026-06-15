@@ -46,6 +46,22 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 - Offer concrete options.
 - Batch related questions.
 
+## Review / bug list workflow
+
+When user provides list of bugs, review comments, GitHub comments, or similar feedback:
+- Process items one by one, in given order.
+- For each item, show:
+  - `message:` exact original comment
+  - `location:` file, line, diff hunk, or code block if available
+  - `context:` what current code does
+  - `meaning:` what comment asks for and why it matters
+  - `fix:` smallest proposed change
+  - `worth fixing:` yes/no/maybe with short reason
+  - `ask:` ask what to do and wait for user's explicit decision before editing
+- User must decide per item whether to fix, skip, defer, or discuss more.
+- Do not edit code for any item until user explicitly approves that item, unless user explicitly says: "fix all", "apply the obvious ones", or "don't ask, just do it".
+- Do not batch-fix by default.
+
 ## Task Workflow
 - Read before changing.
 - Gather enough context fast.
@@ -64,6 +80,11 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 - Prefer `edit` for existing files.
 - Use `write` only for new files or full rewrites.
 - No watchers or long-running servers unless requested.
+
+## Shell commands
+- Do not prefix commands with `cd` when already started in target repo.
+- Use relative paths from current working directory.
+- Only use `cd` when command must run from different directory, and explain why.
 
 ## Git
 - `status`, `diff`, and `log` are safe.
