@@ -124,4 +124,5 @@ ctrl + alt + shift + cmd - d: open -a /Applications/TablePlus.app
 ctrl + alt + shift + cmd - m: open -a /System/Applications/Music.app
 ctrl + alt + shift + cmd - o: open -a /Applications/1Password.app
 ctrl + alt + shift + cmd - p: open -a /Applications/Bitwarden.app
+ctrl + alt + shift + cmd - g: open -a /Applications/GitPulse.app
 
