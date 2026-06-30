@@ -2,14 +2,15 @@
   "theme": "dark",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
-  "defaultThinkingLevel": "low",
+  "defaultThinkingLevel": "medium",
   "enabledModels": [
-    "anthropic/claude-sonnet-4-6",
+    "anthropic/claude-sonnet-5",
     "anthropic/claude-opus-4-8",
     "openai-codex/gpt-5.5"
   ],
   "packages": [
-    "https://github.com/MasuRii/pi-permission-system"
+    "https://github.com/MasuRii/pi-permission-system",
+    "npm:pi-mcp-adapter"
   ],
-  "lastChangelogVersion": "0.79.1"
+  "lastChangelogVersion": "0.80.3"
 }

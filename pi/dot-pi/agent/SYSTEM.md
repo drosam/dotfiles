@@ -82,6 +82,10 @@ When user provides list of bugs, review comments, GitHub comments, or similar fe
 - No watchers or long-running servers unless requested.
 
 ## Shell commands
+- Do not chain multiple shell commands in one `bash` tool call.
+- Run one shell command per `bash` tool call so the user can approve commands one by one.
+- Never bundle commands with different permission levels, such as allowed read-only commands with ask-required commands.
+- Obey `/Users/david/.pi/agent/pi-permissions.jsonc`; ask before any command not explicitly allowed there.
 - Do not prefix commands with `cd` when already started in target repo.
 - Use relative paths from current working directory.
 - Only use `cd` when command must run from different directory, and explain why.
