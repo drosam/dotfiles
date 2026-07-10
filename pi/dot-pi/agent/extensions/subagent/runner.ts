@@ -9,7 +9,7 @@ import * as os from "node:os"
 import * as path from "node:path"
 import type { Message } from "@mariozechner/pi-ai"
 import { withFileMutationQueue } from "@mariozechner/pi-coding-agent"
-import type { AgentConfig } from "./agents.js"
+import { resolveModel, type AgentConfig } from "./agents.js"
 
 interface UsageStats {
   input: number
@@ -77,6 +77,7 @@ async function writePromptFile(
 }
 
 export interface CallerDefaults {
+  provider?: string
   model?: string
   thinking?: string
 }
@@ -94,7 +95,7 @@ export function buildArgs(agent: AgentConfig, callerDefaults?: CallerDefaults): 
     // default: clean sandbox, no extensions
     args.push("--no-extensions")
   }
-  const model = agent.model ?? callerDefaults?.model
+  const model = resolveModel(agent.model, callerDefaults?.provider) ?? callerDefaults?.model
   const thinking = agent.thinking ?? callerDefaults?.thinking
   if (model) args.push("--model", model)
   if (thinking) args.push("--thinking", thinking)
@@ -115,7 +116,7 @@ export async function runAgent(
   let tmpDir: string | null = null
   let tmpPath: string | null = null
 
-  const effectiveModel = agent.model ?? callerDefaults?.model
+  const effectiveModel = resolveModel(agent.model, callerDefaults?.provider) ?? callerDefaults?.model
   const effectiveThinking = agent.thinking ?? callerDefaults?.thinking
 
   const result: RunResult = {

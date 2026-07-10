@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach, afterEach } from "vitest"
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from "node:fs"
 import { join } from "node:path"
 import { tmpdir } from "node:os"
-import { loadAgentsFromDir } from "./agents.js"
+import { loadAgentsFromDir, resolveModel } from "./agents.js"
 
 let tmpDir: string
 
@@ -40,6 +40,36 @@ You are a scout agent.
       source: "user",
       systemPrompt: expect.stringContaining("You are a scout agent"),
     })
+  })
+
+  test("loads provider-specific model map", () => {
+    writeFileSync(
+      join(tmpDir, "scout.md"),
+      `---
+name: scout
+description: Fast recon agent
+model:
+  anthropic: claude-haiku-4-5
+  openai-codex: gpt-5.4-mini
+---
+Body
+`,
+    )
+
+    const agents = loadAgentsFromDir(tmpDir, "user")
+
+    expect(agents[0]!.model).toEqual({
+      anthropic: "claude-haiku-4-5",
+      "openai-codex": "gpt-5.4-mini",
+    })
+  })
+
+  test("resolves provider-specific model for caller provider", () => {
+    expect(resolveModel({ anthropic: "claude-haiku-4-5" }, "anthropic")).toBe(
+      "anthropic/claude-haiku-4-5",
+    )
+    expect(resolveModel({ anthropic: "claude-haiku-4-5" }, "openai-codex")).toBeUndefined()
+    expect(resolveModel("claude-haiku-4-5", "anthropic")).toBe("claude-haiku-4-5")
   })
 
   test("skips files missing required frontmatter fields", () => {

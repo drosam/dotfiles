@@ -53,6 +53,26 @@ describe("buildArgs", () => {
     expect(args[idx + 1]).toBe("claude-haiku-4-5")
   })
 
+  test("resolves provider-specific model map", () => {
+    const args = buildArgs(agent({ model: { anthropic: "claude-haiku-4-5" } }), {
+      provider: "anthropic",
+      model: "anthropic/claude-sonnet-5",
+    })
+    const idx = args.indexOf("--model")
+    expect(idx).toBeGreaterThan(-1)
+    expect(args[idx + 1]).toBe("anthropic/claude-haiku-4-5")
+  })
+
+  test("falls back to caller model when provider map has no match", () => {
+    const args = buildArgs(agent({ model: { anthropic: "claude-haiku-4-5" } }), {
+      provider: "openai-codex",
+      model: "openai-codex/gpt-5.5",
+    })
+    const idx = args.indexOf("--model")
+    expect(idx).toBeGreaterThan(-1)
+    expect(args[idx + 1]).toBe("openai-codex/gpt-5.5")
+  })
+
   test("omits --model when not specified", () => {
     const args = buildArgs(agent())
     expect(args).not.toContain("--model")

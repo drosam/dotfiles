@@ -23,17 +23,30 @@ const THINKING_LEVELS: ReadonlySet<string> = new Set<ThinkingLevel>([
   "xhigh",
 ])
 
+export type ModelConfig = string | Record<string, string>
+
 export interface AgentConfig {
   name: string
   description: string
   tools?: string[]
-  model?: string
+  model?: ModelConfig
   thinking?: ThinkingLevel
   /** undefined/false = --no-extensions (default), true = all, string[] = specific extensions */
   extensions?: boolean | string[]
   systemPrompt: string
   source: "user" | "project"
   filePath: string
+}
+
+export function resolveModel(config: ModelConfig | undefined, callerProvider?: string): string | undefined {
+  if (!config) return undefined
+  if (typeof config === "string") return config
+  if (!callerProvider) return undefined
+
+  const model = config[callerProvider]
+  if (!model) return undefined
+
+  return `${callerProvider}/${model}`
 }
 
 // ── Extension resolution ────────────────────────────────────────────
@@ -144,6 +157,28 @@ function parseExtensions(value: unknown): AgentConfig["extensions"] {
     .filter(Boolean)
 }
 
+function parseModel(value: unknown): ModelConfig | undefined {
+  if (!value) return undefined
+
+  if (typeof value === "string") {
+    const model = value.trim()
+    return model ? model : undefined
+  }
+
+  if (typeof value !== "object") return undefined
+
+  const parsed: Record<string, string> = {}
+  for (const [provider, model] of Object.entries(value as Record<string, unknown>)) {
+    if (!provider || typeof model !== "string") continue
+    const providerId = provider.trim()
+    const modelId = model.trim()
+    if (!providerId || !modelId) continue
+    parsed[providerId] = modelId
+  }
+
+  return Object.keys(parsed).length > 0 ? parsed : undefined
+}
+
 // ── Agent loading ───────────────────────────────────────────────────
 
 export function loadAgentsFromDir(
@@ -175,7 +210,14 @@ export function loadAgentsFromDir(
       continue
     }
 
-    const { frontmatter, body } = parseFrontmatter<Record<string, string>>(content)
+    const { frontmatter, body } = parseFrontmatter<{
+      name?: string
+      description?: string
+      tools?: string
+      extensions?: unknown
+      thinking?: unknown
+      model?: unknown
+    }>(content)
     if (!frontmatter.name || !frontmatter.description) continue
 
     const tools = frontmatter.tools
@@ -194,7 +236,7 @@ export function loadAgentsFromDir(
       name: frontmatter.name,
       description: frontmatter.description,
       tools: tools && tools.length > 0 ? tools : undefined,
-      model: frontmatter.model,
+      model: parseModel(frontmatter.model),
       thinking,
       extensions: resolvedExtensions,
       systemPrompt: body,

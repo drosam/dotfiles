@@ -25,6 +25,18 @@ interface SubagentDetails {
   result: RunResult | null
 }
 
+function formatConfiguredModel(model: unknown): string | undefined {
+  if (!model) return undefined
+  if (typeof model === "string") return model
+  if (typeof model !== "object") return undefined
+
+  const entries = Object.entries(model as Record<string, unknown>)
+    .filter(([, value]) => typeof value === "string" && value.trim())
+    .map(([provider, value]) => `${provider}/${value}`)
+
+  return entries.length > 0 ? entries.join(", ") : undefined
+}
+
 const SubagentParams = Type.Object({
   description: Type.String({
     description: "A short (3-5 words) description of the task",
@@ -126,7 +138,8 @@ export default function(pi: ExtensionAPI) {
       const cwd = ctx.cwd
 
       const callerDefaults: CallerDefaults = {
-        model: ctx.model?.id,
+        provider: ctx.model?.provider,
+        model: ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : undefined,
         thinking: pi.getThinkingLevel(),
       }
 
@@ -219,7 +232,8 @@ export default function(pi: ExtensionAPI) {
       const lines = discovered.map((a) => {
         const badge = a.source === "project" ? " (project)" : ""
         const desc = a.description ? ` — ${a.description}` : ""
-        const model = a.model ? ` [${a.model}]` : ""
+        const configuredModel = formatConfiguredModel(a.model)
+        const model = configuredModel ? ` [${configuredModel}]` : ""
         const tools = a.tools ? ` tools: ${a.tools.join(", ")}` : ""
         return `• ${a.name}${badge}${model}${desc}${tools}`
       })
@@ -239,7 +253,8 @@ export default function(pi: ExtensionAPI) {
       const lines = listed.map((a: any) => {
         const badge = a.source === "project" ? theme.fg("accent", " (project)") : ""
         const desc = a.description ? theme.fg("dim", ` — ${a.description}`) : ""
-        const model = a.model ? theme.fg("dim", ` [${a.model}]`) : ""
+        const configuredModel = formatConfiguredModel(a.model)
+        const model = configuredModel ? theme.fg("dim", ` [${configuredModel}]`) : ""
         return `  ${theme.fg("toolTitle", theme.bold(a.name))}${badge}${model}${desc}`
       })
       return new Text(lines.join("\n"), 0, 0)
