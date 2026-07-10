@@ -4,15 +4,15 @@ PROJECTS_DIR="$HOME/Developer"
 
 # fuzzy find a project in PROJECTS_DIR and create a new tmux session in that dir with the project name
 # 
-PROJECTS=$(ls -l "$PROJECTS_DIR" | grep '^d' | awk '{print " ", $NF}')
+PROJECTS=$(find "$PROJECTS_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sed 's/^/ /')
 
-TMUXINATORS=$(for f in "$HOME/.config/tmuxinator"/*; do
+TMUXINATORS=$(for f in "$HOME/.config/tmuxinator"/*.yml; do
   [ -f "$f" ] && echo " ${f##*/}" | sed 's/\.[^.]*$//'
 done)
 
 BOOQABLE_WORKTREE=" booqable-worktree"
 
-SELECTED=$(printf "$PROJECTS\n$TMUXINATORS\n$BOOQABLE_WORKTREE" | fzf --tmux)
+SELECTED=$(printf "%s\n%s\n%s\n" "$PROJECTS" "$TMUXINATORS" "$BOOQABLE_WORKTREE" | fzf --tmux)
 
 [ -z "$SELECTED" ] && exit 0
 
@@ -44,8 +44,8 @@ elif [[ $SELECTED == *"booqable-worktree"* ]]; then
   tmux send-keys -t "$WORKTREE_NAME:code" "nvim" Enter
   tmux new-window -t "$WORKTREE_NAME" -n claude -c "$WORKTREE_DIR"
   tmux send-keys -t "$WORKTREE_NAME:claude" "claude" Enter
-  tmux new-window -t "$WORKTREE_NAME" -n opencode -c "$WORKTREE_DIR"
-  tmux send-keys -t "$WORKTREE_NAME:opencode" "opencode --port" Enter
+  tmux new-window -t "$WORKTREE_NAME" -n π -c "$WORKTREE_DIR"
+  tmux send-keys -t "$WORKTREE_NAME:π" "pi" Enter
 
   if [ $TMUX ]; then
     tmux switch-client -t "$WORKTREE_NAME"
@@ -53,12 +53,12 @@ elif [[ $SELECTED == *"booqable-worktree"* ]]; then
     tmux attach -t "$WORKTREE_NAME"
   fi
 else
-  SELECTED=$(echo $SELECTED | awk '{print $NF}')
+  SELECTED=$(echo "$SELECTED" | awk '{print $NF}')
 
-  if [ $TMUX ]; then
-    tmux new-session -d -s $SELECTED -c "$PROJECTS_DIR/$SELECTED"
-    tmux switch-client -t $SELECTED
+  if [ "$TMUX" ]; then
+    tmux new-session -d -s "$SELECTED" -c "$PROJECTS_DIR/$SELECTED"
+    tmux switch-client -t "$SELECTED"
   else
-    tmux new-session -As $SELECTED -c "$PROJECTS_DIR/$SELECTED"
+    tmux new-session -As "$SELECTED" -c "$PROJECTS_DIR/$SELECTED"
   fi
 fi
