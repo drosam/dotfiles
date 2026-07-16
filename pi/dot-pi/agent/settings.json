@@ -1,18 +1,19 @@
 {
   "theme": "dark",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-terra",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-sonnet-5",
   "defaultThinkingLevel": "medium",
   "enabledModels": [
     "anthropic/claude-sonnet-5",
     "anthropic/claude-opus-4-8",
     "openai-codex/gpt-5.6-sol",
-    "openai-codex/gpt-5.6-terra"
+    "openai-codex/gpt-5.6-terra",
+    "openai-codex/gpt-5.6-luna"
   ],
   "packages": [
     "https://github.com/MasuRii/pi-permission-system",
     "npm:pi-mcp-adapter",
     "npm:pi-lsp-extension"
   ],
-  "lastChangelogVersion": "0.80.6"
+  "lastChangelogVersion": "0.80.7"
 }
