@@ -136,16 +136,73 @@ return {
         vim.cmd("DiffviewOpen " .. resolved_base .. "...HEAD --imply-local")
       end
 
-      local function branch_sort_key(branch)
-        if branch == "main" then
+      local function current_branch()
+        return git_output({ "git", "branch", "--show-current" })
+      end
+
+      local function branch_creation_base(branch)
+        local entries = git_output_lines({ "git", "reflog", "--format=%H%x09%gs", branch })
+
+        if entries == nil then
+          return nil
+        end
+
+        -- Reflog is newest first. Walk oldest first to find branch creation.
+        for index = #entries, 1, -1 do
+          local hash, entry = entries[index]:match("^([^%s]+)%s+(.+)$")
+
+          if hash ~= nil and entry ~= nil and entry:match("^branch: Created from .+$") ~= nil then
+            return hash
+          end
+        end
+
+        return nil
+      end
+
+      local function configured_base(branch)
+        local base = git_output({ "git", "config", "--get", "branch." .. branch .. ".base" })
+
+        if base ~= nil and resolve_base_ref(base) ~= nil then
+          return base
+        end
+
+        return nil
+      end
+
+      local function infer_default_base(branches)
+        local branch = current_branch()
+
+        if branch ~= nil then
+          local base = configured_base(branch) or branch_creation_base(branch)
+
+          if base ~= nil then
+            return base
+          end
+        end
+
+        for _, base in ipairs({ "main", "master" }) do
+          if vim.tbl_contains(branches, base) then
+            return base
+          end
+        end
+
+        return branches[1]
+      end
+
+      local function branch_sort_key(branch, default_base)
+        if branch == default_base then
           return "0"
         end
 
-        if branch == "master" then
+        if branch == "main" then
           return "1"
         end
 
-        return "2" .. branch
+        if branch == "master" then
+          return "2"
+        end
+
+        return "3" .. branch
       end
 
       local function open_branch_diff()
@@ -156,18 +213,26 @@ return {
           return
         end
 
+        local default_base = infer_default_base(branches)
+        local default_label = default_base
+        local refs_by_label = {}
+
+        if default_base ~= nil and not vim.tbl_contains(branches, default_base) then
+          default_label = "Base commit"
+          refs_by_label[default_label] = default_base
+          table.insert(branches, default_label)
+        end
+
         table.sort(branches, function(a, b)
-          return branch_sort_key(a) < branch_sort_key(b)
+          return branch_sort_key(a, default_label) < branch_sort_key(b, default_label)
         end)
 
-        local default_base = branches[1]
-
-        vim.ui.select(branches, { prompt = "Base branch (default: " .. default_base .. "): " }, function(base_ref)
+        vim.ui.select(branches, { prompt = "Base branch (default: " .. default_label .. "): " }, function(base_ref)
           if base_ref == nil then
             return
           end
 
-          open_diff_from_base(base_ref)
+          open_diff_from_base(refs_by_label[base_ref] or base_ref)
         end)
       end
 
