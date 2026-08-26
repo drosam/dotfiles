@@ -43,6 +43,7 @@ Create minimal, cohesive commits from current changes.
 5. Write commit message:
    - Use one concise sentence for the title.
    - Prefer imperative mood.
+   - Do not include a ticket or issue number unless the user explicitly requests it.
    - No trailers.
    - No body, with one exception: if the changes being committed originate from a GitHub comment (a PR review comment, PR/issue comment, or commit comment referenced in the task or conversation), add that comment's URL as the commit body, formatted as a single line: `Source: <comment-url>`.
    - Only add the `Source:` line when an actual comment URL is known. Never fabricate or guess a URL.
