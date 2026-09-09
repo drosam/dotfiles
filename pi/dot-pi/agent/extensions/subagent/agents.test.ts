@@ -50,7 +50,7 @@ name: scout
 description: Fast recon agent
 model:
   anthropic: claude-haiku-4-5
-  openai-codex: gpt-5.4-mini
+  openai-codex: gpt-5.6-luna
 ---
 Body
 `,
@@ -60,7 +60,7 @@ Body
 
     expect(agents[0]!.model).toEqual({
       anthropic: "claude-haiku-4-5",
-      "openai-codex": "gpt-5.4-mini",
+      "openai-codex": "gpt-5.6-luna",
     })
   })
 
