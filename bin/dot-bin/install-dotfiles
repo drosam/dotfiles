@@ -7,6 +7,10 @@ cd "$repo_dir"
 # ~/.zshrc is commonly created by oh-my-zsh. Remove it so stow can own the link.
 rm -f "$HOME/.zshrc"
 
+# ~/.claude/settings.json is created by Claude Code on first run. Remove it
+# so stow can own the link; other ~/.claude state is left untouched.
+rm -f "$HOME/.claude/settings.json"
+
 # Docker/dev containers do not need GUI app config.
 if [ -f /.dockerenv ]; then
   folders=(
@@ -23,6 +27,7 @@ if [ -f /.dockerenv ]; then
     "lazygit"
     "pi"
     "skills"
+    "claude"
   )
 else
   folders=(
@@ -42,6 +47,7 @@ else
     "lazygit"
     "pi"
     "skills"
+    "claude"
   )
 fi
 
