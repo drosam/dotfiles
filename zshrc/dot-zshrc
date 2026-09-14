@@ -133,31 +133,10 @@ git_branch_info() {
 
 }
 
-alias_with_show 'run-s1-frontend' 'ember s --port=4200 --proxy http://0.0.0.0:6050 --live-reload-port 49161'
-alias_with_show 'run-s1-admin-frontend' 'ember s --port=4201 --proxy http://0.0.0.0:6051 --live-reload-port 49160'
-alias_with_show 'run-s1-api' "DEBUG_QUERIES=true PORT=6050 bundle exec puma -C '/Users/davidrosa/Developer/show-app/backend/smhw-api/config/puma/minimal.rb'"
-alias_with_show 'run-s1-admin-api' "DEBUG_QUERIES=true PORT=6051 bundle exec puma -C '/Users/davidrosa/Developer/show-app/backend/smhw-admin-api/config/puma/minimal.rb'"
-
-alias_with_show 'ssh-s1-qa' 'ssh railsconsolereadonly@bastionqa.satchel.cloud'
-alias_with_show 'ssh-s1-qa-rw' 'ssh railsconsolereadwrite@bastionqa.satchel.cloud'
-alias_with_show 'ssh-s1-prod' 'ssh railsconsolereadonly@bastionprod.satchel.cloud'
-alias_with_show 'ssh-s1-prod-rw' 'ssh railsconsolereadwrite@bastionprod.satchel.cloud'
-
-alias_with_show 'ssh-prod' 'ssh pulse-ro@bastionprod.satchel.cloud'
-alias_with_show 'ssh-prod-rw' 'ssh pulse-rw@bastionprod.satchel.cloud'
-alias_with_show 'ssh-prod-uk' 'ssh pulse-uk-ro@bastionprod.satchel.cloud'
-alias_with_show 'ssh-prod-uk-rw' 'ssh pulse-uk-rw@bastionprod.satchel.cloud'
-alias_with_show 'ssh-prod-ca' 'ssh pulse-ca-ro@bastionprod.satchel.cloud'
-alias_with_show 'ssh-prod-ca-rw' 'ssh pulse-ca-rw@bastionprod.satchel.cloud'
-alias_with_show 'ssh-qa' 'ssh pulse-ro@bastionqa.satchel.cloud'
-alias_with_show 'ssh-qa-rw' 'ssh pulse-rw@bastionqa.satchel.cloud'
-alias_with_show 'ssh-qa-uk' 'ssh pulse-uk-ro@bastionqa.satchel.cloud'
-alias_with_show 'ssh-qa-uk-rw' 'ssh pulse-uk-rw@bastionqa.satchel.cloud'
-alias_with_show 'ssh-qa-ca' 'ssh pulse-ca-ro@bastionqa.satchel.cloud'
-alias_with_show 'ssh-qa-ca-rw' 'ssh pulse-ca-rw@bastionqa.satchel.cloud'
-
-alias_with_show 'run-pulse-front-end' 'ember s --proxy=http://localhost:3000'
-alias_with_show 'run-pulse-api' 'foreman start -f Procfile.dev '
+alias_with_show 'ssh-prod' 'heroku run "rails c -- --noautocomplete" -a booqable'
+alias_with_show 'ssh-prod-rw' 'heroku run "rails c -w -- --noautocomplete" -a booqable'
+alias_with_show 'ssh-staging-rw' 'heroku run -a booqable-staging "rails console -- --noautocomplete"'
+alias_with_show 'ssh-snapshots-rw' 'heroku run -a booqable-snapshots "rails console -- --noautocomplete"'
 
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
