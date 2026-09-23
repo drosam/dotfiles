@@ -1,8 +1,29 @@
 {
   "permissions": {
+    "allow": [
+      "Bash(bundle exec rspec:*)",
+      "Bash(bundle exec cucumber:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git log:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(head:*)",
+      "Bash(pwd:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm run eslint:*)",
+      "Bash(bin/rspec:*)",
+      "Bash(bin/system-test:*)",
+      "Bash(bin/cucumber:*)",
+      "Bash(BROWSER=headless_chrome bin/cucumber:*)",
+      "Bash(BROWSER=headless_chrome bundle exec cucumber:*)",
+      "Bash(git checkout *)",
+      "Bash(bin/rubocop -a app/interactors/line/sync_taxes_and_prices.rb spec/interactors/line/sync_taxes_and_prices_spec.rb)",
+      "Skill(update-config)"
+    ],
     "defaultMode": "default"
   },
-  "model": "opus[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -83,7 +104,7 @@
     "claude-sonnet-5": {
       "effortLevel": "medium"
     },
-    "claude-opus-5": {
+    "claude-opus-5-5": {
       "effortLevel": "high"
     }
   },
