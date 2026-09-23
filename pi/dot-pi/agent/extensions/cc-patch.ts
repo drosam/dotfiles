@@ -59,7 +59,7 @@ export default function (pi: ExtensionAPI) {
 			// Billing header as first block for subscription rate-limit routing
 			newBlocks.push({
 				type: "text",
-				text: "x-anthropic-billing-header: cc_version=2.1.96.000; cc_entrypoint=cli;",
+				text: "x-anthropic-billing-header: cc_version=2.1.280.000; cc_entrypoint=cli;",
 			});
 
 			for (const block of payload.system) {
@@ -73,7 +73,7 @@ export default function (pi: ExtensionAPI) {
 			payload.system = newBlocks;
 		} else if (typeof payload.system === "string") {
 			payload.system = [
-				{ type: "text", text: "x-anthropic-billing-header: cc_version=2.1.96.000; cc_entrypoint=cli;" },
+				{ type: "text", text: "x-anthropic-billing-header: cc_version=2.1.280.000; cc_entrypoint=cli;" },
 				{ type: "text", text: sanitizeSystemPrompt(payload.system) },
 			];
 		}
