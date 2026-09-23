@@ -25,7 +25,9 @@ local function open_terminal()
 end
 
 local function get_test_runner(file)
-	if file:match("%.feature$") or file:match("%.feature:") then
+	if vim.fn.getcwd():match("booqable") and file:match("^spec/system/.+_spec%.rb") then
+		return "bin/system-test"
+	elseif file:match("%.feature$") or file:match("%.feature:") then
 		return "cucumber"
 	elseif file:match("%.[jt]sx?$") and (file:match("%.test%.[jt]sx?") or file:match("%.spec%.[jt]sx?")) then
 		return "jest"
@@ -41,6 +43,8 @@ local function run(command)
 	if runner == "jest" then
 		local file = command:match("^(.-):%d+$") or command
 		terminal_cmd = "tmux send -t 2 'pnpm test " .. file .. "' Enter"
+	elseif runner == "bin/system-test" then
+		terminal_cmd = "tmux send -t 2 '" .. runner .. " " .. command .. "' Enter"
 	else
 		terminal_cmd = "tmux send -t 2 'bundle exec " .. runner .. " " .. command .. "' Enter"
 	end
