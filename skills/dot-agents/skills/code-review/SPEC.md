@@ -44,6 +44,9 @@ Outputs: all distinct actionable findings with trigger, evidence, impact, locati
 16. UI runtime checks require permitted browser access and any needed server authorization. Missing required browser evidence remains a gap; green static checks are not a substitute.
 17. Former for-real implicit repair authority is not retained: prior implementation approval alone does not authorize fixing review findings. Apply explicit per-finding approval, or explicitly authorized batch decisions, then re-review the changed revision.
 
+18. Branch/PR reviews discover associated PRs and use the current description and relevant discussion/review threads as intent and risk context. Confirmed absence differs from unavailable lookup; unresolved material context gaps prevent READY. Prior reviewer claims and resolved threads require independent verification against pinned code.
+19. Branch/PR reviews inspect the branch commit sequence and available PR timeline/review history, trace material decisions and prior fixes to the current revision, and report sources, inspected ranges and unavailable history alongside recent subsystem precedent.
+
 ## Limitations and validation
 
 Model review remains fallible. Runtime accuracy, recall and false-positive rate require separate evaluation; static document checks do not establish them. The existing strict validator requires PyYAML; do not install it without approval. See SOURCES.md for research provenance, desk cases and actual validation results. Existing name, registration and automatic invocation remain unchanged.
