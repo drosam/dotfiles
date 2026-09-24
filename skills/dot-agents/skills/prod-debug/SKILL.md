@@ -65,12 +65,13 @@ Find likely bug from production error/symptom, explain cause, impact, evidence, 
    - Do not run it yourself.
    - Make it read-only and narrowly scoped, with result/time bounds; ask the user to verify environment and read-role support first.
    - Minimize sensitive fields; request redacted results, never credentials or whole customer records.
-   - Copy literal text with `pbcopy` when available and permitted; otherwise show a fenced snippet. Never execute the embedded command.
+   - Immediately execute a local `pbcopy` handoff command that copies the literal payload; do not merely display the handoff command or ask the user to copy manually. Never execute the embedded payload.
+   - If clipboard access is unavailable or denied, show the payload once in a fenced block as fallback.
    - Wait for the user to paste the result before continuing.
 7. For Rails console needs:
    - Do not run console yourself.
-   - Propose one read-only snippet.
-   - Use the same literal-text clipboard handoff or fenced-snippet fallback.
+   - Generate one read-only snippet and immediately copy it through the same local clipboard handoff.
+   - On successful copy, do not print or repeat the snippet in the response; return only the terse confirmation from `Clipboard Step`.
    - Wait for user to paste result.
 8. Final output:
    - `bug:` concise root cause.
@@ -116,9 +117,9 @@ nil
 
 ## Clipboard Step
 
-After proposing a production observation, copy exactly that text only if clipboard access is available and permitted. Clipboard contents may sync or enter history: use placeholders rather than secrets. If copying fails, show the snippet and state it was not copied. The quoted heredoc below prevents shell expansion; copying must never execute its contents.
+Perform this step automatically whenever a production observation payload is ready. Execute the local clipboard command through the shell; never give the clipboard command to the user as an instruction. Copy exactly the payload, without Markdown fences or commentary. Clipboard contents may sync or enter history, so use placeholders rather than secrets. The quoted heredoc prevents shell expansion and must never execute its contents.
 
-For Rails snippets:
+For Rails snippets, execute locally:
 
 ```bash
 cat <<'RUBY' | pbcopy
@@ -126,7 +127,7 @@ cat <<'RUBY' | pbcopy
 RUBY
 ```
 
-For shell/log commands:
+For shell/log commands, execute locally:
 
 ```bash
 cat <<'COMMAND' | pbcopy
@@ -134,10 +135,12 @@ cat <<'COMMAND' | pbcopy
 COMMAND
 ```
 
-Then say one of:
+After a successful copy, do not include the payload or clipboard shell command in the assistant response. Say only one of:
 
 - `snippet copied to clipboard. Paste into Rails console, then paste output here.`
 - `command copied to clipboard. Run it, then paste output here.`
+
+If clipboard execution fails or is unavailable, show the payload exactly once in a fenced block and state that it was not copied.
 
 ## Prohibited Output
 
