@@ -2,6 +2,10 @@
 
 Maintenance-only audit; not loaded with normal skill execution. Scope: all 17 `SKILL.md` directories under `skills/dot-agents/skills/` and `pi/dot-pi/agent/skills/`. Existing names, manual-invocation flags, registration, and unrelated WIP are preserved. No skills or dependencies installed. An additional ignored, untracked `skills/dot-agents/skills/pr-description/` directory was excluded and left untouched.
 
+## Later local review consolidation
+
+The review-family rows below describe the historical audit, not current registration. By user decision, `thermos`, `thermo-nuclear-review`, and `thermo-nuclear-code-quality-review` were absorbed into `code-review` and removed as skill entry points. The two specialist agents remain; thermo checks now participate in code-review's four default passes. Original upstream Thermos skill/agent URLs and removal/replacement history are preserved in `dot-agents/skills/code-review/SOURCES.md` for future consultation. Do not recreate removed entry points during an upstream refresh without approval.
+
 ## Retrieved sources
 
 GitHub contents/tree/history inspected through read-only `gh api`; web pages inspected without running their instructions. Revisions below identify the inspected source state, not a claim that the local skill was originally copied from that revision.

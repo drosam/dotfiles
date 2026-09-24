@@ -34,6 +34,10 @@ Outputs: all distinct actionable findings with trigger, evidence, impact, locati
 7. P0/P1 and mandatory requirement failures block. Other findings declare blocking status and rationale.
 8. No-findings output still includes evidence, gaps and a scoped verdict. READY is not merge/deploy authority.
 9. Every adopted external idea preserves local permissions; no new required dependency or provider-specific agent.
+10. Default review and “thermos” requests use the same four passes, not an additional two-pass audit. General workers cover behavior and tests; optional existing thermo specialists cover security/data/rollout and rules/docs/patterns/code health. Each receives the full assigned rubric and identical pinned scope.
+11. Workers do not dispatch nested reviews or substitute `main`/current HEAD for the supplied scope. Unavailable skill reads use the supplied contract/rubric; missing both prevents complete coverage.
+12. Devex/feature-gate checks and structural simplification scrutiny apply without a special keyword. File length or trust-boundary `unknown` alone is not a finding.
+13. Original Thermos internet resource URLs and removal/replacement history remain in SOURCES.md for future updates, explicitly distinguished from runtime dependencies.
 
 ## Limitations and validation
 

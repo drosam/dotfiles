@@ -2,6 +2,47 @@
 
 Original synthesis: 2026-07-08. Research and primary-review redesign: 2026-09-24.
 
+## Local Thermos consolidation
+
+User approved one `code-review` entry point with thermo checks always included in the existing four passes, not a separate opt-in mode or six-worker review. Keep both specialized Pi agents; dispatch them for security/data/rollout and rules/docs/patterns/code health, with general workers for the other two passes. Missing specialists use the same complete task packet through a general worker or permitted sequential review.
+
+Absorb explicit developer-setup/feature-gate checks and stronger ownership, invariant and structural-simplification scrutiny. Preserve code-review's evidence, validation, scope, severity and readiness contract where the former thermo contracts differ: no default `main`, bare clean-audit output, automatic high severity or line-count blocker. Workers do not orchestrate nested reviews. Explicitly requested narrower scopes remain supported and cannot grant full-change readiness.
+
+Inspected local sources: former `thermos/{SKILL.md,SOURCES.md}`, both Pi `thermo-nuclear-*/{SKILL.md,SOURCES.md}`, and both specialized agent definitions. Trust: canonical local; confidence high for instruction content, not empirical effectiveness. Remove the three redundant skill entry points and their verified live links; retain upstream consultation links below. No new dependencies or skill references required.
+
+Desk cases: ordinary review dispatches four tasks, not six; “thermos” selects the same workflow; specialist unavailable gets general/sequential fallback; worker cannot load skill uses supplied rubric or reports incomplete; security-only excludes other dimensions; a 1001-line file or `unknown` at a trust boundary alone is not a defect; no findings still requires coverage and verdict. These are static contract checks, not observed review runs.
+
+### Original Thermos resources — retain for future updates
+
+Consult these upstream resources when updating the absorbed Thermos behavior. These exact historical URLs were recorded by the former `thermos/SOURCES.md`; they are provenance, not runtime dependencies. They are mutable and may now be missing. Do not claim a fresh fetch or immutable original-content pin from this consolidation.
+
+| Resource | Original upstream URL |
+| --- | --- |
+| Thermos coordinator | https://raw.githubusercontent.com/sndrgrdn/pi/master/skills/thermos/SKILL.md |
+| Correctness/security rubric | https://raw.githubusercontent.com/sndrgrdn/pi/master/skills/thermo-nuclear-review/SKILL.md |
+| Code-quality rubric | https://raw.githubusercontent.com/sndrgrdn/pi/master/skills/thermo-nuclear-code-quality-review/SKILL.md |
+| Correctness worker | https://raw.githubusercontent.com/sndrgrdn/pi/master/agents/thermo-nuclear-review-subagent.md |
+| Code-quality worker | https://raw.githubusercontent.com/sndrgrdn/pi/master/agents/thermo-nuclear-code-quality-review-subagent.md |
+
+Recorded upstream trust: secondary-external; historical source content/removal comparison previously recorded with high confidence. Exact original ancestry/content revision remains unpinned. To recover removed files, inspect the repository's history before the removal commit rather than assuming current URLs still contain them:
+
+- Repository: https://github.com/sndrgrdn/pi
+- Removal commit (`remove thermos skill + agents`): https://github.com/sndrgrdn/pi/commit/54b2037a480491d2a7e8eaebd854163e875edad5
+- Inspected replacement coordinator: https://github.com/sndrgrdn/pi/blob/54b2037a480491d2a7e8eaebd854163e875edad5/skills/deep-review/SKILL.md
+- Current replacement lookup: https://github.com/sndrgrdn/pi/blob/master/skills/deep-review/SKILL.md (mutable; verify on refresh).
+
+The earlier comparison inspected the replacement coordinator, not all its rubric leaves. Adopted pinned shared scope, independent evidence, counterevidence, root-cause/remedy deduplication and honest incomplete coverage. Do not automatically import upstream four-judge policies, tool assumptions, permission changes or mechanical blockers. Local four-pass behavior is this user's decision, not a claim of an upstream migration. Stop research here for this local merge; no new external claim needs retrieval.
+
+### Consolidation validation
+
+- Dependency-free `python3 -c` structural check passed: four-pass routing, all five original upstream URLs, removal/replacement commit reference, bundled reference existence, worker coverage/no-nesting contracts, canonical registration targets, removed directories/link, balanced fences and whitespace. This is not strict YAML/depth validation or a runtime review test.
+- `git diff --check -- skills/dot-agents/skills/code-review skills/UPSTREAM.md pi/dot-pi/agent/agents pi/dot-pi/agent/skills`: passed, no output. Ignored skill/agent file whitespace was also checked by Python.
+- `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/code-review --skill-class security-review --strict-depth`: exit 1, `ModuleNotFoundError: No module named 'yaml'`. No dependencies installed.
+- Live registration verified: shared code-review links point to the canonical source; Pi agents/skills use canonical parent-directory links. Removed three skill directories and the sole separate Thermos symlink; both specialist agent files remain.
+- No application review or spawned-worker behavior evaluation performed. Future runtime adherence and strict validation remain open gaps.
+
+The research and validation sections below predate this consolidation unless explicitly labeled otherwise.
+
 ## Requested behavior and shape
 
 User requires exhaustive automated review with no assumed later human review: repo rules, best practices, edge cases, recent deployed-code patterns, relevant documentation, and confirmation rather than guessing.

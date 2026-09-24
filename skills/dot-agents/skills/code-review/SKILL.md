@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Performs exhaustive, evidence-based code review of diffs, pull requests, patches, and AI-generated changes. Use when asked to review code, review a PR, find edge cases, check repo rules and best practices, verify relevant docs, compare recent deployed patterns, or perform a pre-merge audit. Covers correctness, security, tests, maintainability, and rollout compatibility without assuming a later human review.
+description: Performs exhaustive, evidence-based code review of diffs, pull requests, patches, and AI-generated changes. Use when asked to review code, review a PR, find edge cases, check repo rules and best practices, verify relevant docs, compare recent deployed patterns, or perform a pre-merge audit, thermos, thermo review, thermonuclear review, or harsh code-quality audit. Covers correctness, security, tests, maintainability, and rollout compatibility without assuming a later human review.
 ---
 
 # Code Review
@@ -66,14 +66,16 @@ Recency and deployment are evidence of use, not proof of correctness. Do not rec
 
 ## 4. Run all review passes
 
-Use independent workers when available and permitted. The coordinator owns the shared scope, documentation/history packet, and final verification; workers gather additional context independently. Run these four passes in parallel, or sequentially if delegation is unavailable:
+Use independent workers when available and permitted. The coordinator owns the shared scope, documentation/history packet, and final verification; workers gather additional context independently. Run these four passes in parallel in the same tool turn, or sequentially if delegation is unavailable. Thermo correctness and structural scrutiny are part of every full review, not an opt-in mode or two additional passes. Honor explicitly narrowed requests and report excluded dimensions.
 
-| Pass | Required focus |
-| --- | --- |
-| Behavior/spec/edge cases | Requirements, wiring, state transitions, callers and input-dependent failures |
-| Security/data/rollout | Reachable threats, tenant boundaries, persistence, migration, deployed-version coexistence |
-| Tests/reliability/performance | Behavioral test validity, failure handling, concurrency, resource limits and operational evidence |
-| Rules/docs/patterns/code health | Scoped rules, best practices, doc consistency, recent precedents, ownership and complexity |
+| Pass | Preferred agent if available | Required focus |
+| --- | --- | --- |
+| Behavior/spec/edge cases | `general` | Requirements, wiring, state transitions, callers and input-dependent failures |
+| Security/data/rollout | `thermo-nuclear-review-subagent` | Reachable threats, tenant boundaries, persistence, migration, deployed-version coexistence, devex and feature-gate leaks |
+| Tests/reliability/performance | `general` | Behavioral test validity, failure handling, concurrency, resource limits and operational evidence |
+| Rules/docs/patterns/code health | `thermo-nuclear-code-quality-review-subagent` | Scoped rules, best practices, doc consistency, recent precedents, ownership, invariants and structural simplification |
+
+Check agent availability before dispatch. Each row is one distinct worker task; general workers receive the complete assigned rubric, not just a pass name. Specialized workers must cover the full assigned row, including docs/rules when assigned code health. Pass this skill's resolved path and the relevant contract/rubric text; if a specialized agent is absent, use a general worker with the same packet or permitted sequential review. Do not dispatch a separate thermos workflow.
 
 Give each worker the exact target/commit IDs, local-change scope, relevant rules/spec/docs, comparison sources, rubric, and this return contract:
 
@@ -113,6 +115,7 @@ Map attacker-controlled input, identity/privilege, trust boundary, guard, and da
 - PII/secrets in logs, errors, analytics, exports and caches; retention/deletion; overbroad data access.
 - CI permissions, untrusted PR input, dependencies/lockfiles, install/build hooks, executable config and supply-chain changes.
 - Resource exhaustion, business-logic abuse, replay and monetary/accounting invariants.
+- Devex regressions: renamed environment variables, secrets lookup, ports, setup steps, scripts and build/run workflows. Trace feature gates across routes/jobs/UI so internal-only behavior or rollout bypasses cannot leak to users.
 
 For each security finding, show a reachable abuse scenario, prerequisites, concrete impact, and remediation. Check parameterization, output encoding, tenant scopes, allowlists and framework defaults before reporting. A dangerous API name or scary-looking diff is not proof. Retrieve targeted official security/framework guidance for unfamiliar behavior; mark any unresolved critical boundary unchecked.
 
@@ -130,7 +133,12 @@ For each security finding, show a reachable abuse scenario, prerequisites, concr
 
 ### Maintainability and best practices
 
-Check canonical ownership/layers, unnecessary abstraction, duplication, repeated condition cascades, coupling, naming, types/nullability, producer/consumer boundaries, dependency direction and navigability. Prefer simplifications that remove concepts while preserving necessary guards.
+Check canonical ownership/layers, unnecessary abstraction, duplication, repeated condition cascades, coupling, naming, types/nullability, producer/consumer boundaries, dependency direction and navigability. Be demanding about structural regressions, not just whether the code works:
+
+- Look for a simpler model that deletes concepts, branches, modes, helpers or layers. Identify feature logic leaking into shared code, unrelated special cases, pass-through wrappers, cast/optionality churn and duplicated policy.
+- Ask whether the canonical producer, constructor, schema or type can enforce an invariant instead of scattering consumer guards. Distinguish proven internal invariants from untrusted input; preserve necessary validation, corruption handling and `unknown` at trust boundaries.
+- Check related updates for non-atomic state and orchestration for needless sequencing. Suggest parallel work only when dependencies and effects permit it and complexity actually decreases.
+- For each structural finding, cite the concrete maintenance cost, a smaller design and plausible migration/test boundary. Prefer canonical ownership and meaningful types over another wrapper. Investigate file growth around 1000 lines, but do not make line count an automatic blocker.
 
 Require a concrete maintenance cost or cited applicable rule, not a smell label alone. File length is an investigation signal, not an automatic defect. Do not reject an intentional improvement merely because older code uses another style. Include documented rule breaches even if tooling could catch them; collapse duplicate tool findings and do not flood output with formatting nits.
 
