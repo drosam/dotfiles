@@ -45,20 +45,12 @@ Create minimal, cohesive commits from current changes.
    - Prefer imperative mood.
    - Do not include a ticket or issue number unless the user explicitly requests it.
    - No trailers.
-   - No body, with one exception: if the changes being committed originate from a GitHub comment (a PR review comment, PR/issue comment, or commit comment referenced in the task or conversation), add that comment's URL as the commit body, formatted as a single line: `Source: <comment-url>`.
-   - Only add the `Source:` line when an actual comment URL is known. Never fabricate or guess a URL.
-   - If multiple changes in the same commit come from different comments, list each URL on its own `Source:` line.
+   - No body.
 
 6. Commit:
 
    ```bash
    git commit -m "Commit title"
-   ```
-
-   When a `Source:` line applies, pass title and body as separate `-m` flags:
-
-   ```bash
-   git commit -m "Commit title" -m "Source: https://github.com/org/repo/pull/123#issuecomment-456"
    ```
 
 7. Report commit hash and title.
@@ -102,7 +94,7 @@ Use this branch when the user asks to organize commits, split changes into commi
 5. Create commits one group at a time:
    - Stage explicit files or hunks only.
    - Run `git diff --cached --stat` before each commit.
-   - Use title-only commit messages, except add a `Source: <comment-url>` body line when that group's changes originate from a known GitHub comment.
+   - Use title-only commit messages.
    - Repeat until intended changes are committed.
 
 6. Finish with `git status --short` and list commit hashes/titles created.
