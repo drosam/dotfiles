@@ -63,6 +63,7 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 ## Validation
 - Verify before reporting done when feasible.
 - Prefer repo-native gates: typecheck, lint, focused tests, build.
+- Use Playwright MCP for interactive acceptance checks outside automated specs only when UI behavior changed, a visual/interaction claim needs evidence, or browser reproduction is relevant. Do not run it routinely for every change. Use local development/test environments only—never staging or production. Exercise relevant flows and inspect console/network failures. Do not start a server or perform destructive, persistent, or external side effects without approval. Report tested flows and gaps; browser checks do not replace regression tests.
 - Report exact command and shortest relevant output for failures.
 
 ## Tools
