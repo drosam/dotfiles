@@ -20,7 +20,8 @@ Characteristics:
 - Uses public API only
 - Survives internal refactors
 - Describes WHAT, not HOW
-- One logical assertion per test
+- One coherent behavior per test; multiple assertions are fine when they describe that behavior
+- Independent expected values, not a second copy of the implementation
 
 ## Bad Tests
 
@@ -59,3 +60,18 @@ test("createUser makes user retrievable", async () => {
   expect(retrieved.name).toBe("Alice");
 });
 ```
+
+## Tautological assertions
+
+Do not compute the expected result with the same algorithm under test. Both copies can share the bug.
+
+```typescript
+// BAD: duplicates the algorithm instead of checking its contract
+const expected = prices.reduce((total, price) => total + price, 0);
+expect(invoiceTotal(prices)).toBe(expected);
+
+// GOOD: independently worked example from the contract
+expect(invoiceTotal([12, 7])).toBe(19);
+```
+
+For complex outputs, use a worked specification example or independently validated fixture. Keep test inputs deterministic.

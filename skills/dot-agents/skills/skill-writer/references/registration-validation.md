@@ -23,8 +23,10 @@ For this dotfiles repository today:
 1. Run:
 
 ```bash
-uv run skills/dot-agents/skills/skill-writer/scripts/quick_validate.py <path/to/skill-directory> --strict-depth
+python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py <path/to/skill-directory> --skill-class <chosen-class> --strict-depth
 ```
+
+Requires Python 3.12+ and the script's declared PyYAML dependency. Use an existing compatible environment; `uv run` may provision one only with install/network approval. If unavailable, report the validator blocked and distinguish any fallback structural checks from a strict-depth pass. Pass the chosen class explicitly: keyword-based auto inference can misclassify a review mentioning APIs as integration documentation.
 
 Run from the repository root when possible. If running from another directory, convert both paths to relative paths from that directory instead of introducing absolute or host-specific paths into skill docs.
 

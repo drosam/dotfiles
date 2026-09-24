@@ -1,6 +1,6 @@
 ---
 name: create-plan
-description: Research (via subagent), draft, and iteratively review a plan before implementation. Use for cross-cutting changes that need alignment before code — new subsystems, DSLs, permission models, architecture shifts, refactors spanning many files. Exploration runs in a subagent to keep main context clean; produces `docs/design/<name>.md` and walks through it step-by-step.
+description: Researches, drafts, and iteratively reviews a design plan before implementation. Use for requested cross-cutting planning, new subsystems, permission models, architecture shifts, or multi-file refactors needing alignment. Produces a design document and guided walkthrough; not for already-approved implementation or ordinary bug investigation.
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ Research a problem space, produce a written design doc, walk the user through it
 
 Trigger when the request is to **plan** or **understand**, not to do. Key phrases: *research*, *design*, *how should we*, *flesh out*, *walk me through*, *figure out*, *plan the approach*, *write a proposal*.
 
-Also trigger proactively when the user asks to implement something that touches more than one subsystem (e.g. models + workers + views), introduces a new pattern or DSL, or changes behavior for multiple user types (permission, feature flag).
+For cross-subsystem implementation requests, offer a design step only when unresolved choices materially affect the result. Do not turn an already-approved implementation into an unsolicited planning exercise.
 
 ## When NOT to use
 
@@ -34,12 +34,12 @@ Goal: understand existing code and constraints before writing a word of the doc.
 
 | Scope | Action |
 |-------|--------|
-| >3 files, scope unknown, or "look across codebase" | **must** dispatch subagent |
+| >3 files, scope unknown, or "look across codebase" | prefer a read-only exploration subagent when available and permitted |
 | ≤3 files, user named them, already open in this session | direct read ok |
 | follow-up to subagent findings in same session | direct read the 2-5 load-bearing files subagent named |
 | user says "don't branch out, just read X" | honor user, skip dispatch |
 
-When in doubt, dispatch. Cheap to run, expensive to undo wrong-direction research already in main context.
+If delegation is unavailable, denied, or fails, record the limitation and do bounded direct exploration. Do not bypass permissions or repeatedly dispatch the same blocked task. Require a cited findings pack either way.
 
 **What grug ask subagent for** (one dispatch, structured task):
 
@@ -65,11 +65,11 @@ Require subagent return a **structured findings pack**: bulleted, file:line per 
 
 **Exit signal** (all three):
 
-1. Subagent findings pack received — OR — direct-read path explicitly justified against the dispatch rule above.
+1. Cited findings pack received from the worker, or produced from justified bounded direct reads using the same required fields.
 2. Grug can name file:line of every hook point the design will use.
 3. Grug knows which existing patterns the design will mirror.
 
-If findings pack is thin or contradictory, dispatch a second, narrower subagent task — do not paper over gaps by main-context grepping.
+If findings are thin or contradictory, run one narrower exploration or inspect the decisive files directly. Record unresolved gaps rather than fabricate certainty.
 
 ### Phase 1.5 — Targeted interview (optional)
 
@@ -145,7 +145,7 @@ Goal: capture every refinement from Phase 4 and present the locked doc for imple
 
 Rewrite the doc incorporating walkthrough refinements. Full rewrite via `Write` is fine when refinements are structural; targeted `Edit` when they're local. Summarize changes from the original draft in chat as a bullet list. Say *"say word when grug start implement"* and stop. Do not start coding until explicit approval.
 
-Exit signal: user says "implement", "start", "go", "approved", "Code review complete", or similar.
+Exit signal: user explicitly authorizes implementation (for example, "implement this plan"). "Approved" or "review complete" alone locks the design; it does not authorize code changes.
 
 ## Design principles to apply
 
@@ -167,7 +167,7 @@ Write to `docs/design/<kebab-name>.md`. Sections in order:
 # <Feature> — Design Doc
 
 **Status:** Draft
-**Author:** <name from AGENTS.md>
+**Author:** <confirmed author; omit if unknown>
 **Date:** <today, YYYY-MM-DD>
 **Scope:** <paths touched>
 
@@ -263,7 +263,7 @@ grug: [greps 40 files, reads 18 of them directly in main context]
 grug: [findings reply]
 ```
 
-Wrong. Main context now carries 18 files of detail that subagent would have summarised to 15 bullets. Later phases degraded. Dispatch first, read only load-bearing files after.
+Wrong when delegation is available: main context carries detail a worker could summarize. If delegation is unavailable or denied, bounded direct exploration is valid; return the same cited findings pack and record gaps.
 
 ### Good: mid-walkthrough pushback
 
@@ -315,8 +315,8 @@ Wrong. Wait for explicit approval.
 | Don't | Why |
 |-------|-----|
 | Write the doc before the findings reply | Assumptions may be wrong; wastes context |
-| Research in main context when scope >3 files | Poisons main context with detail subagent would have discarded after summary |
-| Skip dispatch because "grug can just grep" | Grep output clutters context; subagent grep + summarise keeps it clean |
+| Unbounded exploration in main context | Prefer delegation when available; otherwise inspect only decisive files |
+| Retry denied delegation repeatedly | Report the limit and use permitted direct reads |
 | Accept prose findings from subagent | Need bullets + file:line; re-dispatch asking for structured pack |
 | Skip web research when design hooks into third-party library | Installed version behavior may differ from grug's memory; cite doc + changelog |
 | Web research for purely internal change | Noise; codebase is the source of truth for internal patterns |

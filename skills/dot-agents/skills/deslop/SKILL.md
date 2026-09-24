@@ -46,11 +46,11 @@ deslop = club small demon before grow big.
 | 3 | scan for slop | match catalog, record only |
 | 4 | propose list | numbered, verdict + neighbor result each |
 | 5 | wait for pick | user name numbers explicit |
-| 6 | apply one commit | lint, syntax, commit body lists cut |
+| 6 | apply approved edits | scoped checks; no commit unless separately requested |
 
 ### Step 1: find diff
 
-ask user if unclear. default probe order:
+honor explicit user range first. otherwise inspect staged and unstaged status before picking scope; do not silently omit either. ask user if unclear. default probe order:
 
 1. `git diff --cached` — staged
 2. `git diff HEAD` — staged + unstaged
@@ -108,7 +108,7 @@ for every catalog hit, record:
 - verdict: **drop** / **keep** / **grug not sure**
 - neighbor result: **local idiom** / **novel** / **ambiguous**
 
-do NOT edit during scan. scan is read only.
+prove semantic equivalence before suggest drop: nil vs false, exceptions, mutation, ordering, and boundary validation can matter. pattern match not proof. do NOT edit during scan. scan is read only.
 
 ### Step 4: propose list
 
@@ -135,19 +135,11 @@ end with **grug pick** bundle: which number apply, which skip, rough line change
 
 user name number ("apply 1 2 3, skip 4") or say "all" or "grug pick". grug NEVER apply without explicit pick. "look good" = ambiguous → ask *"apply all four or pick subset?"*
 
-### Step 6: apply one commit
+### Step 6: apply approved edits
 
-targeted edit. syntax check. lint on changed files — grug detect linter from repo (rubocop, eslint, ruff, golangci-lint, biome, prettier, …). no linter config = skip. one commit:
+targeted edit only picked findings. detect repo syntax/lint/test commands; run permitted focused checks on affected behavior. no config/tool = report skipped, not passed.
 
-```
-<area>: deslop <what>
-
-- drop `|| false` in foo.rb (coerce bool to bool)
-- drop `.freeze` on @bar (never mutate)
-- drop rescue swallow in baz.rb
-```
-
-if affected code has test, grug run. test fail → offer rollback `git reset HEAD~1`. user decide.
+test fail → inspect failure and stop if repair needs wider scope. preserve prior WIP; do not reset history or auto-revert files. report exact changes and checks. commit only when user separately asks, following local commit conventions.
 
 ## Example Output
 
@@ -167,10 +159,10 @@ employee&.has_permission?(@required_permission) || false
 
 app/tools/application_tool.rb:42
 
-`has_permission?` return boolean already. coercion hide nothing.
+safe navigation return nil when employee absent. `|| false` preserve strict boolean contract; removing changes observable result.
 
-**verdict:** drop.
-**neighbor:** novel — other model method not coerce like this.
+**verdict:** keep unless callers and contract explicitly accept nil.
+**neighbor:** novel does not mean redundant.
 
 ### 2. `.flatten` in permitted_tools
 ...
@@ -185,7 +177,7 @@ app/tools/application_tool.rb:42
 
 ---
 
-**grug pick:** apply 1+2+3. skip 4. net ~-4 line.
+**grug pick:** consider 2+3 after equivalence check. keep 1; skip 4.
 ````
 
 ## Interaction Patterns
@@ -197,8 +189,8 @@ user: deslop
 grug: [read git log, state scope]
 grug: [read each changed file + neighbor]
 grug: [post numbered list + grug pick]
-user: apply 1 2 3, skip 4
-grug: [2 edit, lint, commit]
+user: apply 2 3, keep 1, skip 4
+grug: [targeted edits, focused checks, report; no commit]
 ```
 
 ### Good — user push back
@@ -271,8 +263,8 @@ before grug declare done:
 - [ ] every candidate have verdict + neighbor result
 - [ ] grug pick bundle at end
 - [ ] user approve subset explicit (not silent apply)
-- [ ] lint + syntax clean before commit
-- [ ] single commit, body list what cut
+- [ ] lint + syntax results reported, blocked checks explicit
+- [ ] no commit or history changes without separate request
 - [ ] test run if affected code have test
 
 ## References

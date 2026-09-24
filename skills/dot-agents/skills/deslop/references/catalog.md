@@ -17,7 +17,7 @@
 - [Dead code after return / throw](#dead-code-after-return--throw)
 - [Type escape hatch](#type-escape-hatch)
 
-Remember: every flag runs through **neighbor check** before grug propose drop. local idiom = keep. novel = flag.
+Every entry is a candidate, not an automatic deletion rule. Run **neighbor check** and prove semantic equivalence before proposing a cut. Novel code can still enforce a necessary contract.
 
 ## Defensive chaff
 
@@ -28,7 +28,7 @@ grug add defense code don't need.
 - `x.to_s` / `str(x)` — downstream accept both
 - `Array(x)` / `[x].flat()` — `x` already array
 - nil/None-guard on value caller just assert non-nil
-- `thing&.method(x) || false` — belt AND suspenders
+- `thing&.method(x) || false` — keep for strict boolean contracts; safe navigation can return nil
 - double-check: `if x is not None and x:` when `if x:` covers it
 
 ## Dead insurance
@@ -36,7 +36,7 @@ grug add defense code don't need.
 grug add protection nobody use.
 
 - `.freeze` / `Object.freeze` on class-level state never mutated at runtime
-- `.flatten` on splat (`*args` / `...rest` already flat)
+- `.flatten` on rest arguments only when callers cannot pass nested arrays; splat/rest does not guarantee recursively flat input
 - `.uniq` / `new Set(...)` on source that can't produce duplicate
 - `.compact` / `.filter(Boolean)` on array built from non-nil
 - `defined?(@var)` / `hasattr(self, "x")` guard when always set
@@ -50,7 +50,7 @@ grug catch error that can't happen.
 - `rescue => e; logger.error(e); raise` — framework already log re-raise
 - `rescue StandardError` / `except Exception` when block can't raise
 - **empty rescue** — `rescue => e; end` / `catch(e) {}` / `except: pass` — swallow real bug, very bad
-- `begin/rescue` / `try/except` around one line that can't fail (`hash[:key]`, `dict["k"]`)
+- rescue around a proven non-raising operation; Python `dict["k"]` can raise `KeyError`, and Ruby hash default procs can execute code
 
 ## Identity and redundant op
 
@@ -68,7 +68,7 @@ grug write code do nothing.
 
 grug change type don't need change.
 
-- `.to_sym` on literal string (already interned)
+- repeated `.to_sym` only when the value is already a symbol; converting a string changes its type and lookup semantics
 - `.deep_dup` when `.dup` enough
 - `.with_indifferent_access` when one code path, one key style
 - `String(x)` when `x` is already `string`

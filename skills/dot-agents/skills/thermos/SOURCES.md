@@ -1,6 +1,16 @@
 # Thermos Skill Sources
 
-Retrieval date: 2026-07-08
+Original synthesis: 2026-07-08. Refreshed: 2026-09-24.
+
+## 2026-09-24 upstream comparison
+
+`https://github.com/sndrgrdn/pi/commit/54b2037a480491d2a7e8eaebd854163e875edad5` is titled `remove thermos skill + agents`. The old mutable URLs below are historical. Inspected current `skills/deep-review/SKILL.md` at that revision: four isolated Design/Craft/Fitness/Stability judges, pinned comparison, evidence bars, obligation ledgers, root-cause/remedy merge, and PASS/FAIL/INCOMPLETE gate.
+
+Adopted: pinned shared scope, counterevidence, explicit unchecked coverage, missing-worker recovery, root-cause/remedy dedupe. Preserved: local thermos name, two specialist agents, concise calibrated P0/P1/P2 findings, independent audit before comments. Rejected: automatic migration to four judges, mechanical presumptive-blocker policy, upstream-specific tools and setup. Deep-review rubric reference files were not imported; only the orchestration contract was adapted.
+
+Trust tier: recorded secondary upstream; confidence high for current content/removal history. Usage constraints: rewrite for local task API and permission model. Profile: workflow + security review. Desk checks: empty diff stops dispatch; denied worker produces fallback or incomplete coverage; no findings with missing pass cannot become clean audit; 1000 lines alone is not a blocker. Should not trigger for ordinary implementation or commit requests. No measured model evaluation.
+
+Stopping rationale: current replacement and removal history explain the relevant upstream change; unrelated upstream design frameworks do not improve the retained local two-pass contract.
 
 ## Source inventory
 
@@ -53,3 +63,4 @@ Acceptance decision: accepted for lightweight qualitative update. No quantitativ
 
 - Local non-Pi agents may not have a parallel subagent API; skill includes sequential fallback.
 - No quantitative benchmark run.
+- Strict validator blocked by missing PyYAML; user declined installs. Batch structural checks are recorded in repo `skills/UPSTREAM.md`.

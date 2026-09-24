@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, or asks for test-first development.
+description: Guides test-first implementation through vertical red-green-refactor cycles. Use when the user requests TDD, test-first development, or red-green-refactor for a feature or bug fix; not for read-only diagnosis or test review alone.
 disable-model-invocation: true
 ---
 
@@ -10,11 +10,15 @@ disable-model-invocation: true
 
 **Core principle**: Tests should verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.
 
-**Good tests** are integration-style: they exercise real code paths through public APIs. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification - "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure.
+**Good tests** exercise real behavior at an agreed public seam. Choose unit, integration, or end-to-end scope according to the behavior; larger is not automatically better. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification - "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure.
 
 **Bad tests** are coupled to implementation. They mock internal collaborators, test private methods, or verify through external means (like querying a database directly instead of using the interface). The warning sign: your test breaks when you refactor, but behavior hasn't changed. If you rename an internal function and tests fail, those tests were testing implementation, not behavior.
 
 See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
+
+## Independent expectations
+
+Use expected values from the spec, a worked example, or known-good literals—not the same algorithm as the implementation. A test that recomputes the implementation can pass while both are wrong. Use the repo's domain glossary (`CONTEXT.md` when present) and relevant ADRs for test vocabulary and boundaries.
 
 ## Anti-Pattern: Horizontal Slices
 
@@ -52,7 +56,9 @@ Before writing any code:
 - [ ] Identify opportunities for [deep modules](deep-modules.md) (small interface, deep implementation)
 - [ ] Design interfaces for [testability](interface-design.md)
 - [ ] List the behaviors to test (not implementation steps)
-- [ ] Get user approval on the plan
+- [ ] Name and confirm public seams and priority behaviors; reuse explicit decisions already approved in this conversation
+- [ ] Discover the focused repo test command and establish baseline failures before changes
+- [ ] Keep time, randomness, network, and fixture cleanup deterministic where relevant
 
 Ask: "What should the public interface look like? Which behaviors are most important to test?"
 
@@ -66,6 +72,8 @@ Write ONE test that confirms ONE thing about the system:
 RED:   Write test for first behavior → test fails
 GREEN: Write minimal code to pass → test passes
 ```
+
+Confirm RED is an assertion failure for the intended behavior, not missing dependencies, syntax, or broken setup. If it unexpectedly passes, inspect whether the behavior already exists or the assertion misses the bug; do not force a failure artificially. Record the command and observed RED/GREEN results.
 
 This is your tracer bullet - proves the path works end-to-end.
 
@@ -103,6 +111,8 @@ After all tests pass, look for [refactor candidates](refactoring.md):
 [ ] Test describes behavior, not implementation
 [ ] Test uses public interface only
 [ ] Test would survive internal refactor
+[ ] Expected result is independent of implementation
+[ ] RED failed for the intended reason; GREEN actually ran
 [ ] Code is minimal for this test
 [ ] No speculative features added
 ```

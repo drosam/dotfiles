@@ -6,7 +6,7 @@ These are optional guidance artifacts, not required outputs for every skill.
 ## Integration/Documentation Depth Eval
 
 ```text
-Use `sentry-skills:skill-writer` to synthesize a new skill named `pi-agent-integration-eval` for working with `@mariozechner/pi-agent-core` as a consumer in downstream libraries.
+Use `skill-writer` to synthesize a new skill named `pi-agent-integration-eval` for working with the resolved, version-pinned Pi agent-core package as a consumer in downstream libraries.
 
 Primary objective: produce a non-surface-level integration skill that covers API surface, known issues/workarounds, and common real-world use cases.
 
@@ -56,33 +56,17 @@ When you need stronger confidence, run this sequence:
 
 ## Isolated Eval Runbook
 
-Run the eval in a temporary isolated workspace (copy of repo in `/tmp`):
+Only run after explicit evaluation approval. Create a fresh isolated workspace using available, permitted tooling; never delete/reuse a fixed temporary path or copy credentials, customer data, or unrelated WIP into it.
+
+1. Save the original skill as the unchanged baseline before editing.
+2. Run the same prompt and permitted inputs against baseline and candidate in separate workspaces. Use the available agent runner; do not assume Codex, Claude, a browser viewer, or a particular subprocess API exists.
+3. Keep working cases distinct from holdout cases. Capture outputs, command failures, and cost/timing when available; do not invent unavailable metrics.
+4. Compare against the rubric and report whether evidence came from static review or actual execution.
+
+Validate generated output using the existing validator from its actual skill root:
 
 ```bash
-EVAL_DIR=/tmp/sentry-skills-eval-run
-rm -rf "$EVAL_DIR"
-mkdir -p "$EVAL_DIR"
-rsync -a "<repo-root>/"/ "$EVAL_DIR"/
-
-codex exec \
-  --ephemeral \
-  --full-auto \
-  --sandbox workspace-write \
-  --skip-git-repo-check \
-  --add-dir "<pi-mono-root>" \
-  -C "$EVAL_DIR" \
-  "$(cat <eval-prompt-file>)"
+python3 <skill-dir>/scripts/quick_validate.py <generated-skill-dir> --skill-class integration-documentation --strict-depth
 ```
 
-Where `<eval-prompt-file>` contains the exact eval prompt from this file.
-
-Validate the generated skill output:
-
-**Requires**: The `uv` CLI for python package management, install guide at https://docs.astral.sh/uv/getting-started/installation/
-
-```bash
-uv run "<repo-root>/plugins/sentry-skills/skills/skill-writer/scripts/quick_validate.py" \
-  /tmp/sentry-skills-eval-run/plugins/sentry-skills/skills/pi-agent-integration-eval \
-  --skill-class integration-documentation \
-  --strict-depth
-```
+Requires Python 3.12+ and PyYAML. Use an existing environment; installing dependencies or provisioning through `uv run` needs approval. If blocked, report the missing dependency and any limited fallback checks separately from strict-depth validation.

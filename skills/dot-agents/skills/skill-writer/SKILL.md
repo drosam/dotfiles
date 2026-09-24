@@ -7,19 +7,24 @@ disable-model-invocation: true
 # Skill Writer
 
 Use this as the single canonical workflow for skill creation and improvement.
-Primary success condition: maximize high-value input coverage before authoring so the resulting skill has minimal blind spots.
+Primary success condition: cover high-impact behavior without wasting runtime context. Choose the simplest adequate execution shape; replace or narrow existing guidance before adding more.
 
 Load only the path(s) required for the task:
 
 | Task | Read |
 |------|------|
 | Set skill class and required dimensions | `references/mode-selection.md` |
+| Choose execution shape and reference placement | `references/execution-shapes.md` |
+| Refresh upstream-derived skills without overwriting local policy | `references/upstream-refresh.md` |
 | Apply writing constraints for depth vs concision | `references/design-principles.md` |
 | Select structure pattern for this skill | `references/skill-patterns.md` |
 | Select workflow orchestration pattern for process-heavy skills | `references/workflow-patterns.md` |
 | Select output format pattern for deterministic quality | `references/output-patterns.md` |
-| Choose workflow path and required outputs | `references/mode-selection.md` |
-| Load representative synthesis examples by skill type | `references/examples/*.md` |
+| Check documentation-depth coverage | `references/examples/documentation-skill.md` |
+| Check security-review evidence and false positives | `references/examples/security-review-skill.md` |
+| Check process failure/recovery coverage | `references/examples/workflow-process-skill.md` |
+| Model concrete authoring, safe refresh, and corrections | `references/authoring-examples.md` |
+| Use Claude-only metadata or invocation features | `references/claude-code-extensions.md` |
 | Synthesize external/local sources with depth gates | `references/synthesis-path.md` |
 | Author or update SKILL.md and supporting files | `references/authoring-path.md` |
 | Optimize skill description and trigger precision | `references/description-optimization.md` |
@@ -35,7 +40,9 @@ Load only the path(s) required for the task:
    - for repository registration edits, use the repository's actual canonical files/locations after inspecting the workspace
 3. Read `references/mode-selection.md` and select the required path(s).
 4. Classify the skill (`workflow-process`, `integration-documentation`, `security-review`, `skill-authoring`, `generic`).
-5. Ask one direct question if class or depth requirements are ambiguous; otherwise state explicit assumptions.
+5. Choose the simplest shape with `references/execution-shapes.md`; record why any delegation, script, or new reference is needed.
+6. Ask one direct question if class or depth requirements are ambiguous; otherwise state explicit assumptions.
+7. For upstream refreshes, follow `references/upstream-refresh.md` before authoring.
 
 ## Step 2: Run synthesis when needed
 
@@ -64,13 +71,14 @@ Skip this step when selected path does not include `iteration`.
 Read `references/authoring-path.md`.
 
 1. Write or update `SKILL.md` in imperative voice with trigger-rich description.
-2. Create focused reference files and scripts only when justified.
-3. Follow `references/skill-patterns.md`, `references/workflow-patterns.md`, and
-   `references/output-patterns.md` for structure and output determinism.
-4. For authoring/generator skills, include transformed examples in references:
+2. Before adding guidance, name the behavior delta, existing rule to replace, and reason for any new artifact. Route every new runtime reference directly from `SKILL.md`.
+3. For new skills or material contract changes, create/update a concise `SPEC.md`: scope, inputs/outputs, safety, evidence, acceptance checks, and limitations. Keep provenance in `SOURCES.md`.
+4. Follow `references/skill-patterns.md`, `references/workflow-patterns.md`, and `references/output-patterns.md` only where the chosen shape needs them.
+5. For authoring/generator skills, include transformed examples in references:
    - happy-path
    - secure/robust variant
    - anti-pattern + corrected version
+6. Re-read changed runtime guidance; remove redundant rules and maintenance-only prose. Record whether guidance was replaced, narrowed, moved, deleted, or added with reason.
 
 ## Step 5: Optimize description quality
 

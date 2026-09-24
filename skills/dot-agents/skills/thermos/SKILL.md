@@ -11,9 +11,11 @@ Run a two-pass branch audit, then synthesize the result. Optimize for high-signa
 ## Scope
 
 1. Determine the review target from the user request, PR URL, current branch, or local changes.
-2. Default base is `main`; use another base only when the user specifies one.
+2. Honor the user-supplied base. Otherwise use the repository's documented/default branch if known; fall back to `main` only if it resolves. Ask if the base is ambiguous.
 3. Review only changed/added code and changed integration paths.
 4. Do not report pre-existing issues in untouched code unless the diff newly exposes or worsens them.
+5. Resolve base and HEAD to immutable commits once; pass the same merge-base diff command and commit range to both workers. For local changes, specify staged/unstaged/untracked scope explicitly. Stop before dispatch on invalid refs or empty scope.
+6. Review read-only. Do not edit, commit, install, or run side-effecting checks without separate authorization.
 
 ## Passes
 
@@ -27,10 +29,10 @@ Run these passes independently. If a task/subagent tool is available, launch bot
 Include this in each subagent task:
 
 ```text
-Review the current branch against <base>. Scope: <user scope/context>. Gather your own diff and context. Return prioritized findings with file:line evidence, impact, and concrete fix direction. Do not report pre-existing untouched-code issues. Do not spawn nested subagents.
+Review <exact pinned diff command and commit range>. Scope: <user scope/context>. Read-only; gather your own context. Return prioritized findings with file:line evidence, impact, concrete fix direction, and coverage states: checked, inapplicable, or unchecked (reason). Include counterevidence. Do not report pre-existing untouched-code issues. Do not spawn nested subagents.
 ```
 
-If no specialized subagents exist, use the rubrics below directly.
+Check agent availability before dispatch. If specialized agents are missing, give the complete relevant rubric below to a general worker or run sequentially. If workers are denied or fail, do not retry blindly; use permitted direct reads or mark that pass incomplete.
 
 ## Correctness/security rubric
 
@@ -57,7 +59,7 @@ Rules:
 Be demanding about structure. Flag maintainability regressions that should be fixed before merge:
 
 - a clear “code judo” simplification could delete branches/helpers/modes/layers
-- file crosses or meaningfully worsens a ~1000-line boundary without strong reason
+- file-size growth makes ownership/navigation materially worse (~1000 lines is an investigation heuristic, not an automatic blocker)
 - ad-hoc conditionals or special cases are bolted into unrelated flows
 - feature logic leaks into shared/general-purpose layers
 - duplicate logic or repeated condition cascades suggest a missing model/helper
@@ -79,9 +81,9 @@ Prefer fixes that remove concepts, not rearrange mess:
 
 After both passes:
 
-1. Deduplicate overlap.
-2. Weight issues found by both passes higher.
-3. Resolve disagreements with your own judgment.
+1. Merge only findings with the same root cause and remedy; preserve distinct issues in the same file.
+2. Treat corroboration as evidence to investigate, not an automatic severity increase.
+3. Resolve disagreements against traced code and counterevidence, not worker vote counts.
 4. Findings first; no generic summary unless needed.
 5. If one pass failed, synthesize from the other and note the missing perspective.
 
@@ -103,8 +105,10 @@ Severity:
 - `P2` — should fix before/soon after merge.
 - `question` — blocking uncertainty after reasonable investigation.
 
-If no findings, output exactly:
+If no findings and both passes completed, output exactly:
 
 ```text
 No findings.
 ```
+
+If coverage is incomplete, report `No findings in reviewed scope.` plus the missing pass/check and reason. Never turn a missing worker into a clean audit.

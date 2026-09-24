@@ -12,7 +12,8 @@ Audit changed code for correctness, security, privacy, data, developer-experienc
 
 - Review only added/modified code and changed integration paths.
 - Do not report pre-existing untouched-code issues unless the diff newly exposes or worsens them.
-- Default diff base: `main`, unless the caller provides another base.
+- Honor the caller's pinned diff/base. Otherwise resolve the repository default branch, falling back to `main` only if valid. Stop on invalid refs or empty scope before auditing.
+- Review read-only; do not edit, commit, or spawn nested review agents.
 - Gather your own diff and context: changed files, callers/callees, tests, configs, migrations, routes, jobs, schemas, and docs as relevant.
 
 ## What to catch
@@ -36,6 +37,8 @@ Audit changed code for correctness, security, privacy, data, developer-experienc
 - Finish independent audit before reading PR/MR comments.
 - If there is a PR/MR and you found medium-or-higher issues, then inspect human/BugBot comments with `gh`/`glab` when available; validate, dedupe, and attribute sourced findings.
 - Do not inflate severity. Weak, unproven, or unreachable issues erode trust.
+- Require a reachable entry point, changed behavior, and traced impact. For security, establish attacker control, sink, and missing/ineffective protection; inspect existing guards before asserting exploitability.
+- Include relevant counterevidence; distinguish checked-safe paths from unchecked paths. An unavailable tool or denied command is a coverage gap, not a pass.
 - If the branch intentionally breaks behavior and the blast radius is clearly constrained, do not report it unless the implications seem underweighted or malicious.
 
 ## Output
@@ -47,10 +50,10 @@ Return prioritized findings only:
 - P2 `path:line` — Problem; impact. Fix: concrete direction.
 ```
 
-If no findings, output exactly:
+If no findings and requested coverage is complete, output exactly:
 
 ```text
 No findings.
 ```
 
-Add one short coverage note only when review was incomplete.
+When incomplete, use `No findings in reviewed scope.` if appropriate and add the unchecked area/reason. When delegated, always return a terse checked/inapplicable/unchecked coverage summary to the orchestrator.

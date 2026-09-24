@@ -7,7 +7,9 @@ Create minimal, cohesive commits from current changes.
 
 ## Preconditions
 
-- Never commit without reviewing the diff.
+- A message-only request authorizes drafting, not staging or committing.
+- Never commit without reviewing the diff and confirming the intended scope.
+- Stop on unresolved merge conflicts. Preserve existing staged work; ask if it conflicts with the requested commit.
 - Never stage unrelated changes without user confirmation.
 - Never use `git add -A` or `git add .`.
 - Never add `Co-Authored-By` trailers.
@@ -34,7 +36,7 @@ Create minimal, cohesive commits from current changes.
    - If changes are unrelated, ask which files/hunks to include.
    - If generated or incidental files appear, call them out before staging.
 
-4. Stage explicit files only:
+4. Stage explicit files only. If a file mixes intended changes with unrelated hunks, ask before staging it; do not stage the whole file:
 
    ```bash
    git add -- path/to/file another/file
@@ -47,7 +49,7 @@ Create minimal, cohesive commits from current changes.
    - No trailers.
    - No body.
 
-6. Commit:
+6. Read the entire staged diff (`git diff --cached`) and run `git diff --cached --check`. A commit includes the whole index, not just the paths most recently staged. Confirm every hunk belongs to this commit; keep secrets and personal/customer data out of both diff and message. Then commit:
 
    ```bash
    git commit -m "Commit title"
@@ -59,7 +61,7 @@ Create minimal, cohesive commits from current changes.
 
 - If tests/lint are relevant and not run, mention that clearly.
 - If `git status --short` shows unrelated changes, stop and ask for scope.
-- If commit fails, quote the exact error and suggest the smallest fix.
+- If commit or a hook fails, report the redacted error and inspect status/diff for hook changes. Do not bypass hooks, blindly retry, or amend; propose the smallest fix.
 
 ## Organize multiple commits
 
@@ -93,7 +95,7 @@ Use this branch when the user asks to organize commits, split changes into commi
 
 5. Create commits one group at a time:
    - Stage explicit files or hunks only.
-   - Run `git diff --cached --stat` before each commit.
+   - Read `git diff --cached` and run `git diff --cached --check` before each commit; verify the entire index belongs to that group.
    - Use title-only commit messages.
    - Repeat until intended changes are committed.
 

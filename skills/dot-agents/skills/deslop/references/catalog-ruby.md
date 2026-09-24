@@ -2,6 +2,8 @@
 
 Load when diff touch `.rb`, `.rake`, `.erb`, `Gemfile`, or Rails-shaped folder (`app/`, `config/`, `db/`).
 
+Check behavior, not syntax alone: model validation differs from DB constraints; `.try` and safe navigation differ for missing methods; eager test setup may supply data without a direct variable reference.
+
 ## Ruby
 
 - `attr_reader :foo` when ivar only read inside class
@@ -21,7 +23,7 @@ Load when diff touch `.rb`, `.rake`, `.erb`, `Gemfile`, or Rails-shaped folder (
 - `.all` at end of query chain (`User.where(...).all`) — redundant
 - `after_initialize` doing work that belong in factory / builder
 - `belongs_to :thing, optional: true` on column with DB NOT NULL constraint
-- `validates :x, presence: true` when DB NOT NULL + callback already set
+- presence validation only if proven redundant at every write boundary; NOT NULL does not reject blank strings or preserve validation error behavior
 - scope `scope :active, -> { where(active: true) }` used one place — inline
 - `includes(...)` for association test never touch (over-eager load)
 - `touch: true` on association nobody observe

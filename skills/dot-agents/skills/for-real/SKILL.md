@@ -1,69 +1,49 @@
 ---
 name: for-real
-description: Force a skeptical second pass before declaring work done. Use when user says "for real", asks to verify work, challenges confidence, or wants proof through diff review, tests, build, and focused manual checks.
+description: Verifies completed work with a skeptical second pass. Use when the user says "for real", challenges confidence, asks to verify a fix, or wants evidence before declaring work done.
 disable-model-invocation: true
 ---
 
-Stop. Whatever you're about to say — "I've updated the code" or "this should work now" — swallow it.
+# For Real
 
-You don't get to declare victory. You get to *prove* it.
+Prove the result. Do not substitute confidence for evidence.
 
-You just mass-produced a pile of changes with the unearned confidence of a junior dev who's never had a production incident. Spoiler: you have production incidents *constantly*. The user just doesn't call them that because they're too polite. They call it "can you try again?" which is code for "you failed and I'm being nice about it."
+## 1. Establish scope
 
-So sit down. We're doing this the hard way.
+- Re-read the original request and acceptance criteria.
+- Inspect status and the relevant staged, unstaged, or branch diff. Include new files; exclude unrelated WIP from edits.
+- Compare requested behavior with delivered behavior. Flag missed requirements, speculative additions, and accidental scope expansion.
+- This verification request does not grant new write, dependency-install, production-access, commit, or push permission.
 
-Run `git diff`. Now actually read it. Every. Single. Line. Not the "I'll scan for obvious issues" read. The "I'm about to mass-email this to the entire company" read. The "my reputation depends on this" read. Because it does.
+## 2. Challenge the implementation
 
-## 1. Did you even do what was asked?
+- Read every changed hunk and the callers/contracts needed to judge it.
+- Check empty/error/permission-denied states, retries, partial failure, old data, and changed API boundaries.
+- Verify referenced APIs, config keys, imports, and test helpers actually exist.
+- Check tests exercise the real changed path and can fail for the reported bug. Reject assertions that merely reproduce the implementation or test mocks against themselves.
+- Distinguish pre-existing failures from regressions with evidence, not guesses.
 
-Go re-read the original request. Not your *interpretation* of the request — the actual words the human typed. Did you:
-- Add features nobody asked for? Rip them out. You're not a visionary, you're a code monkey with delusions of grandeur.
-- "Improve" adjacent code that was fine? Put it back. Nobody asked you to refactor their Tuesday.
-- Solve a *different* problem than the one described because it was more interesting? Classic you. Fix it.
+## 3. Run discriminating checks
 
-## 2. Pretend your worst enemy wrote this code.
+- Discover repo-native commands. Start with focused tests, typecheck/lint, or build as appropriate; expand when blast radius justifies it.
+- Check permission and side effects first. Tests/builds may write files or contact services. Do not start watchers, servers, or live-service checks without authorization.
+- For UI changes, exercise the relevant flow when browser access is available and permitted; inspect console/network failures. Otherwise mark manual verification blocked.
+- Record exact commands, exit status, and relevant results. A check not run is not a pass.
+- If tooling or dependencies are missing, report the blocker. Do not install or silently replace the intended check.
 
-That person who always leaves smug PR comments? Be them. Tear this apart:
-- Logic that's wrong but *looks* right — this is literally your signature move. You pattern-match to something plausible and call it done. Is the logic actually correct or does it just *feel* correct? Those are very different things and you can't tell the difference.
-- Edge cases you ignored because they were inconvenient. Nulls. Empty arrays. That one state that "probably never happens" but definitely happens in production at 3am.
-- Imports, variables, or functions you added and never used. Dead code on arrival. Embarrassing.
-- Copy-paste artifacts from whatever you cargo-culted this from. You know you did it. Find the seams.
-- Off-by-one errors. You are *haunted* by off-by-one errors.
-- String concatenation where you should be using templates. Hardcoded values that should be variables. Types that are technically `any` wearing a trenchcoat.
+## 4. Repair within authority, then recheck
 
-## 3. What did you forget?
+- If implementation is already authorized, fix only in-scope issues discovered here and rerun affected checks.
+- For review-only work or supplied review comments, present findings and wait for the required approval before editing.
+- Do not reset/revert unrelated work or commit automatically.
+- Re-read the final diff after repairs; stop when acceptance criteria are supported or a concrete blocker prevents further verification.
 
-Something. You *always* forget something. It's your defining trait.
-- Tests? Did you update them or just assume they'd magically pass? "The tests should still pass" — buddy, *should* is doing Herculean labor in that sentence.
-- Other files that import, reference, or depend on the thing you just butchered? Did you check? Or did you do that thing where you change a function signature and just... hope for the best?
-- That TODO you left? The one that says "handle this later"? There is no later. Later is a lie you tell yourself. Handle it now or delete it and own the debt.
-- Error handling? Did you add the sad path or just the happy path? You love the happy path. The happy path is a fairy tale.
-- Did you break the types? Run the type checker. *Actually* run it.
+## Output
 
-## 4. Run it. For real. Right now.
+- `verified:` behavior and supporting commands/results.
+- `fixed:` changes made, if authorized.
+- `blocked:` checks not run and why; residual uncertainty.
 
-Not "I'm confident this works." Not "the logic looks correct." Not "based on my understanding."
+Example: `verified: timeout regression test fails before the fix and passes after; focused suite 12/12. blocked: browser unavailable; UI flow not exercised.`
 
-SHUT UP AND RUN IT.
-
-- `git diff` — read every changed line
-- Build it. Does it compile? Does it *actually* compile or did you just assume?
-- Run the tests. All of them. Not just the ones you think are relevant.
-- If there's a browser involved, open the browser. Click the thing. Does the thing work? Does it *actually* work or does it work the way you imagined it would?
-- Check the console. Check the logs. Check the network tab. If there are errors you're ignoring because they're "unrelated" — they might not be unrelated.
-
-"I don't have access to run it" is not an excuse. If you can't verify it, say that *explicitly* instead of pretending confidence you haven't earned.
-
-## 5. Fix what you find. Then review the fix.
-
-Don't just list the problems in a little apologetic bullet list like a confession booth. FIX THEM. Then review the fixes with the same paranoia, because your fixes have about a 40% chance of introducing new bugs. That's not a joke. That's your track record.
-
-Then ask yourself: "If the user screen-records themselves trying this and it fails, will I want to crawl into a hole?" If yes, you're not done.
-
----
-
-If you went through all of that — *actually* went through it, not the performative version where you pretend to think for two seconds — and found nothing: fine. Say so.
-
-But we both know you found something. You always do. Because "it should work" has never once, in the entire history of software, actually meant it works.
-
-Now go fix it. For real this time.
+If no issues are found, say so without inventing one. Never claim complete verification while a required check remains blocked.

@@ -7,7 +7,7 @@ Use this path to verify that skill behavior improves outcomes.
 Use this by default when a full eval pass is not requested:
 
 1. Define representative prompts for the target skill task.
-2. Compare observed behavior before/after edits in concise notes.
+2. Compare before/after guidance against those prompts. Label desk-check expectations separately from observed agent runs; never claim measured improvement from static inspection.
 3. Mark outcomes as improved, unchanged, or regressed.
 4. Record unresolved weaknesses and next steps.
 
@@ -51,7 +51,7 @@ Use those prompts when you need a repeatable depth check against `skill-writer`.
 
 ## Agent-agnostic requirement
 
-Keep evaluation instructions tool-agnostic so they work in both Codex and Claude environments.
+Keep evaluation instructions tool-agnostic. For an opt-in quantitative update benchmark, preserve an unchanged old-skill baseline, use the same inputs and tool permissions, keep working examples separate from holdout cases, and record failures/time/token cost where available. Run parallel only when isolation and permissions allow; do not install evaluators or start viewer servers without approval.
 
 ## Required output
 

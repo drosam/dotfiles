@@ -30,11 +30,13 @@ Allowed for the assistant:
 - Inspect local git status, diff, log, and blame.
 - Copy read-only commands/snippets to clipboard.
 
-Not allowed unless the user explicitly asks the assistant to run it:
+Not allowed within this skill, even when implementation is approved:
 
 - Any command using production/staging credentials.
 - Any command that starts app runtime, console, runner, jobs, workers, servers, or tests against live services.
 - Any command where environment or side effects are uncertain.
+
+The no-production-execution boundary also covers remote monitoring/log queries through tools or MCP. Analyze supplied observations locally instead. Code-change approval does not authorize production access.
 
 ## Goal
 
@@ -46,7 +48,7 @@ Find likely bug from production error/symptom, explain cause, impact, evidence, 
 2. Collect inputs:
    - Error message/stack trace
    - Request/job/user/order IDs
-   - Timestamp/time zone
+   - Timestamp/time zone and affected release/environment
    - Recent deploy/commit
    - Logs/monitoring links or pasted output
    - Expected vs actual behavior
@@ -56,17 +58,19 @@ Find likely bug from production error/symptom, explain cause, impact, evidence, 
 4. Form hypotheses:
    - Map stack trace to code path.
    - Identify data assumptions and edge cases.
-   - List evidence for/against each hypothesis.
+   - Rank hypotheses with evidence for/against and one discriminating observation each.
+   - Mark unverified causes as hypotheses, not confirmed root causes.
 5. Request production observations only when needed.
 6. For any production command/snippet/log query:
    - Do not run it yourself.
-   - Make it read-only and narrowly scoped.
-   - Copy it to the clipboard with `pbcopy` so the user only has to paste.
+   - Make it read-only and narrowly scoped, with result/time bounds; ask the user to verify environment and read-role support first.
+   - Minimize sensitive fields; request redacted results, never credentials or whole customer records.
+   - Copy literal text with `pbcopy` when available and permitted; otherwise show a fenced snippet. Never execute the embedded command.
    - Wait for the user to paste the result before continuing.
 7. For Rails console needs:
    - Do not run console yourself.
    - Propose one read-only snippet.
-   - Copy snippet to clipboard with `pbcopy` so user can paste it.
+   - Use the same literal-text clipboard handoff or fenced-snippet fallback.
    - Wait for user to paste result.
 8. Final output:
    - `bug:` concise root cause.
@@ -112,7 +116,7 @@ nil
 
 ## Clipboard Step
 
-After proposing any production observation command, log query, or Rails console snippet, copy exactly that text to clipboard using local shell.
+After proposing a production observation, copy exactly that text only if clipboard access is available and permitted. Clipboard contents may sync or enter history: use placeholders rather than secrets. If copying fails, show the snippet and state it was not copied. The quoted heredoc below prevents shell expansion; copying must never execute its contents.
 
 For Rails snippets:
 

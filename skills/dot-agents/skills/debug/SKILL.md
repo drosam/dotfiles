@@ -28,10 +28,10 @@ Allowed before implementation approval:
 - Inspect git status, diff, log, and blame.
 - Run bounded read-only shell commands.
 - Run focused diagnostics that do not alter source files or persistent data.
-- Run Rails runner with query-only snippets.
+- Run Rails runner with query-only snippets only after verifying the local environment and boot/initializer behavior. A read-looking snippet does not make application startup side-effect-free.
 - Run read-only database queries through app APIs when bounded by IDs/time ranges/limits.
 
-Ask first when a command may alter persistent state, depend on external services, take a long time, or produce large output.
+Ask first when a command may alter persistent state, depend on external services, take a long time, or produce large output. Tests/builds may write caches, coverage, fixtures, or databases; do not assume they are read-only. Redact secrets and personal data from commands, logs, and reported results.
 
 ## Goal
 
@@ -50,13 +50,15 @@ Find likely cause from local error/symptom, explain evidence, and propose a fix 
    - Search relevant classes, controllers, jobs, serializers, services, models, scopes, callbacks, tests, and logs.
    - Check recent git diff/log only if useful.
 4. Reproduce or observe locally with safe commands:
-   - Prefer the smallest focused command.
-   - Bound runtime and output.
-   - Avoid commands that write source/generated files or persistent data.
+   - Seek a fast, repeatable signal for the exact reported symptom, not merely successful startup.
+   - Prefer the smallest safe command; record invocation, observed result, and expected result.
+   - Bound runtime and output. Minimize inputs one at a time without changing persistent state.
+   - If no safe reproduction exists, report that limit and request a redacted artifact; do not add instrumentation or fabricate verification.
 5. Form hypotheses:
    - Map stack trace to code path.
    - Identify data assumptions and edge cases.
-   - List evidence for/against each hypothesis.
+   - Rank plausible hypotheses with evidence for/against and one discriminating read-only check each.
+   - Change one observation at a time. Separate confirmed cause from untested hypothesis.
 6. Use Rails runner when app state inspection helps:
    - Run it yourself only against local development/test environment.
    - Keep snippet query-only and bounded.
@@ -75,7 +77,8 @@ When needing local Rails data, generate and run snippets that:
 - Only read data.
 - Avoid callbacks and app methods with possible side effects.
 - Prefer direct ActiveRecord query methods and primitive columns.
-- Avoid loading huge records. Always bound with IDs/time ranges/limits.
+- Avoid loading huge records. Bound by IDs/time ranges and result limits; a small result does not guarantee a cheap query (especially `count` or sorting).
+- Treat `readonly` and reading roles as defense in depth, not a sandbox for arbitrary app methods.
 - Avoid `inspect` on large objects or objects with expensive methods. Prefer hashes of primitive values.
 - Avoid external service clients.
 - Avoid writes even inside transactions. Rollback is not enough if code has non-DB side effects.

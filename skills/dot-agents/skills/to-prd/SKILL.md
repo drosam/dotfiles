@@ -8,15 +8,17 @@ This skill takes the current conversation context and codebase understanding and
 
 ## Process
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already.
+1. Explore the repo to understand the current state of the codebase, if you haven't already. Use its domain glossary and relevant ADRs; distinguish agreed decisions from assumptions.
 
 2. Sketch out the major modules you will need to build or modify to complete the implementation. Actively look for opportunities to extract deep modules that can be tested in isolation.
 
 A deep module (as opposed to a shallow module) is one which encapsulates a lot of functionality in a simple, testable interface which rarely changes.
 
-Check with the user that these modules match their expectations. Check with the user which modules they want tests written for.
+Prefer existing public test seams that cover the desired behavior without coupling tests to internals. Confirm only material module/seam choices not already settled; this is a targeted checkpoint, not a new requirements interview. Mark missing decisions as open questions rather than inventing requirements.
 
-3. Write the PRD using the template below and save it as a markdown file in `./.prd/` directory (e.g., `.prd/ai-knowledge-base.md`). Use a kebab-case filename derived from the feature name.
+3. Write the PRD using the template below and save it in `./.prd/` (e.g., `.prd/ai-knowledge-base.md`). Use a kebab-case feature name. Inspect any existing destination first; do not overwrite unrelated content. For draft-only/read-only requests, return the draft without writing. Do not publish issues or begin implementation.
+
+4. Report the saved path (or draft status), confirmed testing boundary, and open decisions. For concrete output examples, read `references/examples.md`.
 
 <prd-template>
 
@@ -30,7 +32,7 @@ The solution to the problem, from the user's perspective.
 
 ## User Stories
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+A complete, non-duplicative numbered list of user stories. Each user story should be in the format of:
 
 1. As an <actor>, I want a <feature>, so that <benefit>
 
@@ -38,7 +40,7 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+Cover agreed behavior, meaningful edge cases, and acceptance criteria without padding or inventing scope.
 
 ## Implementation Decisions
 

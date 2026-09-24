@@ -10,22 +10,19 @@ Use this skill for pi-specific questions and implementation work.
 
 ## Resolve Pi Root
 
-Prefer the installed package root:
+Resolve the package actually backing the active `pi` executable; do not assume a machine-specific Node version or package manager.
 
-```bash
-PI_ROOT="$(pnpm root -g 2>/dev/null || npm root -g)/@earendil-works/pi-coding-agent"
-```
+1. Inspect the active executable/symlink target and package metadata when available.
+2. Otherwise run `pnpm root -g` and check for `@earendil-works/pi-coding-agent/package.json` beneath that directory. A successful root command does not prove Pi is installed there.
+3. If absent, try `npm root -g` separately. Older installations may use `@mariozechner/pi-coding-agent`; verify rather than guessing.
+4. Read the resolved `package.json` version and verify its `docs/` directory. If neither candidate matches the executable, ask for the installation path.
 
-If that fails on this machine, use:
-
-```bash
-PI_ROOT="/Users/david/.local/share/mise/installs/node/24.14.1/lib/node_modules/@earendil-works/pi-coding-agent"
-```
+Use separate permitted commands; do not install/upgrade Pi as part of lookup.
 
 ## Read Docs by Topic
 
 Read the relevant docs completely before answering or editing pi config.
-Follow cross-references mentioned by each doc.
+Follow cross-references relevant to the question, not the whole documentation graph. Prefer installed-version docs over latest web docs. If a routed file is missing, inspect that installation's docs index and report version differences rather than inventing a path.
 
 | Topic | Read |
 | --- | --- |
@@ -41,12 +38,12 @@ Follow cross-references mentioned by each doc.
 | Adding models | `docs/models.md` |
 | Packages | `docs/packages.md` |
 | Sessions | `docs/sessions.md`, `docs/session-format.md` |
-| Settings | `docs/settings.md` |
+| Settings and trust | `docs/settings.md`, `docs/configuration.md` |
 | Compaction | `docs/compaction.md` |
 | JSON/print mode | `docs/json.md` |
-| RPC | `docs/rpc.md` |
+| RPC | `docs/rpc.md`, then `docs/rpc-commands.md` or `docs/rpc-extension-ui.md` when relevant |
 | Providers | `docs/providers.md` |
-| Usage | `docs/usage.md` |
+| Usage / CLI / environment | `docs/usage.md`, then `docs/cli.md` or `docs/environment-variables.md` when relevant |
 | Shell aliases | `docs/shell-aliases.md` |
 | Terminal setup | `docs/terminal-setup.md` |
 | Quickstart | `docs/quickstart.md` |
@@ -80,6 +77,6 @@ Useful local paths:
 - Read before changing.
 - Prefer extension APIs over guessing JSON settings.
 - For GitHub work, prefer GitHub CLI (`gh`) over web UI or raw API when available.
-- For extension examples in this repo, match local import convention: `@mariozechner/pi-coding-agent` and `@mariozechner/pi-tui`.
+- For existing extension examples in this repo, preserve local `@mariozechner/pi-coding-agent` / `@mariozechner/pi-tui` imports unless intentionally migrating. Use the resolved package/version for API facts. Treat legacy import aliases as a separate local compatibility concern: inspect existing imports and loader/package aliases before copying an import or migrating it.
 - Use `/reload` after extension/skill/theme changes in interactive pi.
-- Verify with a cheap command when possible, e.g. `pi --list-models <model> --extension <path> --offline`.
+- Verify with a version-supported cheap command after checking `docs/cli.md`. Loading an extension executes code even with `--offline`; inspect it first and obtain required permission. Report command/result and any unverified behavior.

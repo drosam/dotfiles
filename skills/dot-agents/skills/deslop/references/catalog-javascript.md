@@ -2,17 +2,18 @@
 
 Load when diff touch `.js`, `.jsx`, `.ts`, `.tsx`, `.mjs`, `.cjs`, `package.json`.
 
+Treat async timing, promise-return contracts, React hook lifecycle, and external environment configuration as behavior. Do not remove a construct just because its syntax looks redundant.
+
 ## JavaScript
 
-- `async` function that never `await`
+- `async` without `await` only if promise return and rejection semantics are not part of its contract
 - `try { ... } catch (e) { console.log(e) }` — log and swallow
 - single-export barrel `index.js` re-exporting one thing
 - `module.exports = { foo }` when `module.exports.foo = foo` is file's pattern (or vice versa) — novel inconsistency
 - `Object.assign({}, obj)` when `{...obj}` is the file idiom
 - `arr.filter(Boolean).filter(x => x)` — redundant
 - `new Promise((res, rej) => { ... res(x) })` wrapping value already a promise
-- `.then(x => x)` identity then
-- `await Promise.resolve(x)` on non-promise
+- `.then(x => x)` or `await Promise.resolve(x)` only after checking promise identity, microtask timing, and async error behavior
 
 ## TypeScript
 
@@ -35,7 +36,7 @@ Load when diff touch `.js`, `.jsx`, `.ts`, `.tsx`, `.mjs`, `.cjs`, `package.json
 
 ## Node / backend
 
-- `process.env.X || "default"` where `"default"` is the only value ever set in repo
+- env fallback only when deployment/runtime contracts prove it unnecessary; repo values alone do not describe external configuration
 - custom `EventEmitter` subclass with no extra method
 - middleware that only calls `next()`
 - `Router()` split into own file with one route

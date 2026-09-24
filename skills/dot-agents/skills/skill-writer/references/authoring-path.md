@@ -21,9 +21,17 @@ Use this path to create or update the skill files.
 5. Do not use provider-specific path variables such as `${CLAUDE_SKILL_ROOT}` in skills that are meant to stay provider-agnostic; use skill-root-relative paths instead.
 6. Only keep provider-specific path conventions when the skill is intentionally provider-specific and that scope is made explicit.
 
+## Precision and maintenance
+
+Before edits, identify the concrete behavior delta and existing guidance to replace or narrow. Choose the simplest shape using `references/execution-shapes.md`.
+
+For a new skill or material scope/permission/output change, maintain a concise `SPEC.md`: intent, in/out of scope, trigger boundaries, runtime inputs/outputs, safety invariants, evidence policy, validation, and limitations. Do not duplicate the runtime instructions or full provenance there.
+
+After edits, reread as a user of the skill. Remove redundant rules; move source history out of runtime. Each added line must change a decision, action, or verification step. Do not add scripts merely to automate this judgment.
+
 ## Supporting files
 
-Create only files needed to execute the workflow:
+Create only files with a specific lookup, execution, or maintenance need. Route every runtime reference directly from `SKILL.md`; prefer flat new references without renaming established paths solely for uniformity:
 
 - `references/` for domain/process depth
 - `scripts/` when repeated automation is needed
