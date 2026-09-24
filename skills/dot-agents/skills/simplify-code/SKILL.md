@@ -1,11 +1,11 @@
 ---
 name: simplify-code
-description: Proposes evidence-backed simplifications across a branch or pull request, including architecture, unnecessary edge-case machinery, readability, and cohesive module or file boundaries. Use when asked to simplify a PR or branch, clean up a feature branch before opening a PR, reduce overengineering, or make changed code easier to understand and better split. No PR required. Proposes first and edits only approved changes; not a general bug review or triage of existing comments.
+description: Proposes evidence-backed simplifications across a branch or pull request, including architecture, unnecessary edge-case machinery, readability, and cohesive module or file boundaries. Use when asked to simplify a PR or branch, deslop, trim chaff, clean up a feature branch before opening a PR, reduce overengineering, or make changed code easier to understand and better split. No PR required. Proposes first and edits only approved changes; not a general bug review or triage of existing comments.
 ---
 
 # Simplify Code
 
-An open PR is optional. Default to the current branch when no explicit target is supplied; use PR metadata only when a PR exists and is available.
+An open PR is optional. Default to the current branch when no explicit target is supplied; use PR metadata only when a PR exists and is available. Deslop requests use this same whole-branch/PR workflow, not a separate recent-changes mode. State scope before scanning; clarify requests limited to recent edits rather than silently reviewing a different scope.
 
 Make the branch's feature easier to explain, navigate, change and test. Optimize the whole affected design, not just line count or the last edited function. A useful result can be “keep this design”; do not manufacture refactors.
 
@@ -31,6 +31,7 @@ Flow: pin branch → understand behavior and structure → evaluate simpler alte
 - Read applicable instructions, PR intent/specs, tests, relevant docs and representative nearby implementations. Identify required behavior and constraints: public interfaces, supported clients/platforms, state transitions, error semantics, durability, concurrency and rollout/rollback compatibility.
 - Trace a normal request and the unusual paths from input through decisions and effects. Explain the feature in a few sentences and its key ownership boundaries. If this cannot be done confidently, investigate before proposing a new architecture.
 - Check history for suspect wrappers, fallback paths and compatibility guards. An old pattern is not necessarily good; a new pattern is not necessarily waste. Establish what each layer actually provides.
+- For each cleanup candidate, inspect the same file, neighboring module implementations and relevant history. Classify the pattern as `local idiom`, `novel` or `ambiguous`. Preserve local idiom when the only objection is taste; novelty is not evidence of redundancy. Investigate unfamiliar intent or ask rather than proposing speculative cuts.
 - Check external/dynamic consumers, configuration and schema/runtime guarantees before claiming unused code or impossible states. Absence of grep hits, tests or incident reports is not proof. Merged code is not proof of deployed code; unavailable deployment facts remain unknown.
 - Identify existing required gates and relevant baseline checks. Run only permitted safe commands; record pre-existing failures or blocked checks. Do not add tests or repair unrelated failures during proposal-only analysis.
 
@@ -69,6 +70,8 @@ Never remove security/privacy, authorization, data-integrity, financial, durabil
 - Keep validation at real trust boundaries. Preserve distinctions in null/false/empty values, errors, mutation, ordering, async/cancellation, transactions and observable effects. Do not move side effects or weaken types to obtain a shorter diff.
 - Preserve comments explaining constraints and tradeoffs; remove stale/redundant narration only when verified. Respect local naming/import/language conventions rather than imposing generic TypeScript/React rules.
 
+For the cleanup scan, load the [generic catalog](references/catalog.md). Also load the [Ruby/Rails catalog](references/catalog-ruby.md) for Ruby/Rails changes and the [JavaScript/TypeScript catalog](references/catalog-javascript.md) for JS/TS/React/Node changes. Other languages use the generic catalog. These are candidate prompts, not deletion rules or an exhaustive limit on architectural analysis. This workflow's behavior, evidence and approval safeguards override catalog shorthand; pattern matches alone never justify removing a protection.
+
 Read [calibration examples](references/examples.md) when evaluating module splits, abstraction removal, edge-case reductions or a blocked verification. They show proposal boundaries and counterexamples, not rules to mechanically apply.
 
 ## 4. Present a concrete proposal, then stop
@@ -81,6 +84,7 @@ Report:
 
 ```text
 location/evidence: paths:lines; relevant callers, constraints and counterevidence
+neighbor check: local idiom / novel / ambiguous, with evidence for cleanup candidates
 current cost: concrete cognitive/coordination cost, not taste
 proposal: smallest adequate before → after; files/boundaries affected
 classification: behavior-preserving refactor / optional scope reduction

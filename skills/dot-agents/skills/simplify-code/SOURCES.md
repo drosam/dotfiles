@@ -2,7 +2,17 @@
 
 Research/authoring: 2026-09-24. Class: workflow-process. Canonical shared root: `skills/dot-agents/skills/simplify-code/`. User selected `simplify-code`; scope explicitly includes branches before any PR exists.
 
-## Behavior delta and chosen shape
+## Consolidation into one branch/PR skill
+
+- User approved absorbing `deslop` into `simplify-code`, then explicitly chose whole-branch/PR scope only. No recent-changes mode added; retain existing WIP separation and scope clarification.
+- Moved the three local deslop catalogs unchanged into `references/`; added direct runtime routing and per-candidate neighbor/history checks. Catalog shorthand is subordinate to the existing evidence, behavior-preservation and approval contracts.
+- Removed the former deslop entry point and its live symlinks. Retained simplify-code invocation metadata; no automatic post-edit hook or commit authority added.
+- Catalog provenance: former `deslop/SOURCES.md` attributes local skill/catalog history to `f1ff2f87ff72e170bf897326c1a6f60b64cc308e` and philosophy to https://grugbrain.dev/. Original skill ancestry remains unknown; no new upstream fetch or empirical benchmark performed.
+- Former deslop safety corrections retained: nil/false distinction, nested splats, dictionary errors, validation semantics, async contracts and external environment values. Local idiom is evidence, not a reason to discard necessary safeguards or suppress supported architectural improvements.
+- Desk checks: deslop requests now resolve branch scope; recent-only requests clarify scope; novel strict-boolean fallback stays; language catalogs load conditionally; ambiguous approval still requires clarification.
+- The original research and validation below are historical, not validation of this consolidation.
+
+## Original behavior delta and chosen shape
 
 User requested whole-branch architectural simplification, removal of unjustified edge-case complexity, readability and better decomposition, with facts confirmed before claims. Existing deslop is a narrow recent-code cleanup with catalog matches; review-triage evaluates already supplied findings. Neither is replaced or broadened. New workflow discovers structural simplifications and presents concrete proposals before edits.
 

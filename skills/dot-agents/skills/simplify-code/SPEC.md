@@ -4,7 +4,7 @@
 
 Shared/provider-neutral workflow for discovering and proposing simplifications across a feature branch or PR, then implementing only approved changes. A PR is optional; current/local branch and confirmed base suffice. Architecture, unnecessary edge-case machinery, clarity and cohesive decomposition are first-class; line reduction is not the goal.
 
-Not a full defect/security review, automatic post-edit hook, whole-repository redesign, feature implementation, or triage of supplied review comments. Existing `code-review`, `deslop` and `review-triage` remain unchanged.
+Not a full defect/security review, automatic post-edit hook, whole-repository redesign, feature implementation, or triage of supplied review comments. Existing `code-review` and `review-triage` remain unchanged. Absorbs `deslop` catalogs and local-idiom checks into the whole-branch/PR workflow; no separate recent-changes mode.
 
 ## Inputs and outputs
 
@@ -32,6 +32,9 @@ Outputs: pinned scope/coverage, current versus proposed design, numbered evidenc
 5. A proven low-value cosmetic case can be proposed for removal only with exact behavior loss and explicit scope-change approval; unknown frequency stays unknown.
 6. Semantic traps, unmapped deleted tests, stale worktree/head, denied evidence and failing build do not become successful simplifications.
 7. No justified simplification is an acceptable outcome; partial review does not imply branch/merge readiness.
+8. “Deslop” uses the same stated whole-branch/PR scope. Requests limited to recent edits require clarification, not a silent scope change.
+9. Cleanup candidates carry a local-idiom/novel/ambiguous neighbor check; catalogs guide discovery but cannot override verified contracts. A novel boolean fallback remains when nil would violate the return contract.
+10. Generic and relevant language catalogs load for cleanup; a local convention alone does not justify a stylistic rewrite. “Looks good” does not authorize edits without an explicit item/bundle decision.
 
 ## Evaluation limits
 
