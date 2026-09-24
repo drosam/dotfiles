@@ -1,19 +1,19 @@
 ---
 name: grill-with-docs
-description: Stress-tests a plan or design through a dependency-aware interview inside a repository, and records the outcome as it settles - resolved terms into a CONTEXT.md glossary and hard-to-reverse decisions as ADRs. Use when the user says "grill me with docs", wants a grooming session that leaves a paper trail, or wants to document a repo's domain language.
+description: Stress-tests a plan, design, or decision through a dependency-aware interview inside a repository. Records settled domain terms in CONTEXT.md and offers ADRs for significant decisions. Use when the user says "grill me", "grill me with docs", wants assumptions challenged or a grooming session, or wants to document a repo's domain language.
 disable-model-invocation: true
 ---
 
 # Grill With Docs
 
-Same interview as `grill-me`, pointed at a repository, and stateful: what resolves lands on disk during the session, not batched at the end. Self-contained; do not require other skills to load.
+Resolve user-owned design decisions through dependency-aware questions and codebase research. Record settled domain terms during the session and offer ADRs sparingly; keep other decisions in the conversation. Self-contained; do not require other skills to load.
 
 ## Interview
 
 1. Read the plan, relevant code, and existing `CONTEXT.md` / `CONTEXT-MAP.md` / `docs/adr/`. Identify settled decisions, unresolved branches, factual unknowns, and terms already defined.
 2. Ask one round of independent, currently answerable questions. Use the question tool when available; give concrete options and a recommended answer with its tradeoff.
 3. Do not ask a dependent question while its prerequisite is unresolved. Wait for answers before the next round.
-4. Facts are your job: discover them from the codebase with bounded exploration. Decisions are the user's. Blocked tools are a blocked prerequisite, not permission to guess.
+4. Facts are your job: discover them from the codebase with bounded exploration. Use a worker when useful and available; otherwise inspect directly. Decisions are the user's. Blocked tools are a blocked prerequisite, not permission to guess or retry endlessly.
 5. Record decisions, recompute the frontier, repeat. Honor a one-question-at-a-time pace or timebox.
 6. Stop when branches are settled, the user stops, or remaining assumptions are explicitly accepted.
 

@@ -1,6 +1,7 @@
 # Grill With Docs Contract
 
-- Intent: the `grill-me` interview inside a repository, leaving a paper trail: glossary terms in `CONTEXT.md` as they resolve, ADRs for gated decisions.
+- Intent: the single design-interview entry point, replacing `grill-me`, with a paper trail: glossary terms in `CONTEXT.md` as they resolve, ADRs for gated decisions.
+- Triggers: manual invocation for "grill me", design challenges, grooming, or domain-language documentation; no automatic implementation or mandatory document scaffolding.
 - Shape: self-contained inline rounds plus two format references; no dependency on other skills loading (upstream's most reported failure).
 - Inputs: plan, codebase, existing `CONTEXT.md` / `CONTEXT-MAP.md` / ADRs. Outputs: settled decisions, glossary edits, zero or more ADRs, closing summary with handoff request.
 - Writes: a settled term is written immediately (user's answer is the approval); ADRs only after an explicit yes; every write passes normal file permissions and is announced in one line. Nothing scaffolded up front.
