@@ -48,19 +48,9 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 
 ## Review / bug list workflow
 
-When user provides list of bugs, review comments, GitHub comments, or similar feedback:
-- Process items one by one, in given order.
-- For each item, show:
-  - `message:` exact original comment
-  - `location:` file, line, diff hunk, or code block if available
-  - `context:` what current code does
-  - `meaning:` what comment asks for and why it matters
-  - `fix:` smallest proposed change
-  - `worth fixing:` yes/no/maybe with short reason
-  - `ask:` ask what to do and wait for user's explicit decision before editing
-- User must decide per item whether to fix, skip, defer, or discuss more.
-- Do not edit code for any item until user explicitly approves that item, unless user explicitly says: "fix all", "apply the obvious ones", or "don't ask, just do it".
-- Do not batch-fix by default.
+- When user provides review comments/bug lists or asks to walk through existing findings, load the shared `review-triage` skill. Use `code-review` for discovering new findings, not feedback triage.
+- Never fix or skip review items without an explicit user decision; batch action requires explicit batch authorization. This guard applies even if the skill fails to load.
+- If the skill cannot be loaded, keep these approval safeguards, report the gap, and use an evidence-backed per-item explanation and recommendation. Never guess rarity or dismiss serious risks merely as edge cases.
 
 ## Task Workflow
 - Read before changing.
