@@ -39,6 +39,11 @@ Outputs: all distinct actionable findings with trigger, evidence, impact, locati
 12. Devex/feature-gate checks and structural simplification scrutiny apply without a special keyword. File length or trust-boundary `unknown` alone is not a finding.
 13. Original Thermos internet resource URLs and removal/replacement history remain in SOURCES.md for future updates, explicitly distinguished from runtime dependencies.
 
+14. “For real” and completed-fix verification use this entry point, not a separate skill. Explicitly narrowed checks retain scoped reporting and cannot grant full-change readiness; initial diagnosis and test-first implementation are not triggers.
+15. Material requirements cite user decisions, document sections/versions or established contracts and map to behavior/check evidence with verified/violated/unverified status. Unknown acceptance criteria or unresolved material conflicts prevent a completion claim. Tests and implementation alone do not establish intent.
+16. UI runtime checks require permitted browser access and any needed server authorization. Missing required browser evidence remains a gap; green static checks are not a substitute.
+17. Former for-real implicit repair authority is not retained: prior implementation approval alone does not authorize fixing review findings. Apply explicit per-finding approval, or explicitly authorized batch decisions, then re-review the changed revision.
+
 ## Limitations and validation
 
 Model review remains fallible. Runtime accuracy, recall and false-positive rate require separate evaluation; static document checks do not establish them. The existing strict validator requires PyYAML; do not install it without approval. See SOURCES.md for research provenance, desk cases and actual validation results. Existing name, registration and automatic invocation remain unchanged.

@@ -6,6 +6,8 @@ Maintenance-only audit; not loaded with normal skill execution. Scope: all 17 `S
 
 The review-family rows below describe the historical audit, not current registration. By user decision, `thermos`, `thermo-nuclear-review`, and `thermo-nuclear-code-quality-review` were absorbed into `code-review` and removed as skill entry points. The two specialist agents remain; thermo checks now participate in code-review's four default passes. Original upstream Thermos skill/agent URLs and removal/replacement history are preserved in `dot-agents/skills/code-review/SOURCES.md` for future consultation. Do not recreate removed entry points during an upstream refresh without approval.
 
+`for-real` was subsequently absorbed into `code-review` by user approval. Completed-work verification now uses code-review's requirement/evidence mapping and stricter fix-approval contract; the former standalone entry and links are retired. Its local provenance is preserved in `dot-agents/skills/code-review/SOURCES.md`; no verified external original is known. Historical `for-real` rows below are not current registration.
+
 ## Retrieved sources
 
 GitHub contents/tree/history inspected through read-only `gh api`; web pages inspected without running their instructions. Revisions below identify the inspected source state, not a claim that the local skill was originally copied from that revision.

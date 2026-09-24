@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Performs exhaustive, evidence-based code review of diffs, pull requests, patches, and AI-generated changes. Use when asked to review code, review a PR, find edge cases, check repo rules and best practices, verify relevant docs, compare recent deployed patterns, or perform a pre-merge audit, thermos, thermo review, thermonuclear review, or harsh code-quality audit. Covers correctness, security, tests, maintainability, and rollout compatibility without assuming a later human review.
+description: Performs exhaustive, evidence-based code review of diffs, pull requests, patches, and AI-generated changes. Use when asked to review code, review a PR, find edge cases, check repo rules and best practices, verify relevant docs, compare recent deployed patterns, or perform a pre-merge audit, thermos, thermo review, thermonuclear review, or harsh code-quality audit. Also use for "for real", verifying a completed fix, or evidence before declaring work done; not for test-first implementation or initial bug diagnosis. Covers correctness, security, tests, maintainability, and rollout compatibility without assuming a later human review.
 ---
 
 # Code Review
@@ -33,7 +33,9 @@ Documentation review is mandatory, not an optional source lookup.
 
 - Read applicable repository and directory-scoped agent guidance, `CONTRIBUTING`, coding standards, lint/type configurations, architecture/ADRs, and the originating issue/spec/PRD. Respect rule scope; a sibling directory's rules do not automatically apply.
 - Discover docs through the README/docs index, links in changed code, symbol/endpoint/config names, and related tests. Read relevant sections fully plus cross-references needed to resolve the changed contract.
-- Map requirements to changed behavior and tests. Distinguish explicit requirements from assumptions. If no spec exists, use stated intent and established contracts; do not invent requirements.
+- Establish requirement sources before judging completion: re-read the original request and explicit conversation decisions, then referenced issue/PRD/design acceptance criteria and applicable repository/API/ADR contracts. Record a source locator (message/decision, document section or version) for each material requirement. Do not assume unavailable conversation history or an unreferenced document describes this task.
+- Map each material requirement to delivered behavior, inspected code and discriminating checks/results; label it verified, violated or unverified. Separate confirmed requirements from inferred expectations. Existing tests are supporting evidence, not unquestionable intent; never derive the expected behavior solely from the implementation under review.
+- Check missing requirements, speculative additions and accidental scope expansion. If no spec exists, use explicit user intent and established contracts without inventing requirements. Resolve conflicts or consequential missing decisions with a targeted question; otherwise record the gap and mark the affected verification incomplete. Do not certify task completion with unknown acceptance criteria.
 
 | Change | Relevant docs to inspect |
 | --- | --- |
@@ -127,7 +129,8 @@ For each security finding, show a reachable abuse scenario, prerequisites, concr
 - Trace transaction boundaries, atomicity, retry/backoff, idempotency, backpressure, rate limits and timeout budgets.
 - Check N+1 queries, indexes, unbounded reads/loops, memory growth and blocking work against actual call paths and credible scale. Do not invent performance numbers.
 - Before running checks, derive the validation ledger from applicable repo/spec/CI gates and changed-path risks: command/check, applicability, mandatory vs supplemental, required revision/environment, evidence/result, and missing prerequisite. Account for every applicable mandatory gate; focused checks substitute only when that gate's contract permits. A required check without matching evidence prevents READY.
-- Run focused permitted test/lint/typecheck/build checks, expanding for shared contracts and risk. Do not assume a linter or CI caught a problem without matching evidence.
+- Run focused permitted test/lint/typecheck/build checks, expanding for shared contracts and risk. Do not assume a linter or CI caught a problem without matching evidence. Verify referenced APIs, config keys, imports and test helpers exist; distinguish a green command from proof of the requested behavior.
+- For UI changes, exercise the relevant flow with permitted browser access and inspect console/network failures. If unavailable or requiring an unapproved server, report the missing check; static inspection does not substitute for required runtime evidence. Do not start watchers, servers or live-service checks without authorization.
 - Record exact command, result and tested revision/scope. Existing CI must match the reviewed revision; branch-head CI does not validate additional worktree edits. Distinguish product failures, pre-existing failures, and infrastructure/permission blocks.
 - Test commands can boot apps, write databases or call external services. Inspect configuration first; use an isolated local test environment. No production execution or dependency installation. If unsafe or blocked, report the check and missing prerequisite, not a pass.
 
@@ -181,6 +184,7 @@ Use this format; scale detail to findings, not an arbitrary word or finding cap:
 ## Coverage and evidence
 - Target: pinned base/head/diff and any local scope; stability check.
 - Coverage: reviewed file/change groups; each pass checked / not applicable / unchecked.
+- Requirements: source → expected behavior → evidence/check → verified / violated / unverified; separate inferred expectations and unresolved decisions.
 - Docs/rules: sources and versions checked; conflicts, stale docs or missing sources.
 - Recent patterns: compared paths + revisions; consistent/departure/divergence and why.
 - Deployment: environment/revision/source, or unverified/inapplicable with reason.

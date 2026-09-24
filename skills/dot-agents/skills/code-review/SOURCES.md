@@ -2,6 +2,26 @@
 
 Original synthesis: 2026-07-08. Research and primary-review redesign: 2026-09-24.
 
+## Local For Real consolidation
+
+User approved absorbing `for-real` into `code-review`, including explicit checks that requirements were implemented. Inspected source: former `for-real/SKILL.md` and `SOURCES.md`; recorded local history `f1ff2f87ff72e170bf897326c1a6f60b64cc308e`. Trust: canonical local; high confidence in instruction content, not measured effectiveness. No verified external original exists; do not invent an upstream URL or synchronization claim.
+
+Replace overlapping verification guidance rather than add a workflow: retain target/diff scrutiny, independent expectations, actual checks, exact evidence and blocked prerequisites. Extend existing requirements/docs and validation sections with source-to-behavior/check mappings, missing/surplus scope, API/config existence checks and browser verification boundaries. Keep the four-pass shape and readiness output. No new dependencies or wrappers.
+
+Deliberately reject former implicit repair authority: prior implementation approval alone does not authorize fixing findings in this review. Explicit per-finding or explicit batch authorization remains required, followed by verification on the changed revision. Narrow verification requests retain scope limits, not whole-change readiness. “For real” and “verify completed fix” should trigger; initial diagnosis and test-first implementation should not.
+
+Static calibration case added to `references/review-examples.md`: independently sourced expiry requirement contradicts code and passing tests; missing intent stays unverified; missing required browser checks prevent READY. Sources are user decisions, referenced specs and applicable established contracts—not inferred implementation intent. This is desk evaluation, not an executed product review or measured model benchmark.
+
+Retire the canonical `for-real` skill and its verified shared/Claude links. Validation results for this merge are recorded separately below; Thermos and earlier validation entries are historical, not proof of this change. Stop source collection here: the local contracts and explicit user decision suffice; external ancestry remains unknown.
+
+### For Real merge validation
+
+- Removed the canonical directory and both verified live symlinks. Existing shared/Claude code-review links still resolve to the canonical directory.
+- Dependency-free `python3 -c` checks passed: requirement mapping, triggers, approval boundary, four-pass routing, reference existence, registration/removal state, whitespace and fenced blocks. Repository search found only historical/provenance references to `for-real`, not a remaining runtime dependency.
+- `git diff --check -- skills/dot-agents/skills/code-review skills/dot-agents/skills/for-real skills/UPSTREAM.md`: passed, no output. Python also checked ignored skill-file whitespace.
+- `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/code-review --skill-class security-review --strict-depth`: exit 1, `ModuleNotFoundError: No module named 'yaml'`. Nothing installed; strict validation remains blocked.
+- No spawned review or browser/product test executed. Static contract checks do not establish runtime adherence or completeness of future reviews.
+
 ## Local Thermos consolidation
 
 User approved one `code-review` entry point with thermo checks always included in the existing four passes, not a separate opt-in mode or six-worker review. Keep both specialized Pi agents; dispatch them for security/data/rollout and rules/docs/patterns/code health, with general workers for the other two passes. Missing specialists use the same complete task packet through a general worker or permitted sequential review.

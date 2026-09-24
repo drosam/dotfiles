@@ -65,7 +65,15 @@ Confirm the provider's version-matched idempotency contract, key construction, p
 
 If a verified wrapper already persists and reuses the key, suppress the duplicate-charge finding. If provider semantics are unknown, investigate official docs; do not assert financial loss or invent an amount.
 
-## 8. Anti-pattern: guessed pattern violation
+## 8. Completed-fix verification: requirement provenance
+
+Input: the user agreed that an expired invitation must be rejected without creating membership. The referenced PRD's “Invitation expiry” section confirms this; the changed implementation and its new test both accept expired invitations.
+
+Map the requirement to that conversation decision and PRD section, then trace the expiry guard and membership creation. A passing new test is not proof of intended behavior: report the traced violation, the appropriate severity/blocking rationale and a regression check using an independently chosen expired timestamp. Mark the evidence static unless the path was actually exercised. Do not fix it merely because implementation was authorized earlier; await the required finding decision.
+
+If the conversation is unavailable and the PRD does not settle expiry semantics, do not infer acceptance from the implementation or invent rejection as a requirement. Ask for the decision and mark that requirement unverified. A clean lint run cannot settle it. If the contract additionally requires browser verification and browser access is unavailable, report that check separately as blocked; no whole-change READY until required evidence exists.
+
+## 9. Anti-pattern: guessed pattern violation
 
 Bad: “All recent services use helper X, so this implementation is wrong.”
 
