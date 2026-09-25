@@ -13,12 +13,16 @@ Confirm every factual claim before presenting it: current behavior, reachability
 
 ## 1. Establish the queue
 
-- Read the supplied feedback and identify its target/revision. If no feedback is available, ask for the comments or review output; do not invent findings or start a fresh review.
-- Preserve original order, wording and identifiers. Work on one item at a time unless the user explicitly selects another order or subset. Read ahead only to understand dependencies; do not silently reorder or merge decisions.
+- Read and understand the entire supplied feedback first; identify its target/revision and establish the queue. This is a feedback-reading pass, not an investigation of every finding. If no feedback is available, ask for the comments or review output; do not invent findings or start a fresh review.
+- Preserve original order, wording and identifiers. Work on one item at a time unless the user explicitly selects another order or subset. Reading the full feedback may reveal dependencies; do not silently reorder or merge decisions.
+- Investigate only the current item, gather enough evidence to explain it, present it, and wait for the user's decision. Do not inspect code, trace callers, run checks, or delegate investigations for later items in advance or in parallel. Shared code may be needed to understand the current item; that is not permission to triage later findings.
+- Start the next item's investigation only after the current item is fixed and validated, explicitly skipped, or explicitly deferred. Do not pre-investigate the queue before presenting the first item or while waiting for a decision.
 - Include findings from an earlier assistant review when the user asks to walk through them. Do not launch triage merely because a discovery review just finished.
 - Keep decisions in the conversation: pending, fixed, skipped, deferred, or blocked. No tracker creation, remote replies, thread resolution, commits or pushes implied.
 
 ## 2. Verify the current point
+
+Run steps 2–5 for the current item only, not as whole-queue passes. Investigate before presenting its evidence-backed explanation; later items remain pending and uninvestigated.
 
 Inspect the target repo's `.agent-work/`: `work/<work-id>/spec.md` (requirements), `work/<work-id>/plan.md` (design), shared `context/` (glossaries) and `decisions/` (ADRs). Read selected spec/plan status, acceptance criteria, non-goals, design/testing constraints; verify reciprocal links and Work-ID. Selection requires an explicit user path, current-session confirmation, or validated reciprocal link. Otherwise shortlist titles/statuses/summaries and ask via question tool, even if only one candidate exists; offer Other / None—standalone work. Never choose by name, slug, branch, or recency. If asking is unavailable, report the blocker. Clarify conflicting requirements or missing links without editing docs during triage. No documents is valid for ordinary work; do not force creation. Pass confirmed paths/constraints to workers, who must return missing-context questions rather than guess. Document selection does not approve any finding's fix.
 
@@ -67,7 +71,7 @@ All eleven fields are required (SPEC.md acceptance #2); terseness trims wording,
 - **Skip:** record the reason and any accepted risk, then advance. An accepted risk is not proof of safety or authority to waive repository requirements, mark a blocker resolved, or approve/merge a PR.
 - **Defer:** record the missing prerequisite or revisit condition, then advance. Create no external issue unless requested.
 - **Discuss more:** stay on this item, resolve the specific uncertainty, and ask again before edits.
-- After a successful decision/action, present the next point. End with a brief count/list of fixed, skipped, deferred and blocked items plus outstanding validation; do not claim overall PR readiness from triage alone.
+- After a successful decision/action, advance to the next point in order and only then begin its investigation (steps 2–3), present it (step 4), and wait again. A blocked fix or ongoing discussion keeps the current item active unless the user explicitly defers it. End with a brief count/list of fixed, skipped, deferred and blocked items plus outstanding validation; do not claim overall PR readiness from triage alone.
 
 Batch editing requires explicit authority such as “fix all”, “apply the obvious ones”, or “don't ask, just do it”. This waives per-item prompts only for the authorized scope, not evidence checks, permissions or safety. Do not implement disproven/unverified suggestions; report exclusions and blockers. If dependencies conflict with the requested order, explain and request a sequencing decision rather than reorder silently.
 
