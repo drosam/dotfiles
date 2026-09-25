@@ -6,6 +6,10 @@ disable-model-invocation: true
 
 # Test-Driven Development
 
+## Work context
+
+Before implementation, inspect the target repo's `.agent-work/`: `work/<work-id>/spec.md` (requirements), `work/<work-id>/plan.md` (design), shared `context/` (glossaries) and `decisions/` (ADRs). Read the selected spec/plan's status, acceptance criteria, non-goals, design and testing decisions; verify reciprocal Spec/Plan links and matching Work-ID. An explicit user path, current-session confirmation, or validated reciprocal link establishes selection. Otherwise shortlist candidates with titles/statuses/summaries and ask via question tool, even for one candidate; offer Other / None—standalone work. Never infer selection from names, slugs, branches, or recency. If asking is unavailable, stop and report the blocker. Missing/conflicting links or requirements need clarification. Do not create documents for ordinary work or repair links without permission. Selection is not implementation authorization. Pass exact selected paths and relevant decisions to workers; workers without that context must return a clarification request rather than guess.
+
 ## Philosophy
 
 **Core principle**: Tests should verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.

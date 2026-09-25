@@ -32,6 +32,10 @@ Load only the path(s) required for the task:
 | Evaluate behavior and compare baseline vs with-skill (opt-in quantitative) | `references/evaluation-path.md` |
 | Register and validate skill changes | `references/registration-validation.md` |
 
+## Work context
+
+Skill source files belong in their installed/canonical skill directories, not `.agent-work/`. Working feature requirements/designs live in the target repo's `.agent-work/work/<work-id>/spec.md` and `plan.md`; shared domain glossary/ADRs live in `.agent-work/context/` and `.agent-work/decisions/`. Before using them as requirements, resolve selection from explicit user paths, current-session confirmation, or validated reciprocal Spec/Plan links and Work-ID. Otherwise shortlist titles/statuses/summaries and ask via question tool, even with one candidate; include Other / None—standalone work. Never infer from names, branch, slug or recency. Read selected status, acceptance, non-goals and testing decisions; clarify conflicts/broken links. If unable to ask, report the blocker. Ordinary skill maintenance needs no forced artifacts. Pass exact confirmed context to workers, who return missing-identity questions rather than guess.
+
 ## Step 1: Resolve target and path
 
 1. Resolve target skill root and intended operation (`create`, `update`, `synthesize`, `iterate`).

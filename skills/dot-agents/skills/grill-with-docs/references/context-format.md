@@ -28,16 +28,17 @@ _Avoid_: client, buyer, account
 
 ## Single vs multi-context
 
-- No `CONTEXT-MAP.md`: single context, one root `CONTEXT.md` (create lazily on first resolved term).
-- `CONTEXT-MAP.md` present: it lists contexts and their locations; write to the matching context's `CONTEXT.md`. Ask when the topic's context is unclear.
+- Default: `.agent-work/context/CONTEXT.md`, created lazily on the first resolved term.
+- Multiple contexts: `.agent-work/context/CONTEXT-MAP.md` links to `<context>/CONTEXT.md` beneath that same directory. Ask when the topic's context is unclear.
+- Read existing project glossaries/maps too, but do not write outside `.agent-work/` or copy/redefine conflicting terms without clarification.
 
 ```md
 # Context Map
 
 ## Contexts
 
-- [Ordering](./src/ordering/CONTEXT.md): receives and tracks customer orders
-- [Billing](./src/billing/CONTEXT.md): generates invoices and processes payments
+- [Ordering](./ordering/CONTEXT.md): receives and tracks customer orders
+- [Billing](./billing/CONTEXT.md): generates invoices and processes payments
 
 ## Relationships
 

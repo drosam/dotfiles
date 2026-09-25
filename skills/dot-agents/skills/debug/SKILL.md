@@ -37,6 +37,10 @@ Ask first when a command may alter persistent state, depend on external services
 
 Find likely cause from local error/symptom, explain evidence, and propose a fix plan. Do not implement the fix until user says it is OK to code.
 
+## Work context
+
+Read relevant work artifacts under the target repo's `.agent-work/`: `work/<work-id>/spec.md` (requirements), `work/<work-id>/plan.md` (design), shared `context/` (glossaries) and `decisions/` (ADRs). Read selected spec/plan status, acceptance criteria, non-goals and testing decisions; verify reciprocal links and Work-ID. Use only an explicit user path, current-session confirmation, or validated reciprocal link for selection. Otherwise shortlist titles/statuses/summaries and ask via question tool, even with one candidate, including Other / None—standalone work. Never select by filename, slug, branch, or recency; if asking is unavailable, report the blocker. Clarify broken links or conflicting requirements. No documents is valid for ordinary diagnosis; do not create them or modify artifacts in this read-only workflow. Pass confirmed paths/constraints to workers; missing identity returns a clarification request, not a guess. Selection does not authorize implementation.
+
 ## Workflow
 
 1. Restate boundary: read-only local investigation, no implementation yet.

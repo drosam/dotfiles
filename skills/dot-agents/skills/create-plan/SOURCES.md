@@ -1,5 +1,9 @@
 # Create Plan Sources
 
+## Later local work-area contract
+
+User-directed destination change: `.agent-work/work/<work-id>/plan.md` supersedes `docs/design/`. The user subsequently chose work-first grouping with sibling `spec.md` and reciprocal local links. Add Work-ID/status, explicit reciprocal spec/plan links, user-confirmed identity across sessions and blocked-pairing handling. Preserve research/findings/walkthrough and separate implementation approval. Historical destination-preservation notes below describe the prior refresh, not current policy.
+
 Retrieved: 2026-09-24. Class: workflow-process; shape: phased plan/validate workflow.
 
 | Source | Trust tier | Confidence | Usage constraints |

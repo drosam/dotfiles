@@ -1,5 +1,9 @@
 # Grill With Docs Sources
 
+## Later local work-area contract
+
+User-directed storage change: new glossary/maps go under `.agent-work/context/`, approved ADRs under `.agent-work/decisions/`. Existing project docs are evidence, not automatic write destinations. Require confirmed work identity and ADR spec/plan links; ask about stale/conflicting requirements before handoff. This supersedes historical root-glossary/existing-ADR-directory preferences below. Preserve sparse ADR offers, inline glossary updates and no implementation without handoff.
+
 Retrieved: 2026-09-24. Class: workflow-process; shape: self-contained inline rounds + format references. Manual invocation (`disable-model-invocation: true`) matches upstream and local `grill-me`.
 
 | Source | Trust tier | Confidence | Usage constraints |

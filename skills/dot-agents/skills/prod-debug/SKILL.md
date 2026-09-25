@@ -42,6 +42,10 @@ The no-production-execution boundary also covers remote monitoring/log queries t
 
 Find likely bug from production error/symptom, explain cause, impact, evidence, and propose fixes. Do not implement fixes until user says it is OK to code.
 
+## Work context
+
+Inspect the target repo's local `.agent-work/`: `work/<work-id>/spec.md` defines requirements, `work/<work-id>/plan.md` defines design, shared `context/` contains glossaries and `decisions/` contains ADRs. Read selected spec/plan status, acceptance criteria, non-goals and testing decisions; verify reciprocal links and Work-ID. Use explicit user paths, current-session confirmation, or validated reciprocal links only. Otherwise shortlist titles/statuses/summaries and ask via question tool, even with one candidate, offering Other / None—standalone work. Never select by name, slug, branch, or recency; unavailable questioning is a blocker. Clarify conflicting requirements or broken links. Do not force artifact creation for ordinary diagnosis or write docs in this read-only workflow. Pass selected paths/constraints to workers; missing identity requires a clarification request. Selection never authorizes implementation or production access.
+
 ## Workflow
 
 1. Restate safety boundary: read-only investigation, no prod mutation.

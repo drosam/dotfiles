@@ -20,6 +20,7 @@ Notes:
 - The script removes `~/.zshrc` so Stow can replace the oh-my-zsh generated file with the repo-managed symlink.
 - In Docker/dev containers the script skips GUI-only config: Alacritty, Ghostty, and skhd.
 - Stowed config includes shell, git/delta, Neovim, tmux/tmuxinator, Starship, Lazygit, opencode, pi agent config, Claude Code settings/scripts, skills, and `~/bin`.
+- Pi work-artifact layout, spec/plan links, and cross-session selection: [Pi guide](pi/README.md).
 
 Installation MacOS
 ==================

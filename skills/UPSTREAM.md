@@ -2,6 +2,18 @@
 
 Maintenance-only audit; not loaded with normal skill execution. Scope: all 17 `SKILL.md` directories under `skills/dot-agents/skills/` and `pi/dot-pi/agent/skills/`. Existing names, manual-invocation flags, registration, and unrelated WIP are preserved. No skills or dependencies installed. An additional ignored, untracked `skills/dot-agents/skills/pr-description/` directory was excluded and left untouched.
 
+## Current local work-area convention
+
+User-directed changes supersede historical names/destinations in this audit: `to-prd` → `to-feature-spec`, `prd-to-todos` → `feature-spec-to-todos`. Generated specs/plans now live together at the target repo's `.agent-work/work/<work-id>/{spec.md,plan.md}` (user-approved work-first refinement); shared glossaries/ADRs remain under `.agent-work/{context,decisions}/`. Todos remain tool-backed. Work-ID matches the work directory; counterpart links use `./spec.md` and `./plan.md`. No automatic migration of existing artifacts. Specs and plans carry confirmed Work-ID/status and reciprocal links. Every implementation/review session must resolve uncertain artifact identity with the user, even with one candidate; never infer from branch/name/recency. See [Pi guide](../pi/README.md). Upstream refreshes must preserve this contract, selection and approval gates; original upstream URLs/names below remain provenance.
+
+### Work-area validation and registration
+
+- Current runtime names/frontmatter and examples updated; four live `~/.agents/skills/` / `~/.claude/skills/` symlinks replaced with direct canonical targets. No compatibility aliases or new dependencies.
+- `git diff --check`: passed. Read-only AWK structural check across 12 changed skills: `12 skill files checked; 0 structural errors` (frontmatter placement, name/directory match, name/description limits, description angle brackets, trailing whitespace). This is not YAML parsing or strict-depth validation.
+- `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/to-feature-spec --skill-class workflow-process --strict-depth`: blocked, `ModuleNotFoundError: No module named 'yaml'`. No install attempted; re-run in an approved compatible environment.
+- Desk checks: standalone creation, spec-first/plan-first reciprocal linking, ambiguous fresh-session selection (including one candidate), denied backlinks, read-only parent preservation and commit exclusion. These are static expectations, not observed model runs. `to-feature-spec` routes synthesis, not a fresh interview; `feature-spec-to-todos` routes approved decomposition, not tracker publishing; `grill-with-docs` retains interview-only handoff.
+- Inline identity guidance is deliberately repeated in independently loadable skills and isolated agents. Producer destinations/templates replaced; provenance kept historical. Runtime adherence and strict validation remain unverified.
+
 ## Later local review consolidation
 
 The review-family rows below describe the historical audit, not current registration. By user decision, `thermos`, `thermo-nuclear-review`, and `thermo-nuclear-code-quality-review` were absorbed into `code-review` and removed as skill entry points. The two specialist agents remain; thermo checks now participate in code-review's four default passes. Original upstream Thermos skill/agent URLs and removal/replacement history are preserved in `dot-agents/skills/code-review/SOURCES.md` for future consultation. Do not recreate removed entry points during an upstream refresh without approval.

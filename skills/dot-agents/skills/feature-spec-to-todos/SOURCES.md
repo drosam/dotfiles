@@ -1,4 +1,8 @@
-# PRD to Todos Sources
+# Feature Spec to Todos Sources
+
+## Later local work-area contract
+
+User-directed rename: `prd-to-todos` → `feature-spec-to-todos`. Read selected `.agent-work/work/<work-id>/spec.md` and reciprocal sibling `plan.md` context (user-approved work-first grouping); use `spec:<Work-ID>` and actual source/plan paths in tool-backed todos. Ask before selecting uncertain work, even one candidate. Preserve explicit creation approval, unchanged parents and partial-failure handling. Historical PRD terminology below is provenance, not current naming. Static examples added; no todo creation/runtime benchmark performed.
 
 Retrieved: 2026-09-24. Class: workflow-process; shape: ordered local todo creation after approval.
 

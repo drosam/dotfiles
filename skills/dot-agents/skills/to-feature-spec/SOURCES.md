@@ -1,4 +1,8 @@
-# To PRD Sources
+# To Feature Spec Sources
+
+## Later local work-area contract
+
+User-directed rename: `to-prd` → `to-feature-spec`. Current output is `.agent-work/work/<work-id>/spec.md`; the user subsequently chose work-first grouping with sibling `plan.md` and reciprocal local links; the historical `.prd/` policy below is superseded. Add explicit work identity, Work-ID/status and reciprocal spec/plan links, no-guess cross-session selection, and denied-write handling. Preserve synthesis/no-new-interview and no-implementation gates. Static examples cover standalone, confirmed pairing, ambiguous single candidate and blocked backlink; no runtime adherence benchmark claimed.
 
 Retrieved: 2026-09-24. Class: workflow-process; shape: inline synthesis with examples.
 
