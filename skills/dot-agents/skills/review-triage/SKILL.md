@@ -44,24 +44,22 @@ Use `common`, `uncommon`, `very rare`, `unreachable`, or `unknown`, always with 
 
 ## 4. Present one point and wait
 
-Use concise fields; retain enough evidence to support the decision:
+Present as plain markdown fields, never wrapped in a code fence — a fence forces a single unstyled block and hides formatting. Keep each field as short as it can be while still being understandable: usually one line, occasionally two or three when the point genuinely needs it. No sub-bullets, no restating evidence already given in another field, no padding for its own sake. If a full trace is needed to justify a claim, keep it out of the presented item and cite the path/line instead.
 
-```text
-item: original identifier or position
-message: exact original comment
-location: verified path:line / hunk, or unavailable
-context: what current code actually does
-meaning: what the reviewer requests and why
-evidence: classification; proof/counterevidence and remaining unknowns
-fix: smallest sound proposed change, or none if not applicable
-likelihood: common/uncommon/very rare/unreachable/unknown — trigger + evidence
-impact: concrete harm or benefit; mandatory requirement if any
-worth fixing: yes/no/maybe — benefit versus cost, complexity and risk
-recommend: fix/skip/defer — short reason; blocking/nonblocking/unresolved if relevant
-ask: Fix, skip, defer, or discuss more?
-```
+- **item:** original identifier or position
+- **message:** exact original comment (quote as-is; truncate with `…` if very long)
+- **location:** verified path:line, or unavailable
+- **context:** what current code actually does
+- **meaning:** what the reviewer requests and why
+- **evidence:** classification + the decisive fact(s)
+- **fix:** smallest sound proposed change, or none
+- **likelihood:** common/uncommon/very rare/unreachable/unknown — trigger + evidence
+- **impact:** concrete harm or benefit; mandatory requirement if any
+- **worth fixing:** yes/no/maybe — benefit versus cost, complexity and risk
+- **recommend:** fix/skip/defer — short reason; blocking/nonblocking/unresolved if relevant
+- **ask:** Fix, skip, defer, or discuss more?
 
-Use the available question tool with those four options; otherwise ask in plain text. Ask only about the current item, then stop. A recommendation is not a decision; never silently skip or fix anything. If the original comment contains secrets, redact those values and explicitly note the redaction rather than echoing them.
+All eleven fields are required (SPEC.md acceptance #2); terseness trims wording, not fields. Use the available question tool with those four options; otherwise ask in plain text. Ask only about the current item, then stop. A recommendation is not a decision; never silently skip or fix anything. If the original comment contains secrets, redact those values and explicitly note the redaction rather than echoing them.
 
 ## 5. Apply the decision and continue
 
