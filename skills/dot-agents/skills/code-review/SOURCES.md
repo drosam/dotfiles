@@ -32,6 +32,17 @@ Inspected local sources: former `thermos/{SKILL.md,SOURCES.md}`, both Pi `thermo
 
 Desk cases: ordinary review dispatches four tasks, not six; “thermos” selects the same workflow; specialist unavailable gets general/sequential fallback; worker cannot load skill uses supplied rubric or reports incomplete; security-only excludes other dimensions; a 1001-line file or `unknown` at a trust boundary alone is not a defect; no findings still requires coverage and verdict. These are static contract checks, not observed review runs.
 
+### Local specialist agent names — upstream mapping
+
+User approved responsibility-based names after consolidation. Files live under `pi/dot-pi/agent/agents/` from the repository root; their filename stems and frontmatter names match the current names below. The dispatch table in `SKILL.md` uses these names. Only names, titles and routing descriptions changed; review rubrics and safeguards remain unchanged. No legacy runtime aliases are retained.
+
+| Current local name / filename stem | Original upstream name / filename stem | Assignment |
+| --- | --- | --- |
+| `code-review-security` | `thermo-nuclear-review-subagent` | Security/data/rollout; explicitly assigned correctness audits |
+| `code-review-code-health` | `thermo-nuclear-code-quality-review-subagent` | Rules/docs/patterns/code health |
+
+For future source updates, use the original worker URLs and removal history below to locate upstream content, then apply relevant changes to the mapped local files. Preserve current local names, dispatch references, full assigned-pass coverage and approval/evidence safeguards; do not overwrite local adaptations or restore old registrations automatically. This rename did not fetch or verify upstream content anew.
+
 ### Original Thermos resources — retain for future updates
 
 Consult these upstream resources when updating the absorbed Thermos behavior. These exact historical URLs were recorded by the former `thermos/SOURCES.md`; they are provenance, not runtime dependencies. They are mutable and may now be missing. Do not claim a fresh fetch or immutable original-content pin from this consolidation.

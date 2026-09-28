@@ -77,9 +77,9 @@ Use independent workers when available and permitted. The coordinator owns the s
 | Pass | Preferred agent if available | Required focus |
 | --- | --- | --- |
 | Behavior/spec/edge cases | `general` | Requirements, wiring, state transitions, callers and input-dependent failures |
-| Security/data/rollout | `thermo-nuclear-review-subagent` | Reachable threats, tenant boundaries, persistence, migration, deployed-version coexistence, devex and feature-gate leaks |
+| Security/data/rollout | `code-review-security` | Reachable threats, tenant boundaries, persistence, migration, deployed-version coexistence, devex and feature-gate leaks |
 | Tests/reliability/performance | `general` | Behavioral test validity, failure handling, concurrency, resource limits and operational evidence |
-| Rules/docs/patterns/code health | `thermo-nuclear-code-quality-review-subagent` | Scoped rules, best practices, doc consistency, recent precedents, ownership, invariants and structural simplification |
+| Rules/docs/patterns/code health | `code-review-code-health` | Scoped rules, best practices, doc consistency, recent precedents, ownership, invariants and structural simplification |
 
 Check agent availability before dispatch. Each row is one distinct worker task; general workers receive the complete assigned rubric, not just a pass name. Specialized workers must cover the full assigned row, including docs/rules when assigned code health. Pass this skill's resolved path and the relevant contract/rubric text; if a specialized agent is absent, use a general worker with the same packet or permitted sequential review. Do not dispatch a separate thermos workflow.
 
