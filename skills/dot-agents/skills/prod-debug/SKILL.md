@@ -1,42 +1,43 @@
 ---
 name: prod-debug
-description: Read-only production debugging workflow for production incidents, prod bugs, Sentry errors, logs, Rails console observations, and live data symptoms. Use when asked to investigate, find, explain, or verify a production issue. Strictly forbids production mutation and copies required production commands/snippets to clipboard for the user to run.
+description: Read-only production debugging workflow for production incidents, prod bugs, Sentry errors, logs, Rails console observations, and live data symptoms. Use when asked to investigate, find, explain, or verify a production issue. Strictly forbids production mutation; runs approved read-only monitoring/log/MCP queries directly, but always copies Rails console (and other live-session) commands to clipboard for the user to run.
 ---
 
 # Prod Debug
 
 Use this skill for production incident/debug tasks where safety matters more than speed.
 
-Default stance: inspect local code read-only, but do not run anything against production. When production data, logs, console output, or operational command output is needed, prepare the exact read-only command/snippet, copy it to the clipboard, and ask the user to paste/run it.
+Default stance: investigate read-only using local code and approved read-only production tools/MCP. Run narrowly scoped monitoring/log/data queries directly; never mutate production. For Rails console/runner, live interactive sessions, or commands without an approved read-only tool path, prepare the exact read-only command/snippet, copy it to the clipboard, and ask the user to paste/run it.
 
 ## Hard Safety Rules
 
 - Read-only task until user explicitly says code changes are allowed.
 - Do not change code, config, migrations, seeds, scripts, feature flags, env vars, jobs, queues, caches, or production data.
-- Do not run any production command yourself. The user runs all production commands.
+- Do not run any production command yourself, except approved read-only monitoring/log/data queries via read-only tools or MCP. Rails console and any other live interactive production session must always be run by the user via copy/paste handoff, never by the assistant, even read-only.
 - Do not run any command that can create/edit/delete DB data, enqueue jobs, send emails/webhooks, mutate cache, call external write APIs, retry/replay events, acknowledge incidents, toggle flags, or trigger side effects.
 - Do not run Rails console commands directly against production.
 - Do not run Rails runner directly against production.
 - Do not run migrations, rake tasks, backfills, data fixes, or admin scripts.
 - Do not use `save`, `save!`, `update`, `update!`, `create`, `create!`, `destroy`, `destroy!`, `delete`, `delete_all`, `update_all`, `insert`, `upsert`, `touch`, `increment!`, `decrement!`, `deliver_now`, `deliver_later`, `perform_later`, or similar mutators.
-- Treat indirect writes as writes. Avoid methods with callbacks, tracking, audit logs, counters, timestamps, network calls, or job enqueues.
+- Treat indirect writes as writes. Avoid app methods with callbacks, tracking, audit writes, counters, timestamp updates, external writes, or job enqueues. Network requests for approved read-only queries are allowed; normal service-side access logging does not itself make a read query a mutation.
 - If unsure whether action mutates state, do not run it. Ask user or propose safer alternative.
 
-## Allowed Local Actions
+## Allowed Actions
 
 Allowed for the assistant:
 
 - Read and search local code/docs.
 - Inspect local git status, diff, log, and blame.
-- Copy read-only commands/snippets to clipboard.
+- Run approved, narrowly scoped read-only monitoring/log/data queries through tools or MCP, using configured authentication without exposing credentials.
+- Copy read-only commands/snippets requiring user execution to clipboard.
 
 Not allowed within this skill, even when implementation is approved:
 
-- Any command using production/staging credentials.
+- Any production/staging credential use outside approved read-only tool/MCP queries; never extract, print, or copy credentials.
 - Any command that starts app runtime, console, runner, jobs, workers, servers, or tests against live services.
 - Any command where environment or side effects are uncertain.
 
-The no-production-execution boundary also covers remote monitoring/log queries through tools or MCP. Analyze supplied observations locally instead. Code-change approval does not authorize production access.
+Read-only monitoring/log/data queries run directly through approved read-only tools or MCP integrations (e.g. Sentry, log search, dashboards) are allowed without user copy/paste, as long as they are strictly read-only and scoped. Rails console, Rails runner, and any other live interactive production session remain user-executed only, even read-only: generate the command/snippet and use the clipboard handoff. Other runtime/task prohibitions above still apply. Code-change approval does not expand these production-access permissions.
 
 ## Goal
 
@@ -65,19 +66,23 @@ Inspect the target repo's local `.agent-work/`: `work/<work-id>/spec.md` defines
    - Rank hypotheses with evidence for/against and one discriminating observation each.
    - Mark unverified causes as hypotheses, not confirmed root causes.
 5. Request production observations only when needed.
-6. For any production command/snippet/log query:
+6. For production observations via approved read-only tools/MCP (monitoring, log search, dashboards, etc.):
+   - Run directly, scoped narrowly (time/result bounds), redacting/minimizing sensitive fields.
+   - Never use a write/mutate/ack/replay/toggle capability, even if exposed by the same tool.
+   - If the query result is large or sensitive, summarize rather than dumping raw records.
+7. For any production shell command/log query without an approved direct read-only tool/MCP path:
    - Do not run it yourself.
    - Make it read-only and narrowly scoped, with result/time bounds; ask the user to verify environment and read-role support first.
    - Minimize sensitive fields; request redacted results, never credentials or whole customer records.
    - Immediately execute a local `pbcopy` handoff command that copies the literal payload; do not merely display the handoff command or ask the user to copy manually. Never execute the embedded payload.
    - If clipboard access is unavailable or denied, show the payload once in a fenced block as fallback.
    - Wait for the user to paste the result before continuing.
-7. For Rails console needs:
-   - Do not run console yourself.
+8. For production Rails console/runner needs (always, even read-only):
+   - Do not run console or runner yourself, under any circumstance.
    - Generate one read-only snippet and immediately copy it through the same local clipboard handoff.
    - On successful copy, do not print or repeat the snippet in the response; return only the terse confirmation from `Clipboard Step`.
    - Wait for user to paste result.
-8. Final output:
+9. Final output:
    - `bug:` concise root cause.
    - `evidence:` bullets.
    - `impact:` affected users/data/path.
@@ -121,7 +126,7 @@ nil
 
 ## Clipboard Step
 
-Perform this step automatically whenever a production observation payload is ready. Execute the local clipboard command through the shell; never give the clipboard command to the user as an instruction. Copy exactly the payload, without Markdown fences or commentary. Clipboard contents may sync or enter history, so use placeholders rather than secrets. The quoted heredoc prevents shell expansion and must never execute its contents.
+Perform this step automatically whenever a read-only command/snippet requiring user execution is ready. Do not use this handoff for approved read-only tool/MCP queries that the assistant can run directly. Execute the local clipboard command through the shell; never give the clipboard command to the user as an instruction. Copy exactly the payload, without Markdown fences or commentary. Clipboard contents may sync or enter history, so use placeholders rather than secrets. The quoted heredoc prevents shell expansion and must never execute its contents.
 
 For Rails snippets, execute locally:
 
