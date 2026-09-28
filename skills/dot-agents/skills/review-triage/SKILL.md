@@ -48,29 +48,28 @@ Use `common`, `uncommon`, `very rare`, `unreachable`, or `unknown`, always with 
 
 ## 4. Present one point and wait
 
-Present as plain markdown fields, never wrapped in a code fence — a fence forces a single unstyled block and hides formatting. Keep each field as short as it can be while still being understandable: usually one line, occasionally two or three when the point genuinely needs it. No sub-bullets, no restating evidence already given in another field, no padding for its own sake. If a full trace is needed to justify a claim, keep it out of the presented item and cite the path/line instead.
+Keep investigation thorough; keep the default presentation short:
 
-- **item:** original identifier or position
-- **message:** exact original comment (quote as-is; truncate with `…` if very long)
-- **location:** verified path:line, or unavailable
-- **context:** what current code actually does
-- **meaning:** what the reviewer requests and why
-- **evidence:** classification + the decisive fact(s)
-- **fix:** smallest sound proposed change, or none
-- **likelihood:** common/uncommon/very rare/unreachable/unknown — trigger + evidence
-- **impact:** concrete harm or benefit; mandatory requirement if any
-- **worth fixing:** yes/no/maybe — benefit versus cost, complexity and risk
-- **recommend:** fix/skip/defer — short reason; blocking/nonblocking/unresolved if relevant
-- **ask:** Fix, skip, defer, or discuss more?
+- **Item <original identifier or position> — original feedback:** reproduce the complete original comment, unchanged, including code blocks, inline code and formatting. Never truncate or paraphrase. Redact secrets only and note the redaction. The original message is exempt from the length limit.
+- **Context:** one short sentence explaining actual behavior, with the decisive verified `path:line` (or state unavailable).
+- **Verdict:** fix / skip / defer — one short sentence explaining why action is or is not worthwhile. Include the smallest proposed change when recommending fix, or the missing evidence when deferring. Use a second sentence only if needed to disclose material risk or uncertainty.
 
-All eleven fields are required (SPEC.md acceptance #2); terseness trims wording, not fields. Use the available question tool with those four options; otherwise ask in plain text. Ask only about the current item, then stop. A recommendation is not a decision; never silently skip or fix anything. If the original comment contains secrets, redact those values and explicitly note the redaction rather than echoing them.
+Use these verdict labels when supported; do not force a label onto every item:
+
+- **AI slop:** verified false positive, redundant defense, or needless abstraction with no meaningful benefit. Name the concrete flaw; this describes the suggestion's quality, not who wrote it.
+- **Rare edge, not worth fixing:** verified very rare, low-impact behavior whose repair costs more than its benefit. Name the accepted residual behavior; follow section 3's exclusions for serious risks and mandatory requirements.
+- **Real issue:** confirmed meaningful harm or broken requirement. Unknown frequency is not a reason to dismiss it.
+
+Do not print separate meaning, evidence, fix, likelihood, impact or worth-fixing fields. Fold decisive facts into context/verdict; leave detailed traces and tradeoffs for Discuss. Keep relevant unknowns explicit. Render normal markdown, not one enclosing code fence; preserve fences inside the original comment.
+
+Then use the available question tool with **Fix / Skip / Defer / Discuss**; otherwise ask in plain text. Do not duplicate the question in prose when using the tool. Ask only about the current item, then stop. A recommendation is not a decision; never silently skip or fix anything.
 
 ## 5. Apply the decision and continue
 
 - **Fix:** approval covers this item's smallest agreed change only. Recheck current code, preserve unrelated work, implement, run appropriate permitted checks and report the actual result. If the repair requires materially broader work, request approval again. If verification fails or is blocked, report that state; do not mark fixed/verified or silently move on.
 - **Skip:** record the reason and any accepted risk, then advance. An accepted risk is not proof of safety or authority to waive repository requirements, mark a blocker resolved, or approve/merge a PR.
 - **Defer:** record the missing prerequisite or revisit condition, then advance. Create no external issue unless requested.
-- **Discuss more:** stay on this item, resolve the specific uncertainty, and ask again before edits.
+- **Discuss:** stay on this item. Expand only the requested evidence, trigger, tradeoffs or proposed fix; if the user has not specified a question, ask what needs clarification. Discussion does not authorize a fix or skip. Once clear, ask for the decision again before acting.
 - After a successful decision/action, advance to the next point in order and only then begin its investigation (steps 2–3), present it (step 4), and wait again. A blocked fix or ongoing discussion keeps the current item active unless the user explicitly defers it. End with a brief count/list of fixed, skipped, deferred and blocked items plus outstanding validation; do not claim overall PR readiness from triage alone.
 
 Batch editing requires explicit authority such as “fix all”, “apply the obvious ones”, or “don't ask, just do it”. This waives per-item prompts only for the authorized scope, not evidence checks, permissions or safety. Do not implement disproven/unverified suggestions; report exclusions and blockers. If dependencies conflict with the requested order, explain and request a sequencing decision rather than reorder silently.

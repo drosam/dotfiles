@@ -19,7 +19,9 @@ Inputs: original feedback and order, target/current code, relevant rules/docs/te
 ## Acceptance
 
 1. Existing comments trigger triage; a fresh “review this PR” routes to code-review instead.
-2. Each point includes original message, location, context, meaning, evidence, fix, likelihood, impact, worth-fixing assessment, recommendation and question.
+2. Each point shows its identifier and full original message, preserving formatting and embedded code without truncation (secrets redacted explicitly), then one short context sentence with verified location and one short fix/skip/defer verdict sentence. Allow a second verdict sentence for material risk or uncertainty. Ask Fix / Skip / Defer / Discuss through the available question tool, or plain text if unavailable; no duplicate question or mandatory field checklist.
+   - Supported false positives/redundant defenses/needless abstractions are flagged as AI slop with a concrete reason, not an authorship claim. Verified very rare low-impact cases are flagged as not worth fixing only when benefit fails to justify cost; unknown rarity and serious risks are not dismissed.
+   - Discuss expands only the requested details, keeps the current item active and asks for a decision again; discussion alone never authorizes fixing or skipping.
 3. Synthetic low-impact/rare, serious/unknown-frequency, unreachable, stale and inaccessible-evidence cases produce distinct recommendations without guessing.
 4. Fix/skip/defer/discuss decisions advance or hold the queue correctly; a failed validation does not become fixed/verified.
 5. Detailed workflow moves out of the global prompt; no unrelated settings or review skill changes.
