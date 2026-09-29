@@ -4,9 +4,9 @@ Created 2026-09-24. Class: workflow-process. Shared canonical root: `skills/dot-
 
 ## Behavior delta and shape
 
-Move the detailed one-by-one feedback workflow out of Pi SYSTEM.md into a shared skill. Preserve a global Pi router plus explicit per-item approval and fallback. Preserve original order and the user's new evidence-backed rare-edge-case/value assessment. Add stale-comment handling, explicit decision transitions and failure status without expanding into discovery review.
+Move the detailed one-by-one feedback workflow out of Pi SYSTEM.md into a shared skill. Preserve a global Pi router plus explicit per-item approval and fallback. Preserve original order and the user's evidence-backed rare-edge-case/value assessment. Add stale-comment handling, explicit decision transitions and failure status without expanding into discovery review. A later human-verified workflow requirement adds a commit checkpoint: each approved, validated fix must use the `commit` skill before triage investigates the next point.
 
-Shape: one short sequential workflow with inline calibration examples; no scripts, dependencies, workers or runtime references needed. SPEC.md captures scope/acceptance; this file stores maintenance provenance. General code-review remains unchanged.
+Shape: one short sequential workflow with inline calibration examples; no scripts, dependencies or workers. The existing `commit` skill is a required action at the approved-fix checkpoint. SPEC.md captures scope/acceptance; this file stores maintenance provenance. General code-review remains unchanged.
 
 ## Internet research
 
@@ -18,7 +18,7 @@ Observed listing: [receiving-code-review](https://skills.sh/obra/superpowers/rec
 
 | Source | Trust / confidence | Contribution and usage constraints |
 | --- | --- | --- |
-| User requirements and pre-extraction `pi/dot-pi/agent/SYSTEM.md` review workflow | canonical local / high | Original order, per-item decision, rarity/value labels, shared placement. Preserve safety rather than importing upstream fix authority |
+| User requirements and pre-extraction `pi/dot-pi/agent/SYSTEM.md` review workflow | canonical local / high | Original order, per-item decision, rarity/value labels, shared placement, and human-verified per-fix commit checkpoint. Preserve safety rather than importing upstream fix authority |
 | [obra/superpowers receiving-code-review](https://github.com/obra/superpowers/blob/5bf4e78011075bcfc0dc295f0724994cd123ee71/skills/receiving-code-review/SKILL.md), commit `5bf4e78011075bcfc0dc295f0724994cd123ee71` | canonical publisher / high for inspected text | Verify feedback, assess actual use/compatibility, technical pushback, correct mistaken assessment. Read complete SKILL.md and root LICENSE (MIT, Jesse Vincent 2025). Concepts independently formulated; no upstream file or substantial text/example copied |
 | [Google review standard](https://google.github.io/eng-practices/review/reviewer/standard.html) | canonical guidance / high | Code health over perfection, factual evidence, optional polish. Live page, revision unpinned; no automatic approval imported |
 | [Google handling comments](https://google.github.io/eng-practices/review/developer/handling-comments.html) | canonical guidance / high | Clarify request, reason about pros/cons, preserve useful context in code when needed. Live page; no automatic code change or human escalation requirement imported |
@@ -68,9 +68,10 @@ Description explicitly says existing feedback, one point at a time and decision 
 | Reviewer cites code already fixed | Improved stale-target revalidation; recommend skip as resolved with evidence |
 | Required source unavailable | Explicit gap and investigate/defer decision; no invented fix |
 | User chooses discuss | Remain on current point; no edits |
-| User approves item 1 | Only item 1 changes; tests/result reported before advancing |
-| Test fails after authorized edit | Do not mark verified or silently advance; report blocker |
-| User says fix all | Waive per-item prompts only; verify findings and report exclusions/blockers |
+| User approves item 1 | Only item 1 changes; validate it, commit it through the `commit` skill, and report hash/title before advancing |
+| Test fails after authorized edit | Do not mark verified, commit, or silently advance; report blocker |
+| Commit is blocked or fails | Keep the current item active; resolve the commit or obtain an explicit defer decision before investigating the next point |
+| User says fix all | Waive per-item prompts only; verify and commit each accepted fix before investigating the next, and report exclusions/blockers |
 | Skill unavailable in Pi | Global approval safeguards remain; evidence-backed fallback |
 | Ordinary new PR review | Discovery skill, not automatic interactive triage |
 
@@ -82,6 +83,7 @@ Description explicitly says existing feedback, one point at a time and decision 
 - `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/review-triage --skill-class workflow-process --strict-depth`: blocked, exit 1, `ModuleNotFoundError: No module named 'yaml'`. No dependency installed.
 - Re-read runtime skill and Pi router; desk cases above inspected only. Interactive discovery/behavior not executed.
 - User follow-up strengthened confirmation into an explicit claim-by-claim evidence rule, including impact and validation results; recommendations/estimates remain labeled judgments. Re-ran structural checks and git diff whitespace validation successfully.
+- Human-verified fix example: an approved triage repair was at risk of remaining only in the working tree while the queue advanced. The workflow now treats Fix approval as authority for one focused local commit, requires the `commit` skill after validation, blocks advancement on commit failure/ambiguity, and preserves one commit per fixed item even under batch authorization. Static replay expects unchanged skip/defer/discuss behavior and a new implementation → validation → commit → next-item sequence.
 
 ## Open gaps
 

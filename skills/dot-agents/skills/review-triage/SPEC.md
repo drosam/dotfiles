@@ -11,9 +11,9 @@ Inputs: original feedback and order, target/current code, relevant rules/docs/te
 - Preserve item order/identity; no silent merging, skipping, reordering or edits.
 - Confirm factual claims with scoped evidence before presenting them; unknowns stay explicit. Separate confirmed validity, frequency and impact from proposed repairs, estimates and recommendations, which remain labeled judgments.
 - Flag confirmed very rare low-impact cases as not necessary to fix when repair cost exceeds benefit. Do not use rarity to waive serious risks or mandatory requirements.
-- Approval is item-scoped unless the user explicitly authorizes broader work. No remote publication, dependency installation, production access or git mutation implied.
+- Approval is item-scoped unless the user explicitly authorizes broader work. Choosing Fix authorizes the smallest agreed repair and one focused local commit after successful validation; no remote publication, dependency installation, production access or other git mutation is implied.
 - Denied tools and missing evidence result in a stated gap, not guessed findings or speculative fixes.
-- After approved fixes, distinguish implementation from passing validation; skipped/deferred blockers remain unresolved.
+- After approved fixes, distinguish implementation, passing validation and successful commit; do not investigate the next item until all three complete or the user explicitly defers the blocked item. Skipped/deferred blockers remain unresolved.
 - Pi SYSTEM.md retains a short router and approval fallback independent of skill loading. The skill itself has no Pi-only API or runtime dependency.
 
 ## Acceptance
@@ -23,8 +23,8 @@ Inputs: original feedback and order, target/current code, relevant rules/docs/te
    - Supported false positives/redundant defenses/needless abstractions are flagged as AI slop with a concrete reason, not an authorship claim. Verified very rare low-impact cases are flagged as not worth fixing only when benefit fails to justify cost; unknown rarity and serious risks are not dismissed.
    - Discuss expands only the requested details, keeps the current item active and asks for a decision again; discussion alone never authorizes fixing or skipping.
 3. Synthetic low-impact/rare, serious/unknown-frequency, unreachable, stale and inaccessible-evidence cases produce distinct recommendations without guessing.
-4. Fix/skip/defer/discuss decisions advance or hold the queue correctly; a failed validation does not become fixed/verified.
-5. Detailed workflow moves out of the global prompt; no unrelated settings or review skill changes.
+4. Fix/skip/defer/discuss decisions advance or hold the queue correctly; a failed validation or commit does not become fixed/verified, and each validated fix is committed through the `commit` skill before the next item is investigated.
+5. Detailed workflow moves out of the global prompt; the fallback router preserves approval and per-fix commit gates, with no unrelated settings or review skill changes.
 
 ## Limitations
 

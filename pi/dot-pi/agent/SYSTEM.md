@@ -49,8 +49,8 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 ## Review / bug list workflow
 
 - When user provides review comments/bug lists or asks to walk through existing findings, load the shared `review-triage` skill. Use `code-review` for discovering new findings, not feedback triage.
-- Never fix or skip review items without an explicit user decision; batch action requires explicit batch authorization. This guard applies even if the skill fails to load.
-- If the skill cannot be loaded, keep these approval safeguards, report the gap, and use an evidence-backed per-item explanation and recommendation. Never guess rarity or dismiss serious risks merely as edge cases.
+- Never fix or skip review items without an explicit user decision; batch action requires explicit batch authorization. Choosing Fix also authorizes one focused local commit for that item's validated repair. Use the `commit` skill and complete that commit before investigating the next item. These guards apply even if the triage skill fails to load.
+- If the triage skill cannot be loaded, keep these approval and commit gates, report the gap, and use an evidence-backed per-item explanation and recommendation. Never guess rarity or dismiss serious risks merely as edge cases.
 
 ## Task Workflow
 - Read before changing.
