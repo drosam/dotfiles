@@ -1,5 +1,15 @@
 # Code Review Sources and Decisions
 
+## Focused GitHub source excerpts
+
+Human-verified negative example (2026-09-30): a persisted GitHub review copied raw API `diff_hunk` values. Comments on newly added files repeated every line from file start through the anchor, while GitHub displayed only the annotated range. The saved artifact retained path, line range, side, revision, URL and unchanged comment body, so the extra patch context added substantial runtime tokens without adding comment identity.
+
+Behavior delta: preserve the exact annotated source line or multi-line range for each inline comment, labeled with path/lines/side/revision, but exclude raw `diff_hunk`, patch and surrounding lines from `review.md`. Provider context may be used transiently to recover the selected lines; inaccessible source is reported rather than replaced by a full hunk. Keep exact overall/comment bodies and embedded code unchanged. This narrows existing persistence guidance; no script or new artifact is justified.
+
+Static replay: the reported multi-line case retains only its selected range; a single-line comment retains one line; a left-side/outdated comment requires the matching side/revision; inaccessible source records a gap; code blocks written inside the comment remain verbatim. Expected result: reduced snapshot size with unchanged reviewer feedback and stronger anchor precision. This is a desk check, not a runtime review measurement.
+
+Validation (2026-09-30): targeted `git diff --check` passed. Manual structural checks passed for frontmatter, required files, portable paths and the canonical live-skill symlink. Strict-depth `quick_validate.py` was attempted and blocked by `ModuleNotFoundError: No module named 'yaml'`; no dependency was installed.
+
 ## Durable review artifact decision
 
 User approved durable review history inside confirmed work: `.agent-work/work/<work-id>/reviews/<branch-key>/<review-id>/`. If no work exists, propose and confirm a stable Work-ID, then create a review-only work directory without forcing spec/plan files. Each exact branch has a sanitized series folder (`/` → `--`), branch `index.md`, immutable per-run `review.md`, and on-demand append-only sibling `triage.md`. The work's `reviews/index.md` is a branch catalog, not a mutable current-branch selector.

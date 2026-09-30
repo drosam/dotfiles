@@ -1,5 +1,15 @@
 # Review Triage Sources and Decisions
 
+## Focused GitHub source excerpts
+
+Human-verified negative example (2026-09-30): a GitHub feedback snapshot persisted raw API `diff_hunk` values. New-file comments duplicated every source line from file start through each anchor, while the GitHub UI showed only the annotated line/range. Path, range, side, revision, URL and unchanged comment body already established identity; repeated surrounding patch text wasted context whenever triage read or resumed the review.
+
+Behavior delta: keep each inline comment's exact annotated source line or multi-line range, labeled with path/lines/side/revision, while excluding raw `diff_hunk`, patch and surrounding lines from durable snapshots. Use provider context only transiently to recover the selected lines. Preserve exact overall/comment text and embedded code; report inaccessible anchored source instead of saving a full hunk. This narrows existing persistence guidance and preserves immutable review/append-only triage architecture.
+
+Static replay: the reported multi-line case retains only its selected range; a single-line anchor retains one line; left-side/outdated comments use their matching side/revision; inaccessible source stays explicit; code blocks authored in comment text remain verbatim. Expected result: lower resume-token cost without losing feedback or its precise code anchor. This is a desk check, not a measured runtime triage session.
+
+Validation (2026-09-30): targeted `git diff --check` passed. Manual structural checks passed for frontmatter, required files, portable paths and the canonical live-skill symlink. Strict-depth `quick_validate.py` was attempted and blocked by `ModuleNotFoundError: No module named 'yaml'`; no dependency was installed.
+
 ## Durable source and append-only progress decision
 
 User approved work-local branch series: `.agent-work/work/<work-id>/reviews/<branch-key>/<review-id>/`, with immutable `review.md` and separate append-only `triage.md`. A root review index catalogs branches; each branch index tracks exact branch/repository/PR metadata, newest-first history, `Latest review`, and a distinct `Active triage`. This avoids a global current branch becoming stale when the user switches branches and later returns.
