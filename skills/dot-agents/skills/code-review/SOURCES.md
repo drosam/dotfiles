@@ -1,5 +1,19 @@
 # Code Review Sources and Decisions
 
+## Durable review artifact decision
+
+User approved durable review history inside confirmed work: `.agent-work/work/<work-id>/reviews/<branch-key>/<review-id>/`. If no work exists, propose and confirm a stable Work-ID, then create a review-only work directory without forcing spec/plan files. Each exact branch has a sanitized series folder (`/` → `--`), branch `index.md`, immutable per-run `review.md`, and on-demand append-only sibling `triage.md`. The work's `reviews/index.md` is a branch catalog, not a mutable current-branch selector.
+
+Branch identity handles one work spanning several PRs: different branches are separate series; local pre-PR review, later PR revisions and imported GitHub feedback remain in the same verified branch series. Each branch index tracks `Latest review` separately from `Active triage`, so branch switching and a newly completed review cannot silently move an in-progress triage. Exact branch names, repository/PR metadata, aliases and links remain in indexes; detached, renamed or colliding identities require confirmation.
+
+Behavior delta: replace the prior rejected blanket “force report-file writes” rule with one narrow, user-authorized local artifact write after synthesis. Preserve the no-application-edit contract, never stage/commit/ignore `.agent-work/`, stop on already-staged artifacts, redact sensitive content, verify saved content and links, and disclose partial persistence without changing the technical verdict. Shape remains inline workflow guidance; no script, dependency, JSON state, symlink, global Active review, or separate reference is justified.
+
+Static desk checks: two reviews in one second receive a collision suffix; a new completed review updates only its branch's Latest review while older history and Active triage remain; switching checked-out branches resolves another branch index; a rerun never edits prior `review.md`; pre-PR and PR review share verified branch identity; another PR branch remains separate; GitHub feedback records a verbatim paginated snapshot of the exact overall review URL/body when present and every comment URL, identity, context and unchanged text, plus retrieval time and target SHA under the PR head branch; a saved-but-unindexed review is reported but not treated as latest; malformed indexes, detached heads and branch-key collisions cause clarification; strict no-write and staged-artifact cases disclose blocked persistence. These are guidance inspections, not executed runtime review sessions.
+
+Description optimization remains unchanged: persistence is an execution detail, not a trigger. Existing should-trigger review/PR/diff queries and should-not-trigger implementation/deployment queries remain accurate.
+
+Validation for this change: `git diff --check` passed; dependency-free structural checks passed for frontmatter, balanced fences, portable paths, work/branch hierarchy, separate Latest review/Active triage state, GitHub verbatim snapshot marker, and branch-switch behavior. Shared live skill symlink resolves to this canonical directory. Strict-depth validation remains blocked by `ModuleNotFoundError: No module named 'yaml'`; nothing was installed. No runtime review session was executed.
+
 Original synthesis: 2026-07-08. Research and primary-review redesign: 2026-09-24.
 
 ## Local For Real consolidation

@@ -9,8 +9,8 @@ Act as the primary automated reviewer. Do not assume a human reviewer will catch
 
 ## Contract
 
-- Review only; do not edit application code, publish comments, approve a PR, merge, deploy, install tools, or change branch protections without explicit authorization.
-- Preserve the worktree. Read historical versions with `git show`; do not checkout, reset, or stash to review them.
+- Review only; do not edit application code, publish comments, approve a PR, merge, deploy, install tools, or change branch protections without explicit authorization. The only default write is the durable review artifact defined in section 6.
+- Preserve application and configuration state. Read historical versions with `git show`; do not checkout, reset, or stash to review them. Never stage or commit `.agent-work/` artifacts without explicit approval.
 - Report every distinct, supported, actionable finding. No top-N finding cap. Prioritize risk without silently skipping low-risk files.
 - Investigate concrete input-dependent edge cases. A bug need not affect every input to qualify.
 - Confirm before asserting. Back factual claims with inspected code, observed test/command output, applicable documentation, or deployment records. Label hypotheses as unconfirmed and investigate them; never present inferred intent, guessed framework behavior, assumed scale, or unverified deployment as fact. A complete static trace can confirm a failure path without executing it; label it static evidence, not a successful reproduction.
@@ -26,12 +26,13 @@ Act as the primary automated reviewer. Do not assume a human reviewer will catch
 4. Inventory additions, modifications, deletions, renames, tests, configs, lockfiles, migrations, generated artifacts, and binaries. Read the entire diff, retrieving missing chunks after truncation. Inspect full changed functions/classes and relevant surrounding files, not only hunks.
 5. Keep a coverage ledger by file/change group and review dimension: `checked` with evidence, `not applicable` with reason, or `unchecked` with reason and next action. Prioritize high-risk paths first, then finish the rest. Generated/binary changes need an appropriate provenance or inspection check, not silent exclusion.
 6. Invalid refs, ambiguous scope, or an empty target: report the exact obstacle and obtain the missing input. An empty diff is not a passing change review; it does not prevent an explicitly requested whole-file audit.
+7. Record the exact repository and branch series for durable review history: the checked-out branch for local/branch review or verified PR head branch for PR/GitHub review. If the target is detached, branchless, renamed ambiguously, or collides with another stored exact branch, obtain a user-confirmed series before reviewing; do not infer it from timestamps or nearby folders.
 
 ## 2. Read applicable rules, intent, and documentation
 
 Documentation review is mandatory, not an optional source lookup.
 
-Inspect the target repo's `.agent-work/`: `work/<work-id>/spec.md` (requirements), `work/<work-id>/plan.md` (design), shared `context/` (glossaries) and `decisions/` (ADRs). Read the selected spec/plan's status, acceptance criteria, non-goals, design and testing decisions; verify reciprocal Spec/Plan links and matching Work-ID. Use an explicit user path, current-session confirmation, or validated reciprocal link to identify work. Otherwise shortlist titles/statuses/summaries and ask via question tool, even for one candidate; include Other / None—standalone work. Never choose by filename, slug, branch, or recency. If asking is unavailable, report the blocker; do not guess. Clarify missing/conflicting links or requirements; do not repair docs during read-only review. No artifacts is valid for ordinary work with explicit user intent; do not mandate creation. Include exact selected paths and decisions (or confirmed no-artifact context) in every worker packet; a worker lacking identity must return a clarification request. Selection does not authorize fixes.
+Inspect the target repo's `.agent-work/`: `work/<work-id>/spec.md` (requirements), `work/<work-id>/plan.md` (design), work-local `reviews/`, shared `context/` (glossaries) and `decisions/` (ADRs). Read the selected spec/plan's status, acceptance criteria, non-goals, design and testing decisions; verify reciprocal Spec/Plan links and matching Work-ID. Use an explicit user path, current-session confirmation, or validated reciprocal link to identify work. Otherwise shortlist titles/statuses/summaries and ask via question tool, even for one candidate; include creating a new Work-ID. Never choose by filename, slug, branch, or recency. If no existing work applies, propose a stable kebab-case Work-ID, obtain confirmation, then create only `.agent-work/work/<work-id>/`; do not create spec/plan merely for review storage. If asking is unavailable, report the blocker; do not guess. Clarify missing/conflicting links or requirements; do not repair docs during read-only review. No spec/plan is valid for ordinary work with explicit user intent, but every durable review belongs to a confirmed Work-ID. Include the Work-ID, exact selected paths/decisions, and absent-spec/plan markers in every worker packet; a worker lacking identity must return a clarification request. Selection does not authorize fixes.
 
 - Read applicable repository and directory-scoped agent guidance, `CONTRIBUTING`, coding standards, lint/type configurations, architecture/ADRs, and the originating issue/spec/PRD. Respect rule scope; a sibling directory's rules do not automatically apply.
 - For branch/PR review, discover any associated PR through permitted read-only hosting tools; match repository and head/base refs, not branch name alone. If multiple PRs plausibly match, resolve the ambiguity before using one as intent. When a PR exists, read its current description, linked requirements, and relevant discussion/review threads (including resolved or outdated threads that explain decisions or prior defects). Retrieve all pages needed for relevant context. Capture scope, acceptance criteria, rationale, tradeoffs, author clarifications, and unresolved concerns with source links. Use this context to guide requirements and risk checks, not to assume the implementation is correct. Distinguish confirmed no PR from unavailable lookup; missing access or truncated context is a coverage gap, not evidence that no PR/comments exist.
@@ -174,9 +175,21 @@ P0/P1 findings block. Unmet mandatory repo/spec requirements also block regardle
 
 No later human-review step is assumed. Resolve questions from available evidence; if a critical decision or input remains absent, request that specific input and return incomplete rather than delegating responsibility to an unspecified reviewer.
 
-## 6. Report findings and readiness
+## 6. Persist and report findings and readiness
 
-Use this format; scale detail to findings, not an arbitrary word or finding cap:
+Before returning the final report, save its complete durable copy:
+
+1. Inspect `.agent-work/` and git status before writing. If any `.agent-work/` path is staged, stop and ask; never unstage it silently. Respect an explicit no-write request.
+2. Under the confirmed Work-ID, resolve `.agent-work/work/<work-id>/reviews/<branch-key>/`. Derive `<branch-key>` from the exact branch by replacing `/` with `--`; store the exact branch separately. If that key already names another exact branch, or no verified branch exists, ask for a unique series key. Never move or rename an established branch series automatically.
+3. Maintain `reviews/index.md` as a branch catalog only: exact branch, branch-key, repository, branch-index link, and latest-review timestamp. Order catalog entries by latest completed review for readability, but never treat that order as active selection.
+4. Maintain `<branch-key>/index.md` with Work-ID, repository, exact branch and confirmed aliases, PR number/URL or `Not created`, `Latest review`, `Active triage`, and newest-first review history. A new review updates `Latest review` but must not change an existing `Active triage`.
+5. Create `<branch-key>/<review-id>/`, where `<review-id>` is a filesystem-safe UTC timestamp (`YYYYMMDDTHHMMSSZ`) plus a concise source/target token such as `local-<short-head>`, `pr-<number>-<short-head>`, or `github-<short-head>`. Add a numeric suffix on collision; never overwrite or reuse a review directory.
+6. Write immutable `review.md` containing Work-ID, Review-ID, UTC creation time, repository, exact branch, branch-key, source, PR metadata, previous review link when present, exact target/base/head or local inventory, diff command/scope, and the complete report below. For any GitHub-sourced target or feedback, add a verbatim source snapshot before the agent report: preserve the exact supplied/canonical URL and exact overall review body when one exists, then every comment's stable URL, identifier, author, path/line or thread context, and complete unchanged text in source order, including code blocks. Record retrieval time and target SHA; retrieve all pages. If an overall body is absent, record `No overall review body`; if any content is inaccessible or truncated, name it explicitly. Redact secrets and customer data only, and mark each redaction. Never reduce provenance to only a PR number or paraphrase comment text. Re-read it and verify the saved content and all index links before claiming persistence. Never edit this file after creation; a rerun creates another review directory.
+7. Do not create `triage.md`; `review-triage` creates it on demand beside `review.md`. Never stage, commit, or add ignore rules for these artifacts without explicit approval.
+
+If writing or verification fails, still return the complete report, state `Artifact: not saved — <reason>`, and do not claim the indexes or review are durable. A saved but unindexed report must be labeled with its exact path; never delete it or silently treat it as latest. Artifact failure does not change the technical verdict, but it is an explicit workflow gap.
+
+Use this report format; scale detail to findings, not an arbitrary word or finding cap:
 
 ```text
 ## Findings
@@ -204,6 +217,6 @@ BLOCKED | INCOMPLETE | READY — reason, limited to the stated scope.
 - `INCOMPLETE`: no established blocker, but a required pass/check, relevant doc/contract, or safety-critical deployment assumption remains unverified. Not permission to merge.
 - `READY`: all applicable review dimensions checked, required validations passed, no blocking findings, and any remaining nonblocking issues stated. Not a guarantee of defect-free code or authorization to merge/deploy.
 
-If no findings, write `No actionable findings in reviewed scope.` and still include coverage and verdict. Never emit bare `No findings.` as an approval signal.
+If no findings, write `No actionable findings in reviewed scope.` and still include coverage and verdict. Never emit bare `No findings.` as an approval signal. Return `Artifact: <relative review.md path>` after verified persistence, then the complete report; the saved and returned report bodies must match.
 
 Honor an explicitly narrower request (security-only, named files, quick triage), but label excluded dimensions; it cannot produce full-change READY. Pasteable comments may supplement, not replace, the coverage/verdict. If output limits prevent listing every finding, mark the report incomplete and continue in batches; never silently discard the tail.

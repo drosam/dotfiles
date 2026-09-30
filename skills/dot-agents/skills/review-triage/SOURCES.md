@@ -1,12 +1,26 @@
 # Review Triage Sources and Decisions
 
+## Durable source and append-only progress decision
+
+User approved work-local branch series: `.agent-work/work/<work-id>/reviews/<branch-key>/<review-id>/`, with immutable `review.md` and separate append-only `triage.md`. A root review index catalogs branches; each branch index tracks exact branch/repository/PR metadata, newest-first history, `Latest review`, and a distinct `Active triage`. This avoids a global current branch becoming stale when the user switches branches and later returns.
+
+Different branches support multiple PRs within one work. Local pre-PR review, later PR revisions and GitHub-agent feedback share one series only through verified repository/head-branch identity; GitHub feedback retains a verbatim paginated snapshot of the exact overall review URL/body when present and every comment URL, identity, context and unchanged text, plus retrieval time and target SHA. Exact user/current-session paths override index discovery. Resume follows per-branch Active triage; an explicit latest request follows Latest review; a mismatch or competing choice asks rather than overwriting state. If no Work-ID exists, propose and confirm one before creating the review-only work folder.
+
+Behavior delta: replace conversation-only decisions with conversation plus verified durable events. Persist external/unsaved feedback before investigation; reuse code-review artifacts without copying; validate work/branch/source/target/queue on resume; append presented assessments, decisions, validations, commits, blockers, corrections and final summary. Preserve `review.md`; never stage/commit/ignore artifacts. Persistence failure now pauses for an explicit continue-without-state decision. Shape remains one Markdown source plus one Markdown event log; JSON or a mutable status table was rejected because it duplicates truth and can diverge.
+
+Static desk checks: switching branches resolves separate Active triage pointers; returning to a branch resumes its prior triage; a new review updates Latest without displacing Active triage; exact older review paths remain selectable; missing/malformed/target-mismatched indexes, detached heads and branch collisions ask instead of guessing; compaction resume reads both full files and reconstructs state; terminal completion clears only its branch pointer; failed append or staged `.agent-work/` blocks advancement; corrections append rather than erase history. File size is an accepted limitation and expected to remain small for normal review queues. These are static expectations, not runtime measurements.
+
+Description optimization remains unchanged: durable persistence is not routing language. Existing should-trigger existing-feedback queries and should-not-trigger fresh-review queries remain accurate.
+
+Validation for this change: `git diff --check` passed; dependency-free structural checks passed for frontmatter, balanced fences, portable paths, work/branch hierarchy, separate Latest review/Active triage state, GitHub verbatim snapshot marker, and branch-switch behavior. Shared live skill symlink resolves to this canonical directory. Strict-depth validation remains blocked by `ModuleNotFoundError: No module named 'yaml'`; nothing was installed. No runtime triage session was executed.
+
 Created 2026-09-24. Class: workflow-process. Shared canonical root: `skills/dot-agents/skills/review-triage/`.
 
 ## Behavior delta and shape
 
 Move the detailed one-by-one feedback workflow out of Pi SYSTEM.md into a shared skill. Preserve a global Pi router plus explicit per-item approval and fallback. Preserve original order and the user's evidence-backed rare-edge-case/value assessment. Add stale-comment handling, explicit decision transitions and failure status without expanding into discovery review. A later human-verified workflow requirement adds a commit checkpoint: each approved, validated fix must use the `commit` skill before triage investigates the next point.
 
-Shape: one short sequential workflow with inline calibration examples; no scripts, dependencies or workers. The existing `commit` skill is a required action at the approved-fix checkpoint. SPEC.md captures scope/acceptance; this file stores maintenance provenance. General code-review remains unchanged.
+Shape: one short sequential workflow with inline calibration examples; no scripts, dependencies or workers. The existing `commit` skill is a required action at the approved-fix checkpoint. SPEC.md captures scope/acceptance; this file stores maintenance provenance. At original extraction, general code-review remained unchanged; the later durable-artifact decision above intentionally co-updates both skills.
 
 ## Internet research
 
@@ -49,7 +63,7 @@ Selected profile: skill-writer `references/examples/workflow-process-skill.md`. 
 | Preconditions and context | complete | Existing feedback/target required; current revision and stale locations checked |
 | Ordered flow | complete | Queue → verify → assess → present/wait → authorized decision/action → next |
 | Safety and permission boundaries | complete | Per-item authorization; explicit batch scope; no production/install/publication authority |
-| Output and acceptance | complete | Stable item fields, four choices, conversation decision ledger and final summary |
+| Output and acceptance | complete | Stable item fields, four choices, conversation plus append-only durable decision ledger, and final summary |
 | Failure/recovery | complete | Missing source/tool, denied checks, validation failure, new broader fix scope and incompatible order |
 | Handoff/escalation | complete | Specific missing evidence/decision requested; no implied remote issue or merge readiness |
 | Examples | complete | Inline happy-path low-value skip; serious-risk guard; false-positive correction; inaccessible-evidence recovery |

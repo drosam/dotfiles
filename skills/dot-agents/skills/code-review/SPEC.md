@@ -10,12 +10,12 @@ Default includes correctness, edge cases, security/privacy, data/rollout compati
 
 Inputs: pinned target/base/head or stable local-change inventory; relevant requirements/rules/docs; callers/tests; recent history; deployment evidence when applicable; permitted validation tools/results.
 
-Outputs: all distinct actionable findings with trigger, evidence, impact, location, blocking status, fix direction and regression check; coverage/evidence ledger; BLOCKED, INCOMPLETE or READY verdict. Unconfirmed hypotheses are gaps, not established findings.
+Outputs: all distinct actionable findings with trigger, evidence, impact, location, blocking status, fix direction and regression check; coverage/evidence ledger; BLOCKED, INCOMPLETE or READY verdict; and a verified durable copy at `.agent-work/work/<work-id>/reviews/<branch-key>/<review-id>/review.md`. Work and branch indexes retain ordered history, latest-review metadata, and per-branch active-triage state. Unconfirmed hypotheses are gaps, not established findings.
 
 ## Safety and evidence invariants
 
-- No application edits, comment publication, PR approval, merge, deploy, installs or permission bypass implied by review.
-- No worktree checkout/reset/stash for history inspection; unrelated WIP preserved.
+- No application edits, comment publication, PR approval, merge, deploy, installs or permission bypass implied by review. The sole default write is the review artifact and its root/branch review indexes.
+- No worktree checkout/reset/stash for history inspection; unrelated WIP preserved. Review artifacts are never staged, committed, ignored, or overwritten without explicit approval; already-staged `.agent-work/` content blocks artifact mutation pending clarification.
 - No production execution or private content in public research queries.
 - Every factual claim must be confirmed by inspected evidence; static reasoning is not misrepresented as a runtime reproduction.
 - Recent, merged, built, released and currently deployed are distinct states. Confirm environment/revision/current deployment evidence or label unverified.
@@ -46,7 +46,11 @@ Outputs: all distinct actionable findings with trigger, evidence, impact, locati
 
 18. Branch/PR reviews discover associated PRs and use the current description and relevant discussion/review threads as intent and risk context. Confirmed absence differs from unavailable lookup; unresolved material context gaps prevent READY. Prior reviewer claims and resolved threads require independent verification against pinned code.
 19. Branch/PR reviews inspect the branch commit sequence and available PR timeline/review history, trace material decisions and prior fixes to the current revision, and report sources, inspected ranges and unavailable history alongside recent subsystem precedent.
+20. Every review belongs to a confirmed Work-ID. If none exists, the workflow proposes and confirms one before creating a review-only work directory; it does not invent a Work-ID from the branch or force spec/plan creation.
+21. Each branch has one exact-name-preserving series folder, root catalog entry, and branch index. Each completed review gets a unique timestamp/source/target directory and immutable complete `review.md`; history is newest-first. A new review updates only that branch's `Latest review`, never its `Active triage` or another branch's state.
+22. Pre-PR, later PR revisions, and imported GitHub feedback stay in the same verified branch series. Different branches within one work remain separate. Detached/renamed/colliding branches require confirmation rather than automatic relinking. GitHub-sourced reviews preserve a complete verbatim source snapshot: exact overall-review URL/body when present and every comment's stable URL, identity, author/context, and unchanged text in source order, plus retrieval time and target SHA—not only a PR number. Missing, inaccessible, truncated, secret-redacted, or customer-data-redacted source content is explicit.
+23. Artifact write/index failures are disclosed with the exact surviving path or reason and never misreported as persistence success. The complete review still appears in the response, and artifact failure does not alter its technical verdict.
 
 ## Limitations and validation
 
-Model review remains fallible. Runtime accuracy, recall and false-positive rate require separate evaluation; static document checks do not establish them. The existing strict validator requires PyYAML; do not install it without approval. See SOURCES.md for research provenance, desk cases and actual validation results. Existing name, registration and automatic invocation remain unchanged.
+Model review remains fallible. Runtime accuracy, recall and false-positive rate require separate evaluation; static document checks do not establish them. Filesystem permission, staged-artifact, and partial-index failures can prevent durable persistence and must remain explicit. The existing strict validator requires PyYAML; do not install it without approval. See SOURCES.md for research provenance, desk cases and actual validation results. Existing name, registration and automatic invocation remain unchanged.
