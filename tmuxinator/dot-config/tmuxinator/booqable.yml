@@ -54,10 +54,6 @@ windows:
       root: ~/Developer/booqable/develop
       panes:
         - nvim
-  - claude:
-      root: ~/Developer/booqable/develop
-      panes:
-        - claude
   - π:
       root: ~/Developer/booqable/develop
       panes:

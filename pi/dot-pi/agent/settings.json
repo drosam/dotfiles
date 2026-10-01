@@ -17,5 +17,5 @@
     "npm:pi-mcp-adapter",
     "npm:pi-lsp-extension"
   ],
-  "lastChangelogVersion": "0.99.2"
+  "lastChangelogVersion": "1.0.0"
 }

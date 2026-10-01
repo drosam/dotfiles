@@ -15,7 +15,7 @@ Create minimal, cohesive commits from current changes.
 - `.agent-work/` contains local specs, plans, domain context and ADRs, not automatic commit content. Do not stage these files unless explicitly requested. If already staged, stop and ask rather than silently committing or unstaging them.
 - When using work docs to establish commit intent, inspect `.agent-work/work/<work-id>/spec.md` and `plan.md`, follow reciprocal Spec/Plan links and Work-ID, and read acceptance criteria/non-goals. Use only an explicit user path, current-session confirmation, or validated reciprocal link. Otherwise shortlist titles/statuses/summaries and ask via question tool (even for one candidate), offering Other / None—standalone work; never guess from names, slugs, branch, or recency. If asking is unavailable, report the blocker. Missing docs need not be created. Selection does not authorize staging or commits.
 - Never add `Co-Authored-By` trailers.
-- Never amend, rebase, reset, stash, or push unless explicitly asked.
+- Never amend an existing commit or create a `fixup!`/`squash!` commit unless the user explicitly asks. Never rebase, reset, stash, or push unless explicitly asked.
 
 ## Workflow
 
