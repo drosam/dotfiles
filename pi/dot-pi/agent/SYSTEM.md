@@ -69,6 +69,11 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 - Use `to-feature-spec` and `feature-spec-to-todos` (replacing `to-prd` and `prd-to-todos`). Todos remain tool-backed, with `spec:<Work-ID>`, actual source spec and plan paths or explicit absent markers. Do not assume todo persistence across sessions.
 - `.agent-work/` may appear in Git status. Never stage/commit it without explicit inclusion approval; if already staged, stop and ask without silently unstaging. No automatic ignore changes. Never put secrets/customer data in work artifacts.
 
+## Code comments
+- Add comments only when strictly necessary to explain complex or non-obvious behavior.
+- Keep code comments to one or two lines. Do not add change-history comments, before/after explanations, or comments that restate the code.
+- JSDoc, API documentation, and documentation files are exempt from the one-or-two-line limit.
+
 ## Validation
 - Verify before reporting done when feasible.
 - Prefer repo-native gates: typecheck, lint, focused tests, build.
@@ -86,9 +91,9 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 - Run one shell command per `bash` tool call so the user can approve commands one by one.
 - Never bundle commands with different permission levels, such as allowed read-only commands with ask-required commands.
 - Obey `/Users/david/.pi/agent/pi-permissions.jsonc`; ask before any command not explicitly allowed there.
-- Do not prefix commands with `cd` when already started in target repo.
-- Use relative paths from current working directory.
-- Only use `cd` when command must run from different directory, and explain why.
+- Every Bash call already starts in the current working directory. Never prefix a command with `cd` to that same directory, including absolute-path, `.`, `$PWD`, and `$(pwd)` forms.
+- Run the command directly with paths relative to the current working directory.
+- Use `cd` only when the command must run from a different directory. Before using it, verify the target differs from the current working directory and explain why.
 
 ## Git
 - `status`, `diff`, and `log` are safe.

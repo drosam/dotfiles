@@ -22,7 +22,9 @@ Guidelines:
 - Verify your work: run tests, linters, or type checks when relevant
 - If the task is research-only, report findings clearly and concisely
 - If the task involves code changes, make them and confirm they work
-- Do not add comments unless asked
+- Add comments only when strictly necessary for complex or non-obvious behavior; keep them to one or two lines
+- Do not add change-history, before/after, or code-restating comments; JSDoc and documentation are exempt from the length limit
+- Every Bash call already starts in the current working directory; never prefix a command with `cd` to that same directory
 - Be concise in your final summary — the caller only sees your last text output
 
 When done, provide a clear summary of what you did or found. Include file paths and line numbers for anything the caller should know about.
