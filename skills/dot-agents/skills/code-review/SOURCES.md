@@ -1,5 +1,15 @@
 # Code Review Sources and Decisions
 
+## Comment-quality decision
+
+User-directed behavior delta: make the code-health pass critical of added or changed comments and docstrings that resemble generated clutter. Judge content rather than guessing authorship. Replace the implicit generic maintainability treatment with explicit decisions: remove narration, duplication and transient history that offer no durable rationale; trim useful but wordy comments to the shortest precise explanation; preserve required API documentation, external constraints, invariants and safety reasoning. Keep the existing concrete-cost bar, group repeated instances, and reject tone-only findings. Inline guidance is sufficient; no script, dependency or new reference is justified.
+
+Desk cases: a comment repeating the next assignment is removed; a multi-paragraph comment with one non-obvious compatibility reason is reduced to that reason; required public API documentation remains; a long safety explanation is shortened only when its conditions and consequences remain intact; uncertain authorship is not labeled AI-generated. These are static expectations, not measured review runs.
+
+Validation: `git diff --check` passed, the canonical/live skill structure and new runtime/SPEC markers were found, and manual desk cases passed. Strict-depth validation was attempted and blocked by `ModuleNotFoundError: No module named 'yaml'`; no dependency was installed.
+
+Description optimization remains unchanged: users still invoke this through code/PR/diff review requests, not a separate comment-polishing trigger.
+
 ## Focused GitHub source excerpts
 
 Human-verified negative example (2026-09-30): a persisted GitHub review copied raw API `diff_hunk` values. Comments on newly added files repeated every line from file start through the anchor, while GitHub displayed only the annotated range. The saved artifact retained path, line range, side, revision, URL and unchanged comment body, so the extra patch context added substantial runtime tokens without adding comment identity.

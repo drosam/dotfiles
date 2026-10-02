@@ -148,6 +148,12 @@ Check canonical ownership/layers, unnecessary abstraction, duplication, repeated
 - Check related updates for non-atomic state and orchestration for needless sequencing. Suggest parallel work only when dependencies and effects permit it and complexity actually decreases.
 - For each structural finding, cite the concrete maintenance cost, a smaller design and plausible migration/test boundary. Prefer canonical ownership and meaningful types over another wrapper. Investigate file growth around 1000 lines, but do not make line count an automatic blocker.
 
+### Comment quality and AI-style clutter
+
+Audit added or changed comments and docstrings for durable maintenance value, regardless of authorship; do not speculate that text was AI-generated. Recommend deletion when a comment only restates names, types, syntax or control flow; narrates obvious steps; duplicates nearby documentation; records transient change history; or can drift without explaining a non-obvious reason, invariant, constraint or safety boundary. Prefer clearer code structure or naming over prose that compensates for confusing code.
+
+When a useful comment is wordy, recommend the shortest precise wording that preserves its durable rationale. Remove repetition, generic framing and implementation narration, but do not trim required API documentation, external constraints or complex safety reasoning until meaning is lost. Group repeated comment clutter with the same cause and remedy. Treat it as a nonblocking maintenance finding only when the absent value, readability cost or drift risk is concrete; do not report tone preferences as defects.
+
 Require a concrete maintenance cost or cited applicable rule, not a smell label alone. File length is an investigation signal, not an automatic defect. Do not reject an intentional improvement merely because older code uses another style. Include documented rule breaches even if tooling could catch them; collapse duplicate tool findings and do not flood output with formatting nits.
 
 ## 5. Validate and synthesize findings
