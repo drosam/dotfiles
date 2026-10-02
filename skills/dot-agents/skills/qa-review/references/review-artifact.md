@@ -2,6 +2,7 @@
 
 ## Contents
 - Identity and allocation
+- Style
 - Finalize report
 - Index and verification
 
@@ -28,13 +29,23 @@ Use the existing `code-review` / `review-triage` storage contract. Do not invent
 
 Do not store credentials, customer data, raw traces, auth-state files, or broad environment/network dumps. Sanitize before persistence. Use local relative links; do not rely on temporary tool output URLs. Verify each evidence file exists, opens, corresponds to the described state, and contains no sensitive content. Freeze referenced evidence with the finalized review; later retests use a new run. In a no-write run, do not persist screenshots/drafts either.
 
+## Style
+
+`review.md` is read whole by the fix agent and by `review-triage`; every token costs their context. Write caveman: fragments, labels, no narration, no hedging, no restating observations across fields. Compress wording, never evidence, finding count, or reproduction steps.
+
+- Verbatim only where provenance requires it (source snapshot, requirement excerpts). Everything else compressed.
+- Finding fields: one line each; omit a field with no content instead of writing `none`/`n/a` (keep Expected/Actual/Reproduction/Evidence always).
+- Tables: fragments, not sentences. Coverage lists counts and labels, not every file read.
+- Say each fact once; metadata lives in the header only.
+- Keep exact routes, `path:line`, selectors, commands, results, evidence paths, unknowns.
+
 ## Finalize report
 
 Write `review.md` once after synthesis. Include the complete report and metadata below; never edit a finalized report. Corrections/retests create another run linked to the prior report and finding IDs. The receiving agent can triage an earlier immutable review independently of a newer review.
 
 For GitHub-sourced context/feedback, add a source snapshot before the agent report: exact supplied/canonical URL, retrieval time, target SHA, overall review body when present (otherwise `No overall review body`), then every comment from the selected feedback source in source order with stable URL/ID, author, thread/path/line context, and complete unchanged text. Retrieve all pages; do not discard supplied review comments because they appear unrelated to QA. Distinguish contextual PR excerpts from a complete supplied-review snapshot, and identify any missing feedback explicitly. Preserve code blocks. Include only the exact annotated source line/range at the correct side/revision for inline comments, not surrounding lines, API `diff_hunk`, or a whole patch. Record inaccessible source or pagination/truncation explicitly. Mark necessary secret/customer-data redactions. For PR descriptions, tickets and Figma, retain source locators, retrieved version/time and acceptance excerpts sufficient to reconstruct the oracle; do not copy unrelated private workspace material.
 
-Use this template, expanding all findings and scenarios without a top-N cap:
+Use this template; all findings and scenarios, no top-N cap, one line per field:
 
 ```markdown
 # QA Review

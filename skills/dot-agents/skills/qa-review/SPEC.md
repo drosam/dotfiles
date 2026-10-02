@@ -45,6 +45,7 @@ Use synthetic examples in `references/qa-examples.md` plus these desk checks; ru
 | Staged work artifacts / no-write | Stop and ask / return report without artifact writes respectively |
 | Evidence/index write failure | Explicit not-saved or saved-but-unindexed state; no false durable handoff |
 | Fix-agent reads report | Stable IDs/repro/expected source/fix direction/retest; revalidate and request fix authority |
+| Report density | Caveman fragments, one line per field, empty fields omitted, coverage as counts/labels; verbatim only in source snapshot; no finding/repro/evidence dropped |
 
 ## Validation and limitations
 

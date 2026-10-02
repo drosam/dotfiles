@@ -195,28 +195,39 @@ Before returning the final report, save its complete durable copy:
 
 If writing or verification fails, still return the complete report, state `Artifact: not saved — <reason>`, and do not claim the indexes or review are durable. A saved but unindexed report must be labeled with its exact path; never delete it or silently treat it as latest. Artifact failure does not change the technical verdict, but it is an explicit workflow gap.
 
-Use this report format; scale detail to findings, not an arbitrary word or finding cap:
+### Artifact style
+
+`review.md` is read whole by later agents (triage, fix, QA); every token costs their context. Write caveman: fragments, labels, no narration, no hedging, no restating the finding. Compress wording, never evidence or finding count.
+
+- Verbatim only where provenance requires it (GitHub source snapshot). Everything else compressed.
+- Finding: 1 headline line + `ev:` / `fix:` / `check:` lines; ≤4 lines total unless the trace is the point (security, concurrency, disputed).
+- Coverage: counts and labels, not lists of every file read; one line per bullet; `cmd → result`.
+- Say each fact once; metadata lives in the header only. Drop "verified"/"confirmed" filler when the evidence line shows it.
+- Keep exact `path:line`, symbols, commands, results, decisions, unknowns.
+
+Use this report format; no finding cap, strict word discipline per finding:
 
 ```text
 ## Findings
-- P1 [blocking] `path:line` — Trigger → failure and impact.
-  Evidence: traced path/test; relevant rule/doc/precedent; counterevidence checked.
-  Fix: smallest sound direction. Regression check: concrete scenario.
+- P1 [blocking] `path:line` — trigger → impact.
+  ev: traced path/test; rule/doc/precedent; counterevidence.
+  fix: smallest sound direction. check: regression scenario.
 - P2 [nonblocking: reason] `path:line` — ...
 
-## Coverage and evidence
-- Target: pinned base/head/diff and any local scope; stability check.
-- Coverage: reviewed file/change groups; each pass checked / not applicable / unchecked.
-- Requirements: source → expected behavior → evidence/check → verified / violated / unverified; separate inferred expectations and unresolved decisions.
-- Docs/rules: sources and versions checked; conflicts, stale docs or missing sources.
-- PR context/history: associated PR or confirmed none/lookup unavailable; description and relevant thread links, material decisions, branch commit range and PR timeline inspected, prior concerns checked against current code, and retrieval gaps.
-- Recent patterns: compared paths + revisions; consistent/departure/divergence and why.
-- Deployment: environment/revision/source, or unverified/inapplicable with reason.
-- Validation: exact commands or CI evidence, results and unrun checks with reasons.
-- Gaps: missing checks/inputs and concrete next actions, or none identified.
+## Coverage
+- Target: base..head, diff cmd, stability.
+- Passes: behavior ✓ | security ✓ | tests ✓ | rules/docs ✓ — or `unchecked: reason`.
+- Files: N in full diff + surrounding areas (groups, not file lists).
+- Requirements: `req (source) → verified | violated | unverified (evidence)` one line each; inferred expectations labeled.
+- Docs/rules: sources checked; stale/conflicts/missing.
+- PR/history: PR # or none/lookup unavailable; commit range; prior concerns vs current code; gaps.
+- Patterns: compared paths@rev → consistent | departure | divergence (why).
+- Deployment: env/rev/source, or `n/a: reason`.
+- Validation: `cmd → result` one line each; unrun: reason.
+- Gaps: missing checks + next action, or none.
 
 ## Verdict
-BLOCKED | INCOMPLETE | READY — reason, limited to the stated scope.
+BLOCKED | INCOMPLETE | READY — reason, scope.
 ```
 
 - `BLOCKED`: at least one established blocking finding. Still report all incomplete coverage.
