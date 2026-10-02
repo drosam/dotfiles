@@ -1,5 +1,22 @@
 # Review Triage Sources and Decisions
 
+## Queue source locators
+
+User-approved iteration from a human-supplied triage/review pair in this conversation: compressed queue entries preserved code locations but omitted document locations, making exact original feedback harder to retrieve. Anonymized negative example: two reviewers flag the same control at overlapping code lines; the queue has no direct locator for either distinct comment. Positive behavior to preserve: compact queue, full immutable source, separate decisions and append-only history.
+
+Replace the queue format with an explicit `source: review.md:Lstart-Lend` field. Use verified, inclusive, 1-based document lines covering heading/metadata and complete comment; keep code locations separate. Existing logs receive append-only locator additions/corrections when resumed, not rewritten queues. Shape remains inline sequential guidance; no scripts, references, dependencies or registration changes needed. Scope: workflow-process skill maintenance only; the supplied application artifacts remain untouched.
+
+Qualitative desk checks (static expectations, not agent runs):
+- Working example: full first comment section maps to `review.md:24-51`; exact text recoverable without copying it into triage — improved.
+- Duplicate findings: each reviewer retains an independent document range despite shared code locations — improved lookup, unchanged decision gates.
+- Synthetic holdout: a local finding with fenced code includes the complete fence within its source range — improved lookup.
+- Synthetic holdout: a legacy missing/wrong locator produces a verified append-only addition/correction; an ambiguous mapping asks — unchanged history safety, improved recovery.
+- Fresh code-review requests still do not trigger triage; no investigation, approval or commit gates changed — unchanged.
+
+Description retained verbatim: this changes output precision, not routing. Should trigger: “triage these comments”, “resume review triage”, “which findings should we fix?”. Should not trigger: “review a new diff”, “implement this feature”, “explain Markdown line numbers”. No runtime adherence or measured token-saving claim.
+
+Validation: `git diff --check -- skills/dot-agents/skills/review-triage` passed; changed runtime guidance and contract re-read. The existing shared live symlink points to the canonical skill directory. Command `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/review-triage --skill-class workflow-process --strict-depth` exited 1: `ModuleNotFoundError: No module named 'yaml'`. No dependency installed; strict validation and runtime behavior remain unverified.
+
 ## Focused GitHub source excerpts
 
 Human-verified negative example (2026-09-30): a GitHub feedback snapshot persisted raw API `diff_hunk` values. New-file comments duplicated every source line from file start through each anchor, while the GitHub UI showed only the annotated line/range. Path, range, side, revision, URL and unchanged comment body already established identity; repeated surrounding patch text wasted context whenever triage read or resumed the review.
