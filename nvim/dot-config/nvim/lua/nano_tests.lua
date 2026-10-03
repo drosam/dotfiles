@@ -54,13 +54,14 @@ local function run(command)
 end
 
 local function run_file()
-	local command = vim.fn.expand("%")
+	local command = vim.fn.fnamemodify(vim.fn.expand("%:p"), ":.")
 	global_options.cache.last_run = command
 	run(command)
 end
 
 local function run_line()
-	local command = vim.fn.expand("%") .. ":" .. vim.fn.line(".")
+	local file = vim.fn.fnamemodify(vim.fn.expand("%:p"), ":.")
+	local command = file .. ":" .. vim.fn.line(".")
 	global_options.cache.last_run = command
 	run(command)
 end
