@@ -14,8 +14,7 @@
   ],
   "packages": [
     "https://github.com/MasuRii/pi-permission-system",
-    "npm:pi-mcp-adapter",
     "npm:pi-lsp-extension"
   ],
-  "lastChangelogVersion": "1.0.0"
+  "lastChangelogVersion": "1.0.3"
 }

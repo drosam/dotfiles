@@ -9,7 +9,7 @@
           "contextWindow": 500000
         },
         "claude-fable-5-1": {
-          "contextWindow": 5000000
+          "contextWindow": 500000
         }
       }
     },
