@@ -1,5 +1,17 @@
 # Review Triage Sources and Decisions
 
+## Prior-session finding history
+
+User-requested workflow correction: triage of a current point must check the confirmed Work-ID's earlier review/triage sessions to determine whether the same behavior or root cause was already discussed. Previously, the skill preserved history and required full reads on resume but did not explicitly search earlier review runs for each point.
+
+Behavior delta: before current-code investigation, verify `review.md` Work-ID against directory/index identity, then search relevant earlier immutable reviews and append-only triages in that work. Start with pinned branch history and previous-review lineage; cross branch series only when code lineage makes it relevant. Match semantically using identifiers, paths and symbols as aids, read the full matched finding and later events, and cite the artifact/range. Revalidate prior fixes, defers and verdicts against the current target. Prior decisions remain context, never current evidence or authorization. State no match or access/search gaps explicitly. This adds one every-item lookup to the existing inline workflow; no script/reference/dependency needed.
+
+Static desk checks (expectations, not runtime agent runs): repeated root cause with renamed title is found through path/symbol/behavior and cited; prior fixed item checks its commit and current code before calling feedback stale; prior deferred item checks the revisit condition; same title with a different cause is not treated as a match; unavailable or ambiguous history remains an explicit gap; later queue items remain uninvestigated. Expected: improved continuity and fewer repeated discussions, with unchanged per-item approval and evidence gates.
+
+Description remains unchanged because this alters triage depth, not routing. Existing should-trigger queries such as “resume review triage” remain accurate; fresh-review and implementation requests remain excluded.
+
+Validation: `git diff --check -- skills/dot-agents/skills/review-triage` passed. Strict-depth validator attempted with the workflow-process class and blocked by the existing environment gap: `ModuleNotFoundError: No module named 'yaml'`; no dependency installed. Runtime behavior remains unmeasured.
+
 ## Queue source locators
 
 User-approved iteration from a human-supplied triage/review pair in this conversation: compressed queue entries preserved code locations but omitted document locations, making exact original feedback harder to retrieve. Anonymized negative example: two reviewers flag the same control at overlapping code lines; the queue has no direct locator for either distinct comment. Positive behavior to preserve: compact queue, full immutable source, separate decisions and append-only history.
