@@ -19,7 +19,7 @@ All paths below are relative to the **target project repository**, not the dotfi
 
 Use a stable kebab-case `<work-id>` matching the documents' Work-ID. Keep each work item's spec and plan together; shared domain context and ADRs stay outside individual work directories. Default to one `spec.md` and one `plan.md`. Only when explicitly needed and approved, use `specs/` and/or `plans/` within that work directory for multiple documents, with actual relative links. Do not reorganize existing files automatically.
 
-Create lazily, only as needed. No automatic `.gitignore` or `.git/info/exclude` changes: these files may appear in `git status`. **`git add .` can stage them.** Agents must not stage/commit `.agent-work/` without explicit inclusion approval; stop and ask if it is already staged. This is a workflow safeguard, not Git enforcement. Avoid secrets and customer data.
+Create lazily, only as needed. The managed global excludes file (`gitconfig/dot-config/git/ignore`, stowed to `~/.config/git/ignore`) ignores `.agent-work/` in every repository, so untracked artifacts stay out of normal `git status` and `git add .`. Do not add per-repository ignore rules. Never stage/commit these artifacts; if legacy, tracked, or force-added content is staged, stop and ask without silently unstaging. Avoid secrets and customer data.
 
 This convention governs generated working documents, not application source, tests, user-requested project documentation, or skill implementation files. Existing project docs remain useful evidence. Do not migrate earlier flat work-area layouts, `.prd/`, `docs/design/`, project glossaries or ADRs, or overwrite existing files automatically. Confirm legacy document selection and any migration first; preserve inbound links when moving an approved artifact.
 
@@ -88,6 +88,6 @@ Static desk checks, not claims of observed agent behavior:
 - Read-only request / denied backlink write → no silent mutation; report draft/incomplete pairing.
 - Grill with existing `docs/adr/` → read existing evidence; new ADR stays under `.agent-work/decisions/`.
 - Review/todos → consume chosen context, preserve parent docs and existing approval gates.
-- Commit request → `.agent-work/` excluded unless explicitly included; inspect the whole index.
+- Commit request → `.agent-work/` globally excluded from ordinary adds; inspect the whole index for tracked or force-added artifacts.
 
 Strict skill validation uses `skills/dot-agents/skills/skill-writer/scripts/quick_validate.py`; do not install its dependencies without approval. Runtime adherence needs separate model-session testing.

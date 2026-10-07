@@ -15,7 +15,7 @@ Outputs: all distinct actionable findings with trigger, evidence, impact, locati
 ## Safety and evidence invariants
 
 - No application edits, comment publication, PR approval, merge, deploy, installs or permission bypass implied by review. The sole default write is the review artifact and its root/branch review indexes.
-- No worktree checkout/reset/stash for history inspection; unrelated WIP preserved. Review artifacts are never staged, committed, ignored, or overwritten without explicit approval; already-staged `.agent-work/` content blocks artifact mutation pending clarification.
+- No worktree checkout/reset/stash for history inspection; unrelated WIP preserved. Review artifacts rely on the managed global Git excludes rule and are never staged, committed, or overwritten without explicit approval; already-staged `.agent-work/` content blocks artifact mutation pending clarification.
 - No production execution or private content in public research queries.
 - Every factual claim must be confirmed by inspected evidence; static reasoning is not misrepresented as a runtime reproduction.
 - Recent, merged, built, released and currently deployed are distinct states. Confirm environment/revision/current deployment evidence or label unverified.

@@ -15,7 +15,7 @@ Inputs: original feedback and order, target/current code, relevant rules/docs/te
 - Flag confirmed very rare low-impact cases as not necessary to fix when repair cost exceeds benefit. Do not use rarity to waive serious risks or mandatory requirements.
 - Approval is item-scoped unless the user explicitly authorizes broader work. Choosing Fix authorizes the smallest agreed repair and one focused local commit after successful validation; no remote publication, dependency installation, production access or other git mutation is implied.
 - Denied tools and missing evidence result in a stated gap, not guessed findings or speculative fixes. Failed artifact persistence requires an explicit continue-without-state decision.
-- `.agent-work/` artifacts are never staged, committed, ignored, overwritten, or silently unstaged; staged artifacts block mutation pending clarification.
+- `.agent-work/` artifacts rely on the managed global Git excludes rule and are never staged, committed, overwritten, or silently unstaged; staged artifacts block mutation pending clarification.
 - After approved fixes, distinguish implementation, passing validation and successful commit; append and verify each transition before investigating the next item. Skipped/deferred blockers remain unresolved.
 - Pi SYSTEM.md retains a short router and approval fallback independent of skill loading. The skill itself has no Pi-only API or runtime dependency.
 
