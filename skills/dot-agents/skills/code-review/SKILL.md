@@ -108,7 +108,7 @@ Trace changed inputs through callers, transformation, storage, and externally vi
 | Concurrency | Two writers, lost update, check-then-act races, lock ordering, cancellation, double submit, duplicate delivery and idempotency scope |
 | Partial failure | DB succeeds/queue fails; remote succeeds/local timeout; retry after side effect; rollback/cleanup failure; exhausted retry; unavailable dependency |
 | Compatibility | Old/new clients and workers; historical payloads; default vs explicit config; flag off/on/mixed; rolling deployment and rollback |
-| UI | Loading/empty/error/disabled states; stale async response; keyboard/focus/screen reader behavior; localization and slow/offline network |
+| UI | Loading/empty/error/disabled states; stale async response; keyboard/focus/screen reader behavior; localization, including translation and configurable domain terminology; slow/offline network. Cross viewport breakpoints with ancestor mounting/visibility: which user capabilities disappear, and is there an intended alternative? |
 
 State the invariants: what must remain true before, during, and after the operation? Missing tests alone do not prove a bug; prove the failure path or describe the specific unprotected contract as a test gap.
 
@@ -129,8 +129,8 @@ For each security finding, show a reachable abuse scenario, prerequisites, concr
 ### Tests, reliability, and performance
 
 - Map changed contracts and high-risk edge cases to existing/new unit, integration and end-to-end tests. Read assertions and fixtures, not only test names or coverage percentages.
-- Check tests would fail for the concrete bug. Detect duplicated implementation in expected values, mocks bypassing real guards, skipped tests, swallowed failures, vacuous assertions and stale snapshots.
-- Examine broad catches, fallbacks, optional/default values and success responses on failure. Check propagation, observability, cleanup and recovery. A justified fallback or intentional cancellation is not automatically defective; avoid leaking sensitive details through logs/errors.
+- Check tests would fail for the concrete bug. Detect duplicated implementation in expected values, mocks bypassing real guards, skipped tests, swallowed failures, vacuous assertions and stale snapshots. Compare UI locators with available semantic roles/labels and scoped test conventions; flag concrete brittleness, not selector taste.
+- Examine broad catches, fallbacks, optional/default values and success responses on failure. Check propagation, observability, cleanup and recovery. For changed cleanup or deferred writes, enumerate triggers beyond the motivating flow: deletion, navigation, cancellation, identity change and teardown. Trace pending work and record lifetime; check whether test timing shortcuts bypass the risky window. Preserve justified fallbacks/cancellation and avoid leaking sensitive details through logs/errors.
 - Trace transaction boundaries, atomicity, retry/backoff, idempotency, backpressure, rate limits and timeout budgets.
 - Check N+1 queries, indexes, unbounded reads/loops, memory growth and blocking work against actual call paths and credible scale. Do not invent performance numbers.
 - Before running checks, derive the validation ledger from applicable repo/spec/CI gates and changed-path risks: command/check, applicability, mandatory vs supplemental, required revision/environment, evidence/result, and missing prerequisite. Account for every applicable mandatory gate; focused checks substitute only when that gate's contract permits. A required check without matching evidence prevents READY.
@@ -141,12 +141,13 @@ For each security finding, show a reachable abuse scenario, prerequisites, concr
 
 ### Maintainability and best practices
 
-Check canonical ownership/layers, unnecessary abstraction, duplication, repeated condition cascades, coupling, naming, types/nullability, producer/consumer boundaries, dependency direction and navigability. Be demanding about structural regressions, not just whether the code works:
+Review changed responsibilities, not just individual files. Retain checks for layers, coupling, naming, types/nullability, cast/optionality churn, dependency direction, navigability, unnecessary abstractions/wrappers, duplication/repeated condition cascades, feature logic leaking into shared code and unrelated special cases. Seek simpler models deleting concepts, branches, modes, helpers or layers; investigate file growth around 1000 lines without treating length alone as a defect. For affected state, policy or lifecycle, perform these checks:
 
-- Look for a simpler model that deletes concepts, branches, modes, helpers or layers. Identify feature logic leaking into shared code, unrelated special cases, pass-through wrappers, cast/optionality churn and duplicated policy.
-- Ask whether the canonical producer, constructor, schema or type can enforce an invariant instead of scattering consumer guards. Distinguish proven internal invariants from untrusted input; preserve necessary validation, corruption handling and `unknown` at trust boundaries.
-- Check related updates for non-atomic state and orchestration for needless sequencing. Suggest parallel work only when dependencies and effects permit it and complexity actually decreases.
-- For each structural finding, cite the concrete maintenance cost, a smaller design and plausible migration/test boundary. Prefer canonical ownership and meaningful types over another wrapper. Investigate file growth around 1000 lines, but do not make line count an automatic blocker.
+1. Map the authoritative owner, derived copies, relevant writers and synchronization/invalidation obligations, with source locations. Include shared event arbitration, not just stored data. Explain separately writable copies: intentional draft/snapshot or redundant authority?
+2. Trace every relevant mutation path and recurring fix from the inspected history. When several callers must remember the same repair, ask whether the invariant belongs at the producer or derived-state owner. Verify deletion, nested dependencies, stale responses and update ordering before recommending subscriptions or centralization; do not replace missed callbacks with incorrect or excessive refreshes.
+3. Compare business predicates across sibling selectors/guards, not only matching syntax. Trace callers before tightening optional contracts; ask whether the producer, constructor, schema or type can enforce an internal invariant instead of scattered consumer guards. Preserve legitimate absent values, intentional view-specific filters, corruption handling, validation and `unknown` at trust boundaries.
+4. When one discriminator repeatedly controls data source, effects and rendering, compare mode-specific ownership/lifecycles. Enumerate reset/cleanup triggers and state that must survive transitions. Split only when it removes coordination cost; preserve pending work, focus, loading/error recovery and other required continuity.
+5. For each finding, name the concrete coordination cost or violated invariant, a smaller design and a migration/regression-check boundary. Prefer canonical ownership and meaningful types over another wrapper. Check atomicity and needless sequencing; suggest parallelism only when dependencies and effects permit it and complexity decreases. Record the ownership map and justified separations in code-health coverage even when no finding remains; use not-applicable only with a reason.
 
 ### Comment quality and AI-style clutter
 
@@ -165,10 +166,10 @@ For every candidate:
 3. Reproduce safely when feasible, or supply a complete static trace. Never claim an unrun repro/test. Drop disproven issues; put consequential unresolved uncertainty in coverage gaps with the exact missing check.
 4. Give impact, smallest sound fix direction, and a regression check. Cite relevant docs/rules and precedent when they support the finding.
 5. Merge only identical root-cause/remedy findings. Preserve distinct failures in the same file. Resolve agent disagreement using evidence, not vote counts.
-6. Search relevant sibling paths for variants of a confirmed defect. Keep untouched/unrelated occurrences separate from introduced regressions.
+6. Search relevant sibling paths for variants of a confirmed defect. If multiple fixes restore the same invariant, distinguish repaired symptoms from remaining ownership/representation costs; do not call a fixed bug still present or assume a shared root cause without tracing it. Keep untouched/unrelated occurrences separate from introduced regressions.
 7. Recheck scope/HEAD/worktree stability and ledger completeness before the verdict. Re-review fixes on their new revision; previous conclusions do not automatically transfer.
 
-For worked true-positive, safe-pattern, documentation and partial-review cases, read `references/review-examples.md` when calibrating evidence or resolving a disputed finding.
+Read `references/review-examples.md` when calibrating evidence or resolving a disputed finding; use its ownership, mode-boundary and lifecycle cases when the change involves synchronized state, repeated repair callbacks or mode-dependent effects.
 
 ### Severity and gate
 
@@ -222,6 +223,7 @@ Use this report format; no finding cap, strict word discipline per finding:
 - Docs/rules: sources checked; stale/conflicts/missing.
 - PR/history: PR # or none/lookup unavailable; commit range; prior concerns vs current code; gaps.
 - Patterns: compared paths@rev → consistent | departure | divergence (why).
+- Ownership: authoritative → derived state/policy; writers/repair obligations, source locations and justified separations; or n/a with reason.
 - Deployment: env/rev/source, or `n/a: reason`.
 - Validation: `cmd → result` one line each; unrun: reason.
 - Gaps: missing checks + next action, or none.

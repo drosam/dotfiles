@@ -1,5 +1,39 @@
 # Code Review Sources and Decisions
 
+## Ownership and recurrence iteration
+
+User-approved improvement from [human review 5441194187](https://github.com/booqable/booqable/pull/19387#pullrequestreview-5441194187), pinned application revision `21446cc0b6eb0bd72ccb3cd33a98e0aa30988391`. Inspected the overall body and six inline comments, including the user-selected local verbatim snapshot, plus pinned refresh, panel-state, selector, stock-chip and cleanup source. Trust: human-authored feedback with mixed static verification; not every proposed remedy is proven. Original automated-review execution was not inspected, so missed findings cannot be attributed to a particular worker or historical skill version.
+
+Intake: negative/maintenance examples for distributed repair callbacks, synchronized state, duplicated selection policy, optional internal contracts and mode-dependent lifecycles; edge-case questions for cleanup/deletion and responsive capability loss; localization and locator feedback. Transform into generic synthetic calibration cases, not copied application code or an assertion that all human comments are confirmed defects.
+
+Behavior delta: replace broad structural bullets with owner/derived-state/writer tracing, recurring-fix analysis, semantic-predicate and caller-contract comparisons, and lifecycle separation with continuity checks. Require source-backed ownership coverage even with no findings. Extend existing UI/test checks for mounting × viewport visibility, configurable terminology, semantic locators and cleanup triggers/test timing. Route the existing examples reference for these change shapes. No new worker, script, dependency or reference file; retain the four-pass workflow and all previous review dimensions, safety, severity and evidence requirements.
+
+Preservation constraint: retain layers/coupling, naming, type/nullability and cast/optionality checks, dependency direction/navigability, wrapper/special-case and shared-layer leakage scrutiny, simplification, producer/schema invariants, trust-boundary validation, atomicity/sequencing, migration/test boundaries and the nonmechanical file-size signal. Retain failure propagation, observability, cleanup/recovery and justified fallback/cancellation checks. Existing calibration cases remain unchanged; new cases supplement them. This strengthens execution and coverage evidence, not scope or permissions.
+
+### Qualitative replay expectations
+
+Desk comparison only; no observed agent run or measured recall improvement. Working examples derive from the supplied feedback; transfer probes are synthetic and were not used as source evidence.
+
+| Prompt/case | Before → after guidance expectation | Desk outcome |
+| --- | --- | --- |
+| All previously missed refresh callbacks now repaired | Generic ownership scrutiny → investigate distributed obligations without resurrecting fixed bugs | Improved specificity |
+| Repeated mode flag governs fetch/reset/render | Generic simplification → compare lifecycles and retain pending/focus/error continuity | Improved specificity |
+| Copied selector / optional internal callback | Generic duplication/types → compare semantic predicates and actual caller guarantees | Improved specificity |
+| Deferred save added for one unmount reason | Generic concurrency/cleanup → enumerate deletion/navigation/identity triggers and timing shortcuts | Improved specificity |
+| Replacement UI hidden at a breakpoint | Generic UI checks → cross ancestor mounting with reachable capabilities; unknown intent stays a question | Improved specificity |
+| Legitimate draft, optional shared callback, existing canonical invalidation | Preserve counterevidence and safe boundaries; suppress unjustified centralization/guard removal | Unchanged safeguards, more explicit examples |
+| Transfer probe: background job duplicates a cache-repair obligation | Same owner/writer procedure applies without React or UI assumptions | Improved specificity |
+| Transfer probe: repeated permission guards at distinct trust boundaries | Preserve required validation; repetition alone does not establish removable duplication | Unchanged safeguard |
+
+Description retained verbatim: this changes review execution, not invocation. Should trigger: “review this PR”, “audit this diff for maintainability”, “thermos review”, “verify this completed fix”. Should not trigger: “implement this panel”, “deploy this branch”, “explain this hook”, or initial incident diagnosis without a review request. Manual trigger inspection found no reason to broaden or narrow the existing description; no classifier benchmark run.
+
+Validation:
+- `git diff --check -- skills/dot-agents/skills/code-review`: passed.
+- Approved read-only `python3 -` checks against Git HEAD: passed for unchanged frontmatter, dispatch, scope/docs/history, security, comment-quality, severity, persistence, existing non-UI coverage rows, nine original examples, unaffected SPEC criteria and historical provenance. Checked retained structural/failure-handling dimensions, reference/anchor targets, Markdown structure, line limit and canonical/live symlinks. The first checker run overran a subsection boundary (`AssertionError: Comment quality and AI-style clutter`); corrected heading parsing and reran successfully, with no product-guidance change needed.
+- `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/code-review --skill-class security-review --strict-depth`: blocked, exit 1, `ModuleNotFoundError: No module named 'yaml'`. Nothing installed. Structural checks are not a strict-depth pass or a behavioral benchmark.
+
+Remaining limits: no original-run causal proof, no runtime application reproduction or blind behavior benchmark; desk expectations do not establish recall. Class remains security-review + workflow-process; integration-documentation and skill-authoring API-depth rubrics are inapplicable. Existing registrations and specialized-worker names remain unchanged.
+
 ## Comment-quality decision
 
 User-directed behavior delta: make the code-health pass critical of added or changed comments and docstrings that resemble generated clutter. Judge content rather than guessing authorship. Replace the implicit generic maintainability treatment with explicit decisions: remove narration, duplication and transient history that offer no durable rationale; trim useful but wordy comments to the shortest precise explanation; preserve required API documentation, external constraints, invariants and safety reasoning. Keep the existing concrete-cost bar, group repeated instances, and reject tone-only findings. Inline guidance is sufficient; no script, dependency or new reference is justified.
