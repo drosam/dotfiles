@@ -1,6 +1,6 @@
 ---
 name: review-triage
-description: Evaluates existing code-review feedback and bug lists one point at a time before changes. Use when asked to go through review comments, triage findings, assess whether feedback is worth fixing, identify unnecessary rare-edge-case fixes, or decide fix versus skip versus defer. Verifies evidence and tradeoffs, then waits for each decision; not for discovering new findings in a fresh code review.
+description: Evaluates existing code-review feedback and bug lists one point at a time before changes. Use when asked to go through review comments, triage findings, assess whether feedback is worth fixing, decide fix versus skip versus defer, or reply on GitHub after triage. Verifies evidence and tradeoffs, then waits for each decision; not for discovering new findings in a fresh code review.
 ---
 
 # Review Triage
@@ -18,7 +18,7 @@ Confirm every factual claim before presenting it: current behavior, reachability
 - Investigate only the current item, gather enough evidence to explain it, present it, and wait for the user's decision. Do not inspect code, trace callers, run checks, or delegate investigations for later items in advance or in parallel. Shared code may be needed to understand the current item; that is not permission to triage later findings.
 - Start the next item's investigation only after the current item is fixed, validated, and committed; explicitly skipped; or explicitly deferred. Do not pre-investigate the queue before presenting the first item or while waiting for a decision.
 - Include findings from an earlier assistant review when the user asks to walk through them. Do not launch triage merely because a discovery review just finished.
-- Keep decisions in the conversation and durable triage log: pending, fixed, skipped, deferred, or blocked. No tracker creation, remote replies, thread resolution, or pushes implied. Choosing **Fix** also authorizes one focused local commit for that item's validated repair; no other decision authorizes git mutation.
+- Keep decisions in the conversation and durable triage log: pending, fixed, skipped, deferred, or blocked. No tracker creation, remote replies, thread resolution, or pushes are implied by a triage decision. Choosing **Fix** also authorizes one focused local commit for that item's validated repair; no other decision authorizes git mutation. An explicit request to reply or comment on GitHub separately authorizes only the requested publication scope; follow section 6.
 
 ### Persist or resume the review before investigation
 
@@ -89,6 +89,16 @@ Append and verify the presented assessment in `triage.md`. Then use the availabl
 - Advance to the next point in order only after the durable event for a successful validation and commit, explicit skip, or explicit defer has been appended and verified. Only then begin its investigation (steps 2–3), present it (step 4), and wait again. A blocked fix, persistence, validation, commit, or ongoing discussion keeps the current item active unless the user explicitly defers it. End by appending and returning a brief count/list of fixed, skipped, deferred and blocked items, commit hashes, and outstanding validation; do not claim overall PR readiness from triage alone.
 
 Batch editing requires explicit authority such as “fix all”, “apply the obvious ones”, or “don't ask, just do it”. This waives per-item prompts only for the authorized scope, not evidence checks, permissions, per-item commits, or safety. Complete and commit each approved fix before investigating the next item. Do not implement disproven/unverified suggestions; report exclusions and blockers. If dependencies conflict with the requested order, explain and request a sequencing decision rather than reorder silently.
+
+## 6. Reply on GitHub when requested
+
+Do this only after the user explicitly asks to reply, comment, or report the triage outcome on GitHub. That request authorizes posting for the identified review/items; do not ask for a second confirmation unless the target, scope, or wording is materially ambiguous, or the user asks to preview drafts. It does not authorize pushing commits, resolving threads, dismissing reviews, approving, or merging.
+
+- Reply to an inline comment in its existing thread. For feedback that exists only in an overall review body, use a top-level PR comment and quote only enough original text to identify each response. Do not create duplicate replies.
+- For a fixed item, default to exactly `Fixed in [\`<short-sha>\`](<commit-url>).` Add one short clause only when the commit link cannot answer necessary context. Do not say the suggestion was followed/applied and do not summarize the implementation by default.
+- For a skipped, deferred, already-resolved, or question-only item, write one brief direct sentence answering the reviewer or stating the evidence-backed reason it was not addressed. Avoid defensive narration and do not restate the full triage verdict.
+- Verify the comment target, repository, commit SHA, and URL before posting. The linked commit must be available on that GitHub repository; if publication requires a push, stop and request separate push authorization.
+- Prefer GitHub CLI for publication. Capture each resulting comment URL, append the exact outcome to `triage.md`, re-read the append, and report only the posted/blocked count and URLs. A failed or ambiguous API response is blocked, not posted.
 
 ## Calibration examples
 

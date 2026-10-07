@@ -1,5 +1,23 @@
 # Review Triage Sources and Decisions
 
+## Concise GitHub replies after triage
+
+User-requested iteration from the named local session “PCO-5103 triage full review”: after triage, the user may ask the agent to publish outcomes back to GitHub. The prior workflow correctly targeted inline comment threads, used a top-level PR comment for overall-review bullets, captured returned URLs, and logged publication. Its fixed-item replies were too verbose: phrases such as “applied your suggestion” and implementation summaries repeated what the commit already showed.
+
+Behavior delta: triage decisions still imply no remote action. A separate explicit request to reply/comment authorizes publication only for the identified review scope, without another wording confirmation unless target/scope/text is materially ambiguous or preview is requested. Inline feedback stays in-thread; overall-review-only feedback uses a top-level comment with minimal identifying quotation. Fixed-item text defaults to `Fixed in <linked-short-sha>.`; context is added only when necessary. Skipped/deferred/already-resolved/question items get one brief direct rationale or answer. Never implicitly push, resolve, dismiss, approve, or merge. Verify targets and commit availability, capture returned URLs, and append outcomes to triage.
+
+Shape remains inline conditional guidance; no new reference, script, dependency, or registration is needed. Existing persistence and GitHub source metadata already provide comment IDs, URLs, decisions, and commit hashes.
+
+Static desk checks (expectations, not runtime agent runs):
+- Explicit “reply on GitHub” after a fixed item posts `Fixed in <linked-short-sha>.` to the existing thread — improved concision.
+- A fixed item needing no clarification omits “followed/applied your suggestion” and implementation detail — improved signal.
+- A skipped item posts one short evidence-backed reason — improved concision, unchanged truthfulness.
+- Overall-review-only bullets use a top-level PR comment with enough quotation to identify each response — unchanged targeting.
+- A local-only commit blocks the reply pending separate push authorization; reply authority never becomes push authority — unchanged safety.
+- “Fix this item” without a reply request posts nothing remotely — unchanged permission boundary.
+
+Description now includes “reply on GitHub after triage” to cover the new explicit trigger while retaining the existing-feedback and no-fresh-review boundaries. Should trigger: “reply on GitHub to these triaged comments”, “post the review outcomes”, “tell the reviewer which commits fixed these”. Should not trigger: “reply to this unrelated issue”, “review this new PR”, “push my commits”, “resolve all review threads”. Runtime adherence remains unmeasured.
+
 ## Prior-session finding history
 
 User-requested workflow correction: triage of a current point must check the confirmed Work-ID's earlier review/triage sessions to determine whether the same behavior or root cause was already discussed. Previously, the skill preserved history and required full reads on resume but did not explicitly search earlier review runs for each point.
