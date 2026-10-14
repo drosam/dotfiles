@@ -1,12 +1,14 @@
 # Grill With Docs Contract
 
-- Intent: the single design-interview entry point, replacing `grill-me`, with a paper trail: glossary terms in `CONTEXT.md` as they resolve, ADRs for gated decisions.
-- Triggers: manual invocation for "grill me", design challenges, grooming, or domain-language documentation; no automatic implementation or mandatory document scaffolding.
-- Shape: self-contained inline rounds plus two format references; no dependency on other skills loading (upstream's most reported failure).
-- Inputs: explicitly selected spec/plan, codebase, work-area and existing project glossaries/maps/ADRs. Outputs: settled decisions, glossary edits under `.agent-work/context/`, approved ADRs under `.agent-work/decisions/`, closing summary with handoff request.
-- Identity: explicit path/session confirmation or verified reciprocal link; otherwise ask even for one candidate. No filename/branch/recency inference. Standalone discussion is valid; absent question capability is a blocker, not permission to guess.
-- Storage: existing docs outside `.agent-work/` are evidence only; no silent migration. ADRs carry confirmed work links; changed requirements require explicit reconciliation before handoff.
-- Writes: a settled term is written immediately (user's answer is the approval); ADRs only after an explicit yes; every write passes normal file permissions and is announced in one line. Nothing scaffolded up front.
-- Boundaries: `CONTEXT.md` is glossary only; ADR gate requires hard-to-reverse + surprising + real trade-off; facts discovered locally, decisions owned by user; blocked tools stay blocked; no implementation without explicit handoff.
-- Acceptance: glossary changes during the session, not in one lump; code-answerable questions are not asked; conflicting user vocabulary is challenged against the glossary; few or no ADRs; closing names decisions that live only in the conversation.
-- Limitations: static review does not measure interview quality or glossary usefulness; multi-context inference may need user confirmation.
+- Intent: the single design-interview entry point, replacing `grill-me`, with compaction-safe recovery notes plus a durable paper trail for glossary terms and gated ADRs.
+- Triggers: manual invocation for "grill me", design challenges, grooming, or domain-language documentation; no automatic implementation or mandatory spec/plan scaffolding.
+- Shape: self-contained inline rounds plus recovery-notes, glossary, and ADR format references; no dependency on other skills loading.
+- Inputs: active-session context, confirmed Work-ID, explicitly selected spec/plan when present, codebase, work area, and existing project glossaries/maps/ADRs. Outputs: current `.agent-work/work/<work-id>/notes.md`, settled decisions, glossary edits, approved ADRs, and a closing handoff request.
+- Identity: explicit path/session confirmation or verified reciprocal link; otherwise ask even for one candidate. No filename/branch/recency inference. Standalone discussion is valid but still requires a confirmed Work-ID and notes; absent question capability is a blocker.
+- Recovery: create or merge recovery notes before substantive questions; capture relevant existing session knowledge; update after every answered round and material research batch; fully reread after compaction, resume, branch switch, or suspected context loss; final-sync before handoff.
+- Storage: existing docs outside `.agent-work/` are evidence only; no silent migration. Notes do not establish spec/plan relationships. ADRs carry confirmed work links; changed requirements require explicit reconciliation before handoff.
+- Writes: recovery notes are mandatory and announced; a settled term is written immediately; ADRs require explicit acceptance. Failed notes persistence blocks the interview rather than falling back to conversation-only state.
+- Safety: summarize rather than store secrets, customer data, full transcripts, or large raw outputs. Preserve provenance and distinguish verified facts, user reports, and assumptions.
+- Boundaries: notes are not a spec, plan, transcript, glossary, or ADR; `CONTEXT.md` remains glossary-only; ADR gate requires hard-to-reverse + surprising + real trade-off; facts discovered locally, decisions owned by user; no implementation without explicit handoff.
+- Acceptance: relevant prior session context exists in notes before substantive questioning; notes remain current after each round; recovery starts by rereading the whole file; glossary changes happen inline; code-answerable questions are researched; closing identifies and passes the notes path.
+- Limitations: guidance cannot independently detect invisible runtime events; it relies on model-visible compaction/resume state or suspected context loss to trigger rereading. Static review does not measure interview quality or recovery completeness.

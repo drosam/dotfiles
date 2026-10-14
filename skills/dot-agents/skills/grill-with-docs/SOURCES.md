@@ -1,5 +1,14 @@
 # Grill With Docs Sources
 
+## 2026-10-14 persistence iteration
+
+- Example intake: **positive fix**, human-verified. In a user-selected prior Pi session, the successful proposal used `.agent-work/work/<work-id>/notes.md` to preserve already-collected source links, research facts, conflicts, decisions, open questions, and the next round. The user explicitly selected this approach and requested it become mandatory skill behavior.
+- Behavior delta: replaced the conversation-only rule and narrowed lazy creation. Recovery notes now exist before substantive questions, update after every answer/research round, are reread fully after compaction or continuity loss, and receive a final handoff sync. Spec and plan creation remain separately approved.
+- Shape decision: retained the inline workflow; added one directly routed format reference because the mandatory ledger needs a stable schema. No script or worker is warranted.
+- Working replay: an interview with substantial pre-existing research now writes that context before round one and updates before round two — improved. A denied notes write now blocks rather than risking loss — improved.
+- Holdout replay: a standalone architecture grill still creates notes under a user-confirmed Work-ID while leaving Spec/Plan as `Not created` — intended. An existing notes file is merged, not overwritten — intended. Ordinary non-grill requests remain outside the manual trigger — unchanged.
+- Residual risk: skill guidance cannot detect a runtime event hidden from the model; recovery rereads depend on visible compaction/resume cues or suspected context loss.
+
 ## Later local work-area contract
 
 User-directed storage change: new glossary/maps go under `.agent-work/context/`, approved ADRs under `.agent-work/decisions/`. Existing project docs are evidence, not automatic write destinations. Require confirmed work identity and ADR spec/plan links; ask about stale/conflicting requirements before handoff. This supersedes historical root-glossary/existing-ADR-directory preferences below. Preserve sparse ADR offers, inline glossary updates and no implementation without handoff.
