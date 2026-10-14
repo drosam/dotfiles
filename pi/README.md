@@ -11,6 +11,8 @@ All paths below are relative to the **target project repository**, not the dotfi
   work/<work-id>/
     spec.md                       # what and why; acceptance criteria
     plan.md                       # how; design, constraints, validation
+    tickets/index.md              # breakdown outline, statuses, coverage
+    tickets/NN-<slug>.md          # one reviewed ticket per file
   context/CONTEXT.md              # shared domain glossary
   context/CONTEXT-MAP.md          # optional multi-context map
   context/<context>/CONTEXT.md    # optional per-context glossary
@@ -29,10 +31,10 @@ This convention governs generated working documents, not application source, tes
 | --- | --- | --- |
 | `create-plan` | Research and agree technical design | `.agent-work/work/<work-id>/plan.md` |
 | `to-feature-spec` (formerly `to-prd`) | Capture agreed requirements, not a new interview | `.agent-work/work/<work-id>/spec.md` |
-| `feature-spec-to-todos` (formerly `prd-to-todos`) | Propose vertical slices; create only after approval | Todo tool, not files; `spec:<Work-ID>` prefix |
+| `feature-spec-breakdown` (formerly `feature-spec-to-todos`) | Agree slice list, review each ticket, then optionally create todos or publish to a named tracker | `.agent-work/work/<work-id>/tickets/`; todos with `spec:<Work-ID>` prefix |
 | `grill-with-docs` | Challenge design, settle terms, offer significant ADRs | `.agent-work/context/` and `decisions/` |
 
-Plan → spec → todos is optional. A spec can precede its plan; simple work can have neither. Planning, document selection, and design approval never imply implementation approval.
+Plan → spec → tickets is optional. A spec can precede its plan; simple work can have neither. Planning, document selection, and design approval never imply implementation approval.
 
 ## Spec ↔ plan navigation
 
@@ -60,7 +62,7 @@ Matching plan `.agent-work/work/session-restore/plan.md`:
 
 Use `Not created` for an absent counterpart, not a nonexistent file link. When the counterpart is created, reuse the confirmed work directory, update both headers through normal permissions and verify link targets, Work-ID matching the directory, and reciprocal links. Matching filenames/IDs or directory proximity alone do not establish selection. Multiple specs/plans require explicit user-confirmed relationships and lists of links rather than overwriting an existing pairing. If either write is blocked, report incomplete linkage. Read-only/draft workflows do not update either file.
 
-ADRs include confirmed Work-ID and relative Spec/Plan links (for example `../work/session-restore/spec.md` and `../work/session-restore/plan.md` from `decisions/`), or absent markers for standalone decisions. Todos include the actual source spec path/URL and plan path (or `Not created`); never invent a local source file for pasted text. Decomposition leaves parent documents unchanged. Todo persistence is limited to what the available runtime guarantees; specs/plans remain the cross-session source of truth.
+ADRs include confirmed Work-ID and relative Spec/Plan links (for example `../work/session-restore/spec.md` and `../work/session-restore/plan.md` from `decisions/`), or absent markers for standalone decisions. Tickets link the actual source spec and plan (or `Not created`); never invent a local source file for pasted text. Decomposition leaves parent documents unchanged. Todo persistence is limited to what the available runtime guarantees; specs, plans and ticket files remain the cross-session source of truth.
 
 ## Session-start and handoff rule
 
@@ -87,7 +89,7 @@ Static desk checks, not claims of observed agent behavior:
 - Explicit spec with valid reciprocal plan link → read both without redundant identity interview.
 - Read-only request / denied backlink write → no silent mutation; report draft/incomplete pairing.
 - Grill with existing `docs/adr/` → read existing evidence; new ADR stays under `.agent-work/decisions/`.
-- Review/todos → consume chosen context, preserve parent docs and existing approval gates.
+- Review/breakdown → consume chosen context, preserve parent docs and existing approval gates; publish only accepted tickets on explicit instruction.
 - Commit request → `.agent-work/` globally excluded from ordinary adds; inspect the whole index for tracked or force-added artifacts.
 
 Strict skill validation uses `skills/dot-agents/skills/skill-writer/scripts/quick_validate.py`; do not install its dependencies without approval. Runtime adherence needs separate model-session testing.
