@@ -25,6 +25,9 @@ Class: workflow-process. Shape: inline workflow + routed references (template, s
 | Context / Description / Steps to reproduce / Acceptance criteria only | adopted | User; upstream template brevity |
 | Omit implementation details by default; retain only necessary, source-backed constraints | adopted | User follow-up requirement; preserves outcome-focused tickets without dropping mandatory plan/ADR, compatibility, security, or migration constraints |
 | Description defaults to prose; lists are used only when distinct items become clearer | adopted | User follow-up requirement; avoids checklist-like prose without banning useful lists |
+| Ticket bodies contain no spec/plan/ADR citations; source coverage stays in the local header/index | adopted | User follow-up requirement |
+| `Status`, `Blocked by`, `Source`, and `Published` remain local and are never published or mapped to Linear/Jira | adopted | User follow-up requirement |
+| Inter-ticket references publish as hyperlinks to destination issues in any third-party tracker, including a final pass for forward references | adopted | User follow-up requirement |
 | Necessary code pointers use path + symbol with commit SHA, no line numbers | adopted | Upstream "paths go stale" vs. user need for pointers |
 | Stable ticket IDs; merges/splits never renumber | adopted | Resume and publication-record safety |
 | Default tracker, triage label, auto-publish | rejected | User wants tracker-agnostic, explicit instructions |

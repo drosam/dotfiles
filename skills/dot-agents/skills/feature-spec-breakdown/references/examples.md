@@ -27,7 +27,7 @@ Spec header says `Plan: Not created`. Ask: run `create-plan` first, slice from t
 
 User: "publish to Linear, team INV, project 'Collections filter', Backlog, no assignee". Mapping approved. 01 → `INV-41`, recorded. 02 fails with a timeout.
 
-Report `created: INV-41 (#01); pending: #02`. Search the project for "#02"/title before retrying; it was created as `INV-42` despite the timeout → record it, do not create again. Then create 03 with blocker `INV-41`.
+Report `created: INV-41 (#01); pending: #02`. Search the project for "#02"/title before retrying; it was created as `INV-42` despite the timeout → record it, do not create again. Then create 03 after its prerequisite; do not copy local header metadata into the tracker. If 03's body refers to 01 or 02, publish those references as hyperlinks to `INV-41` or `INV-42`, using the approved final update pass when needed.
 
 ## Anti-pattern → correction
 
@@ -47,7 +47,7 @@ Correct: two-line Context, short prose Description, criteria like "Selecting col
 
 Bad ticket: prescribe a new `CollectionFilterService`, endpoint parameters, database indexes, and an ordered file-by-file coding sequence when the approved plan does not require them.
 
-Correct: describe the observable filtering behavior and constraints. Include a schema, API, or code pointer only when an approved plan/ADR mandates it or compatibility, security, migration, or material ambiguity makes it necessary; include only that detail and cite the source.
+Correct: describe the observable filtering behavior and constraints. Include a schema, API, or code pointer only when an approved plan/ADR mandates it or compatibility, security, migration, or material ambiguity makes it necessary. Include only that detail; keep spec, plan, and ADR citations in the `Source` header or index, never the body.
 
 ## Customer data in a screenshot
 

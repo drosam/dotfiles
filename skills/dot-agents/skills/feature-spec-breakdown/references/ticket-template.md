@@ -46,7 +46,7 @@ Why this ticket exists and what it builds on. Links: [Figma <frame>](<url with n
 
 ## Description
 
-In short prose, describe what to build as end-to-end behavior using glossary terms and include scope limits ("not X; see NN"). Use a list only when distinct requirements or constraints are clearer when scanned separately. Leave out implementation details by default. Include only the minimum needed when an approved plan/ADR mandates it, compatibility/security/data migration depends on it, or behavior would otherwise be materially ambiguous; state why and cite the source. If a code pointer is necessary, use `path` — `symbol` (read at <commit SHA>).
+In short prose, describe what to build as end-to-end behavior using glossary terms and include scope limits ("not X; see [NN](./NN-slug.md)"). Use a list only when distinct requirements or constraints are clearer when scanned separately. Leave out implementation details by default. Include only the minimum needed when an approved plan/ADR mandates it, compatibility/security/data migration depends on it, or behavior would otherwise be materially ambiguous; state why without adding spec, plan, or ADR citations here. Record source coverage only in the `Source` header and `index.md`. If a code pointer is necessary, use `path` — `symbol` (read at <commit SHA>).
 
 ## Steps to reproduce
 
@@ -61,4 +61,4 @@ Expected: <behavior>. Actual: <behavior>.
 - [ ] <edge or error outcome>
 ```
 
-Omit `Steps to reproduce` when not a bug. Keep header lines short. Record review decisions in the index or chat, not as extra ticket sections.
+Omit `Steps to reproduce` when not a bug. Keep header lines short. The body never carries spec, plan, or ADR citations. Link every body reference to another ticket with its relative ticket-file link; publishing replaces it with the third-party issue URL. Record source coverage and review decisions in the header, index, or chat, not as extra ticket sections.

@@ -51,8 +51,9 @@ After agreement, write one file per ticket using `references/ticket-template.md`
 - Sections: Context, Description, Steps to reproduce (bugs only), Acceptance criteria. Complete and well described, but terse: no filler, no copied spec prose.
 - Write Description as short prose by default. Use a list only when distinct requirements or constraints are clearer when scanned separately; do not turn every sentence into a bullet.
 - Default to outcomes and constraints, not implementation. Omit proposed file changes, code symbols, component/class names, algorithms, schema/API shapes, and coding sequences.
-- Include only the minimum implementation detail necessary because an approved plan or ADR mandates it, compatibility/security/data migration depends on it, or the ticket would otherwise be materially ambiguous. State why it is necessary and cite the source. Do not invent solution details.
+- Include only the minimum implementation detail necessary because an approved plan or ADR mandates it, compatibility/security/data migration depends on it, or the ticket would otherwise be materially ambiguous. State why it is necessary without adding spec, plan, or ADR citations to the body; record source coverage only in the `Source` header and `index.md`. Do not invent solution details.
 - IDs are stable: never renumber. Splits get new numbers; merged tickets become `merged into NN`; removed ones `rejected`.
+- Link references to another ticket as relative Markdown links (`[NN](./NN-slug.md)`), not plain ticket numbers, so publishing can resolve them to tracker issue hyperlinks.
 - Links and images: add Figma links (with node IDs), docs, threads, and screenshots only when the user provides or approves them. Copy local images into `tickets/assets/` and link relatively. Ask before storing any image that may show customer data or secrets.
 - When a necessary implementation detail needs a code pointer, use path + symbol and the commit SHA it was read at. No line numbers or long snippets.
 
@@ -68,7 +69,7 @@ Finish with a consistency check: every ticket `accepted`, `rejected`, `deferred`
 
 ## 5. Hand off
 
-Ask what to do with accepted tickets: create todos, publish to a tracker, both, or stop (files remain the record). Read `references/publishing.md` before creating anything. Publish only with the user's explicit target and approval; record every returned ID/URL in the ticket file and `index.md`.
+Ask what to do with accepted tickets: create todos, publish to a tracker, both, or stop (files remain the record). Read `references/publishing.md` before creating anything. Publish only with the user's explicit target and approval; record every returned ID/URL in the ticket file and `index.md`. Ticket header metadata (`Status`, `Blocked by`, `Source`, `Published`) stays local and is never copied or mapped to Linear/Jira. Convert every body link to another ticket file into a hyperlink to that ticket's third-party issue.
 
 ## 6. Report
 
