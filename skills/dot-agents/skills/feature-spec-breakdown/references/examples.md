@@ -43,7 +43,11 @@ Correct: 01 "Filter by one collection" covers param, scope, UI, and tests for on
 
 Bad ticket: three paragraphs restating the spec, acceptance criterion "filter works well".
 
-Correct: two-line Context, short Description, criteria like "Selecting collection A shows only A's products" and "Clearing the filter restores the full list".
+Correct: two-line Context, short prose Description, criteria like "Selecting collection A shows only A's products" and "Clearing the filter restores the full list". Use Description bullets only when genuinely separate constraints are easier to scan; do not format each sentence as its own bullet.
+
+Bad ticket: prescribe a new `CollectionFilterService`, endpoint parameters, database indexes, and an ordered file-by-file coding sequence when the approved plan does not require them.
+
+Correct: describe the observable filtering behavior and constraints. Include a schema, API, or code pointer only when an approved plan/ADR mandates it or compatibility, security, migration, or material ambiguity makes it necessary; include only that detail and cite the source.
 
 ## Customer data in a screenshot
 

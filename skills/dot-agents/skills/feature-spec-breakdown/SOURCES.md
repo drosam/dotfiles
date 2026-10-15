@@ -23,7 +23,9 @@ Class: workflow-process. Shape: inline workflow + routed references (template, s
 | Agree list + order before writing full tickets; review full tickets one per turn | adopted | User |
 | Plan gate and spec/plan coverage table | adopted | User; other-agent assessment |
 | Context / Description / Steps to reproduce / Acceptance criteria only | adopted | User; upstream template brevity |
-| Code pointers as path + symbol with commit SHA, no line numbers | adopted | Upstream "paths go stale" vs. user need for pointers |
+| Omit implementation details by default; retain only necessary, source-backed constraints | adopted | User follow-up requirement; preserves outcome-focused tickets without dropping mandatory plan/ADR, compatibility, security, or migration constraints |
+| Description defaults to prose; lists are used only when distinct items become clearer | adopted | User follow-up requirement; avoids checklist-like prose without banning useful lists |
+| Necessary code pointers use path + symbol with commit SHA, no line numbers | adopted | Upstream "paths go stale" vs. user need for pointers |
 | Stable ticket IDs; merges/splits never renumber | adopted | Resume and publication-record safety |
 | Default tracker, triage label, auto-publish | rejected | User wants tracker-agnostic, explicit instructions |
 | Separate todo skill alongside | rejected | Would duplicate slicing rules |

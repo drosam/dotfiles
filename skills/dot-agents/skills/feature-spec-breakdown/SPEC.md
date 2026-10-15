@@ -6,7 +6,7 @@
 - Identity: explicit path, session confirmation, or validated reciprocal link; otherwise ask even with one candidate. Never infer from names/branch/recency.
 - Plan gate: missing plan → ask (create-plan / spec-only / stop); draft plan or conflicting spec/plan → ask. Never write a plan.
 - Gates: list + order agreed before ticket files; full ticket accepted individually; publication only for accepted tickets after explicit target and approval.
-- Boundaries: no parent spec/plan edits, no implementation, no staging `.agent-work/`, no secrets/customer data, no tracker-specific default.
+- Boundaries: no parent spec/plan edits, no implementation, no staging `.agent-work/`, no secrets/customer data, no tracker-specific default. Tickets omit implementation details unless an approved source or material compatibility, security, migration, or ambiguity concern makes the minimum detail necessary.
 - Recovery: resume from `index.md` without overwriting reviewed tickets; partial publish records created IDs and reconciles before retry.
-- Acceptance: acyclic real blockers; coverage maps every spec story/criterion and plan section or explains deferral; tickets terse but complete; IDs never renumbered.
+- Acceptance: acyclic real blockers; coverage maps every spec story/criterion and plan section or explains deferral; tickets are outcome-focused, terse, and complete; descriptions default to prose and use lists only when they improve clarity; any implementation detail is necessary and source-backed; IDs never renumbered.
 - Limits: todo persistence depends on runtime; tracker field mapping depends on the user-named tool; runtime behavior verified by desk checks only.

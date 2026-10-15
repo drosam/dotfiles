@@ -46,7 +46,7 @@ Why this ticket exists and what it builds on. Links: [Figma <frame>](<url with n
 
 ## Description
 
-What to build as end-to-end behavior, in glossary terms. Include scope limits ("not X; see NN") and, when useful, code starting points as `path` — `symbol` (read at <commit SHA>).
+In short prose, describe what to build as end-to-end behavior using glossary terms and include scope limits ("not X; see NN"). Use a list only when distinct requirements or constraints are clearer when scanned separately. Leave out implementation details by default. Include only the minimum needed when an approved plan/ADR mandates it, compatibility/security/data migration depends on it, or behavior would otherwise be materially ambiguous; state why and cite the source. If a code pointer is necessary, use `path` — `symbol` (read at <commit SHA>).
 
 ## Steps to reproduce
 
