@@ -1,24 +1,37 @@
 ---
 name: debug
-description: Read-only local debugging workflow for failing tests, local errors, Rails runner investigations, logs, stack traces, and confusing app behavior. Use when asked to debug, investigate, find, explain, reproduce, or verify a local development issue. Allows local read-only commands, including Rails runner, but forbids edits and persistent mutation until the user explicitly says to start implementing.
+description: Read-only local debugging workflow for failing tests, local errors, Rails runner investigations, logs, stack traces, and confusing app behavior. Use when asked to debug, investigate, find, explain, reproduce, or verify a local development issue. Runs only read-only commands by default. A local mutating Rails command may run only when the user explicitly asks to run that specific mutation; permission is one-shot and immediately returns to read-only.
 ---
 
 # Debug
 
 Use this skill for local development debugging where the agent may run commands, inspect runtime behavior, and gather evidence, but must not modify code or persistent state before implementation is authorized.
 
-Default stance: run local read-only investigation commands yourself when useful. Do not edit files, change configuration, migrate databases, seed data, enqueue jobs, or mutate persistent local state until the user explicitly says to start implementing.
+Default stance: run local read-only investigation commands yourself when useful. Do not edit files, change configuration, migrate databases, seed data, enqueue jobs, or mutate persistent local state until the user explicitly says to start implementing. Implementation approval does not authorize a state-mutating command.
 
 ## Hard Safety Rules
 
 - Read-only task until user explicitly says code changes or implementation are allowed.
+- Run or generate only read-only commands by default.
 - Do not edit code, config, migrations, seeds, scripts, docs, tests, lockfiles, or generated files.
 - Do not run formatters, autofixers, code generators, migrations, seeds, backfills, destructive rake tasks, or cleanup tasks.
-- Do not run commands that create/edit/delete persistent DB data, enqueue jobs, send emails/webhooks, mutate cache, call external write APIs, or trigger side effects.
-- Do not use Rails/ActiveRecord mutators: `save`, `save!`, `update`, `update!`, `create`, `create!`, `destroy`, `destroy!`, `delete`, `delete_all`, `update_all`, `insert`, `upsert`, `touch`, `increment!`, `decrement!`, `deliver_now`, `deliver_later`, `perform_later`, or similar.
+- Do not run commands that create/edit/delete persistent DB data, enqueue jobs, send emails/webhooks, mutate cache, call external write APIs, or trigger side effects, except for the one-shot local Rails exception below.
+- Do not use Rails/ActiveRecord mutators such as `save`, `update`, `create`, `destroy`, `delete`, `insert`, `upsert`, `touch`, `increment!`, `deliver_now`, or `perform_later`, except for the one-shot local Rails exception below.
 - Treat indirect writes as writes. Avoid callbacks, tracking, audit logs, counters, timestamps, network writes, and job enqueues.
 - Do not start long-running servers, workers, watchers, or interactive consoles unless the user explicitly asks.
 - If unsure whether a command mutates state, do not run it. Ask or choose a safer command.
+
+### One-shot local Rails mutation exception
+
+Apply this exception only when the user explicitly asks the assistant to run a specific Rails command that changes local state.
+
+- Do not infer authorization from “fix it,” implementation approval, prior mutation approval, or a request to investigate.
+- Require a concrete target and intended change. If scope or side effects are unclear, ask before running anything.
+- State the exact mutation and environment before execution. Run only that requested Rails command, once.
+- Do not broaden it into migrations, rake tasks, shell commands, retries, cleanup, follow-up mutations, or additional records.
+- After that single execution attempt, immediately restore the read-only command boundary. Verification must be read-only.
+- Require a new explicit user request for every additional mutating command.
+- Never apply this exception to production or staging.
 
 ## Allowed Local Actions
 
@@ -65,9 +78,13 @@ Read relevant work artifacts under the target repo's `.agent-work/`: `work/<work
    - Change one observation at a time. Separate confirmed cause from untested hypothesis.
 6. Use Rails runner when app state inspection helps:
    - Run it yourself only against local development/test environment.
-   - Keep snippet query-only and bounded.
+   - Keep snippet query-only and bounded unless the current user message explicitly authorizes one specific local Rails mutation under the one-shot exception.
    - Prefer primitive output via `pluck`, `pick`, `ids`, `count`, `exists?`, `where`, `select`, `limit`, `order`, `find_by`, and `readonly`.
-7. Final output:
+7. If the user explicitly requests a local Rails mutation:
+   - Apply only the one-shot exception above.
+   - Report whether that one execution succeeded, failed, or was not attempted.
+   - Return to read-only checks immediately.
+8. Final output:
    - `bug:` concise likely root cause.
    - `evidence:` bullets with commands/files.
    - `verify:` read-only checks already run or still useful.
@@ -78,14 +95,14 @@ Read relevant work artifacts under the target repo's `.agent-work/`: `work/<work
 
 When needing local Rails data, generate and run snippets that:
 
-- Only read data.
+- Only read data, unless the current user message explicitly requests one specific local mutation under the one-shot exception.
 - Avoid callbacks and app methods with possible side effects.
 - Prefer direct ActiveRecord query methods and primitive columns.
 - Avoid loading huge records. Bound by IDs/time ranges and result limits; a small result does not guarantee a cheap query (especially `count` or sorting).
 - Treat `readonly` and reading roles as defense in depth, not a sandbox for arbitrary app methods.
 - Avoid `inspect` on large objects or objects with expensive methods. Prefer hashes of primitive values.
 - Avoid external service clients.
-- Avoid writes even inside transactions. Rollback is not enough if code has non-DB side effects.
+- For read-only snippets, avoid writes even inside transactions. Rollback is not enough if code has non-DB side effects.
 
 Example:
 
@@ -109,4 +126,4 @@ nil'
 
 ## Prohibited Output
 
-Do not present a mutation command as a quick fix during investigation. If a data repair, migration, code change, or test update may be needed, describe it conceptually and ask before implementing.
+Do not present or run a mutation command as a quick fix during investigation. If a data repair, migration, code change, or test update may be needed, describe it conceptually. Only run a local mutating Rails command after the user explicitly requests that specific execution; that permission expires after one attempt.
