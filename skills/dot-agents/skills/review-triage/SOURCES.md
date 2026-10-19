@@ -2,21 +2,21 @@
 
 ## Concise GitHub replies after triage
 
-User-requested iteration from the named local session “PCO-5103 triage full review”: after triage, the user may ask the agent to publish outcomes back to GitHub. The prior workflow correctly targeted inline comment threads, used a top-level PR comment for overall-review bullets, captured returned URLs, and logged publication. Its fixed-item replies were too verbose: phrases such as “applied your suggestion” and implementation summaries repeated what the commit already showed.
+User-requested iteration from the named local session "PCO-5103 triage full review": after triage, the user may ask the agent to publish outcomes back to GitHub. The prior workflow correctly targeted inline comment threads, used a top-level PR comment for overall-review bullets, captured returned URLs, and logged publication. Its fixed-item replies were too verbose: phrases such as "applied your suggestion" and implementation summaries repeated what the commit already showed.
 
 Behavior delta: triage decisions still imply no remote action. A separate explicit request to reply/comment authorizes publication only for the identified review scope, without another wording confirmation unless target/scope/text is materially ambiguous or preview is requested. Inline feedback stays in-thread; overall-review-only feedback uses a top-level comment with minimal identifying quotation. Fixed-item text defaults to `Fixed in <linked-short-sha>.`; context is added only when necessary. Skipped/deferred/already-resolved/question items get one brief direct rationale or answer. Never implicitly push, resolve, dismiss, approve, or merge. Verify targets and commit availability, capture returned URLs, and append outcomes to triage.
 
 Shape remains inline conditional guidance; no new reference, script, dependency, or registration is needed. Existing persistence and GitHub source metadata already provide comment IDs, URLs, decisions, and commit hashes.
 
 Static desk checks (expectations, not runtime agent runs):
-- Explicit “reply on GitHub” after a fixed item posts `Fixed in <linked-short-sha>.` to the existing thread — improved concision.
-- A fixed item needing no clarification omits “followed/applied your suggestion” and implementation detail — improved signal.
-- A skipped item posts one short evidence-backed reason — improved concision, unchanged truthfulness.
-- Overall-review-only bullets use a top-level PR comment with enough quotation to identify each response — unchanged targeting.
-- A local-only commit blocks the reply pending separate push authorization; reply authority never becomes push authority — unchanged safety.
-- “Fix this item” without a reply request posts nothing remotely — unchanged permission boundary.
+- Explicit "reply on GitHub" after a fixed item posts `Fixed in <linked-short-sha>.` to the existing thread - improved concision.
+- A fixed item needing no clarification omits "followed/applied your suggestion" and implementation detail - improved signal.
+- A skipped item posts one short evidence-backed reason - improved concision, unchanged truthfulness.
+- Overall-review-only bullets use a top-level PR comment with enough quotation to identify each response - unchanged targeting.
+- A local-only commit blocks the reply pending separate push authorization; reply authority never becomes push authority - unchanged safety.
+- "Fix this item" without a reply request posts nothing remotely - unchanged permission boundary.
 
-Description now includes “reply on GitHub after triage” to cover the new explicit trigger while retaining the existing-feedback and no-fresh-review boundaries. Should trigger: “reply on GitHub to these triaged comments”, “post the review outcomes”, “tell the reviewer which commits fixed these”. Should not trigger: “reply to this unrelated issue”, “review this new PR”, “push my commits”, “resolve all review threads”. Runtime adherence remains unmeasured.
+Description now includes "reply on GitHub after triage" to cover the new explicit trigger while retaining the existing-feedback and no-fresh-review boundaries. Should trigger: "reply on GitHub to these triaged comments", "post the review outcomes", "tell the reviewer which commits fixed these". Should not trigger: "reply to this unrelated issue", "review this new PR", "push my commits", "resolve all review threads". Runtime adherence remains unmeasured.
 
 ## Prior-session finding history
 
@@ -26,7 +26,7 @@ Behavior delta: before current-code investigation, verify `review.md` Work-ID ag
 
 Static desk checks (expectations, not runtime agent runs): repeated root cause with renamed title is found through path/symbol/behavior and cited; prior fixed item checks its commit and current code before calling feedback stale; prior deferred item checks the revisit condition; same title with a different cause is not treated as a match; unavailable or ambiguous history remains an explicit gap; later queue items remain uninvestigated. Expected: improved continuity and fewer repeated discussions, with unchanged per-item approval and evidence gates.
 
-Description remains unchanged because this alters triage depth, not routing. Existing should-trigger queries such as “resume review triage” remain accurate; fresh-review and implementation requests remain excluded.
+Description remains unchanged because this alters triage depth, not routing. Existing should-trigger queries such as "resume review triage" remain accurate; fresh-review and implementation requests remain excluded.
 
 Validation: `git diff --check -- skills/dot-agents/skills/review-triage` passed. Strict-depth validator attempted with the workflow-process class and blocked by the existing environment gap: `ModuleNotFoundError: No module named 'yaml'`; no dependency installed. Runtime behavior remains unmeasured.
 
@@ -37,13 +37,13 @@ User-approved iteration from a human-supplied triage/review pair in this convers
 Replace the queue format with an explicit `source: review.md:Lstart-Lend` field. Use verified, inclusive, 1-based document lines covering heading/metadata and complete comment; keep code locations separate. Existing logs receive append-only locator additions/corrections when resumed, not rewritten queues. Shape remains inline sequential guidance; no scripts, references, dependencies or registration changes needed. Scope: workflow-process skill maintenance only; the supplied application artifacts remain untouched.
 
 Qualitative desk checks (static expectations, not agent runs):
-- Working example: full first comment section maps to `review.md:24-51`; exact text recoverable without copying it into triage — improved.
-- Duplicate findings: each reviewer retains an independent document range despite shared code locations — improved lookup, unchanged decision gates.
-- Synthetic holdout: a local finding with fenced code includes the complete fence within its source range — improved lookup.
-- Synthetic holdout: a legacy missing/wrong locator produces a verified append-only addition/correction; an ambiguous mapping asks — unchanged history safety, improved recovery.
-- Fresh code-review requests still do not trigger triage; no investigation, approval or commit gates changed — unchanged.
+- Working example: full first comment section maps to `review.md:24-51`; exact text recoverable without copying it into triage - improved.
+- Duplicate findings: each reviewer retains an independent document range despite shared code locations - improved lookup, unchanged decision gates.
+- Synthetic holdout: a local finding with fenced code includes the complete fence within its source range - improved lookup.
+- Synthetic holdout: a legacy missing/wrong locator produces a verified append-only addition/correction; an ambiguous mapping asks - unchanged history safety, improved recovery.
+- Fresh code-review requests still do not trigger triage; no investigation, approval or commit gates changed - unchanged.
 
-Description retained verbatim: this changes output precision, not routing. Should trigger: “triage these comments”, “resume review triage”, “which findings should we fix?”. Should not trigger: “review a new diff”, “implement this feature”, “explain Markdown line numbers”. No runtime adherence or measured token-saving claim.
+Description retained verbatim: this changes output precision, not routing. Should trigger: "triage these comments", "resume review triage", "which findings should we fix?". Should not trigger: "review a new diff", "implement this feature", "explain Markdown line numbers". No runtime adherence or measured token-saving claim.
 
 Validation: `git diff --check -- skills/dot-agents/skills/review-triage` passed; changed runtime guidance and contract re-read. The existing shared live symlink points to the canonical skill directory. Command `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/review-triage --skill-class workflow-process --strict-depth` exited 1: `ModuleNotFoundError: No module named 'yaml'`. No dependency installed; strict validation and runtime behavior remain unverified.
 
@@ -118,16 +118,16 @@ Selected profile: skill-writer `references/examples/workflow-process-skill.md`. 
 | Dimension | Status | Evidence |
 | --- | --- | --- |
 | Preconditions and context | complete | Existing feedback/target required; current revision and stale locations checked |
-| Ordered flow | complete | Queue → verify → assess → present/wait → authorized decision/action → next |
+| Ordered flow | complete | Queue -> verify -> assess -> present/wait -> authorized decision/action -> next |
 | Safety and permission boundaries | complete | Per-item authorization; explicit batch scope; no production/install/publication authority |
 | Output and acceptance | complete | Stable item fields, four choices, conversation plus append-only durable decision ledger, and final summary |
 | Failure/recovery | complete | Missing source/tool, denied checks, validation failure, new broader fix scope and incompatible order |
 | Handoff/escalation | complete | Specific missing evidence/decision requested; no implied remote issue or merge readiness |
 | Examples | complete | Inline happy-path low-value skip; serious-risk guard; false-positive correction; inaccessible-evidence recovery |
 
-Should trigger: “go through these review points one by one”, “which comments are worth fixing?”, “is this finding just a rare edge case?”, “triage the bot's feedback”, “address these review comments”, “walk through your previous findings”.
+Should trigger: "go through these review points one by one", "which comments are worth fixing?", "is this finding just a rare edge case?", "triage the bot's feedback", "address these review comments", "walk through your previous findings".
 
-Should not trigger: “review this new PR”, “find security bugs in this diff”, “debug this production incident”, “implement a feature”, “summarize review best practices”.
+Should not trigger: "review this new PR", "find security bugs in this diff", "debug this production incident", "implement a feature", "summarize review best practices".
 
 Description explicitly says existing feedback, one point at a time and decision value; excludes discovering fresh findings. Shared/provider-neutral wording replaces the initial Pi-only placement proposal.
 
@@ -154,7 +154,7 @@ Description explicitly says existing feedback, one point at a time and decision 
 - `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/review-triage --skill-class workflow-process --strict-depth`: blocked, exit 1, `ModuleNotFoundError: No module named 'yaml'`. No dependency installed.
 - Re-read runtime skill and Pi router; desk cases above inspected only. Interactive discovery/behavior not executed.
 - User follow-up strengthened confirmation into an explicit claim-by-claim evidence rule, including impact and validation results; recommendations/estimates remain labeled judgments. Re-ran structural checks and git diff whitespace validation successfully.
-- Human-verified fix example: an approved triage repair was at risk of remaining only in the working tree while the queue advanced. The workflow now treats Fix approval as authority for one focused local commit, requires the `commit` skill after validation, blocks advancement on commit failure/ambiguity, and preserves one commit per fixed item even under batch authorization. Static replay expects unchanged skip/defer/discuss behavior and a new implementation → validation → commit → next-item sequence.
+- Human-verified fix example: an approved triage repair was at risk of remaining only in the working tree while the queue advanced. The workflow now treats Fix approval as authority for one focused local commit, requires the `commit` skill after validation, blocks advancement on commit failure/ambiguity, and preserves one commit per fixed item even under batch authorization. Static replay expects unchanged skip/defer/discuss behavior and a new implementation -> validation -> commit -> next-item sequence.
 
 ## Open gaps
 

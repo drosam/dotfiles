@@ -6,7 +6,7 @@ User-approved improvement from [human review 5441194187](https://github.com/booq
 
 Intake: negative/maintenance examples for distributed repair callbacks, synchronized state, duplicated selection policy, optional internal contracts and mode-dependent lifecycles; edge-case questions for cleanup/deletion and responsive capability loss; localization and locator feedback. Transform into generic synthetic calibration cases, not copied application code or an assertion that all human comments are confirmed defects.
 
-Behavior delta: replace broad structural bullets with owner/derived-state/writer tracing, recurring-fix analysis, semantic-predicate and caller-contract comparisons, and lifecycle separation with continuity checks. Require source-backed ownership coverage even with no findings. Extend existing UI/test checks for mounting × viewport visibility, configurable terminology, semantic locators and cleanup triggers/test timing. Route the existing examples reference for these change shapes. No new worker, script, dependency or reference file; retain the four-pass workflow and all previous review dimensions, safety, severity and evidence requirements.
+Behavior delta: replace broad structural bullets with owner/derived-state/writer tracing, recurring-fix analysis, semantic-predicate and caller-contract comparisons, and lifecycle separation with continuity checks. Require source-backed ownership coverage even with no findings. Extend existing UI/test checks for mounting x viewport visibility, configurable terminology, semantic locators and cleanup triggers/test timing. Route the existing examples reference for these change shapes. No new worker, script, dependency or reference file; retain the four-pass workflow and all previous review dimensions, safety, severity and evidence requirements.
 
 Preservation constraint: retain layers/coupling, naming, type/nullability and cast/optionality checks, dependency direction/navigability, wrapper/special-case and shared-layer leakage scrutiny, simplification, producer/schema invariants, trust-boundary validation, atomicity/sequencing, migration/test boundaries and the nonmechanical file-size signal. Retain failure propagation, observability, cleanup/recovery and justified fallback/cancellation checks. Existing calibration cases remain unchanged; new cases supplement them. This strengthens execution and coverage evidence, not scope or permissions.
 
@@ -14,18 +14,18 @@ Preservation constraint: retain layers/coupling, naming, type/nullability and ca
 
 Desk comparison only; no observed agent run or measured recall improvement. Working examples derive from the supplied feedback; transfer probes are synthetic and were not used as source evidence.
 
-| Prompt/case | Before → after guidance expectation | Desk outcome |
+| Prompt/case | Before -> after guidance expectation | Desk outcome |
 | --- | --- | --- |
-| All previously missed refresh callbacks now repaired | Generic ownership scrutiny → investigate distributed obligations without resurrecting fixed bugs | Improved specificity |
-| Repeated mode flag governs fetch/reset/render | Generic simplification → compare lifecycles and retain pending/focus/error continuity | Improved specificity |
-| Copied selector / optional internal callback | Generic duplication/types → compare semantic predicates and actual caller guarantees | Improved specificity |
-| Deferred save added for one unmount reason | Generic concurrency/cleanup → enumerate deletion/navigation/identity triggers and timing shortcuts | Improved specificity |
-| Replacement UI hidden at a breakpoint | Generic UI checks → cross ancestor mounting with reachable capabilities; unknown intent stays a question | Improved specificity |
+| All previously missed refresh callbacks now repaired | Generic ownership scrutiny -> investigate distributed obligations without resurrecting fixed bugs | Improved specificity |
+| Repeated mode flag governs fetch/reset/render | Generic simplification -> compare lifecycles and retain pending/focus/error continuity | Improved specificity |
+| Copied selector / optional internal callback | Generic duplication/types -> compare semantic predicates and actual caller guarantees | Improved specificity |
+| Deferred save added for one unmount reason | Generic concurrency/cleanup -> enumerate deletion/navigation/identity triggers and timing shortcuts | Improved specificity |
+| Replacement UI hidden at a breakpoint | Generic UI checks -> cross ancestor mounting with reachable capabilities; unknown intent stays a question | Improved specificity |
 | Legitimate draft, optional shared callback, existing canonical invalidation | Preserve counterevidence and safe boundaries; suppress unjustified centralization/guard removal | Unchanged safeguards, more explicit examples |
 | Transfer probe: background job duplicates a cache-repair obligation | Same owner/writer procedure applies without React or UI assumptions | Improved specificity |
 | Transfer probe: repeated permission guards at distinct trust boundaries | Preserve required validation; repetition alone does not establish removable duplication | Unchanged safeguard |
 
-Description retained verbatim: this changes review execution, not invocation. Should trigger: “review this PR”, “audit this diff for maintainability”, “thermos review”, “verify this completed fix”. Should not trigger: “implement this panel”, “deploy this branch”, “explain this hook”, or initial incident diagnosis without a review request. Manual trigger inspection found no reason to broaden or narrow the existing description; no classifier benchmark run.
+Description retained verbatim: this changes review execution, not invocation. Should trigger: "review this PR", "audit this diff for maintainability", "thermos review", "verify this completed fix". Should not trigger: "implement this panel", "deploy this branch", "explain this hook", or initial incident diagnosis without a review request. Manual trigger inspection found no reason to broaden or narrow the existing description; no classifier benchmark run.
 
 Validation:
 - `git diff --check -- skills/dot-agents/skills/code-review`: passed.
@@ -56,11 +56,11 @@ Validation (2026-09-30): targeted `git diff --check` passed. Manual structural c
 
 ## Durable review artifact decision
 
-User approved durable review history inside confirmed work: `.agent-work/work/<work-id>/reviews/<branch-key>/<review-id>/`. If no work exists, propose and confirm a stable Work-ID, then create a review-only work directory without forcing spec/plan files. Each exact branch has a sanitized series folder (`/` → `--`), branch `index.md`, immutable per-run `review.md`, and on-demand append-only sibling `triage.md`. The work's `reviews/index.md` is a branch catalog, not a mutable current-branch selector.
+User approved durable review history inside confirmed work: `.agent-work/work/<work-id>/reviews/<branch-key>/<review-id>/`. If no work exists, propose and confirm a stable Work-ID, then create a review-only work directory without forcing spec/plan files. Each exact branch has a sanitized series folder (`/` -> `--`), branch `index.md`, immutable per-run `review.md`, and on-demand append-only sibling `triage.md`. The work's `reviews/index.md` is a branch catalog, not a mutable current-branch selector.
 
 Branch identity handles one work spanning several PRs: different branches are separate series; local pre-PR review, later PR revisions and imported GitHub feedback remain in the same verified branch series. Each branch index tracks `Latest review` separately from `Active triage`, so branch switching and a newly completed review cannot silently move an in-progress triage. Exact branch names, repository/PR metadata, aliases and links remain in indexes; detached, renamed or colliding identities require confirmation.
 
-Behavior delta: replace the prior rejected blanket “force report-file writes” rule with one narrow, user-authorized local artifact write after synthesis. Preserve the no-application-edit contract, rely on the user-approved managed global exclude for `.agent-work/`, never stage/commit it, stop on already-staged artifacts, redact sensitive content, verify saved content and links, and disclose partial persistence without changing the technical verdict. Shape remains inline workflow guidance; no script, dependency, JSON state, symlink, global Active review, or separate reference is justified.
+Behavior delta: replace the prior rejected blanket "force report-file writes" rule with one narrow, user-authorized local artifact write after synthesis. Preserve the no-application-edit contract, rely on the user-approved managed global exclude for `.agent-work/`, never stage/commit it, stop on already-staged artifacts, redact sensitive content, verify saved content and links, and disclose partial persistence without changing the technical verdict. Shape remains inline workflow guidance; no script, dependency, JSON state, symlink, global Active review, or separate reference is justified.
 
 Static desk checks: two reviews in one second receive a collision suffix; a new completed review updates only its branch's Latest review while older history and Active triage remain; switching checked-out branches resolves another branch index; a rerun never edits prior `review.md`; pre-PR and PR review share verified branch identity; another PR branch remains separate; GitHub feedback records a verbatim paginated snapshot of the exact overall review URL/body when present and every comment URL, identity, context and unchanged text, plus retrieval time and target SHA under the PR head branch; a saved-but-unindexed review is reported but not treated as latest; malformed indexes, detached heads and branch-key collisions cause clarification; strict no-write and staged-artifact cases disclose blocked persistence. These are guidance inspections, not executed runtime review sessions.
 
@@ -76,9 +76,9 @@ User approved absorbing `for-real` into `code-review`, including explicit checks
 
 Replace overlapping verification guidance rather than add a workflow: retain target/diff scrutiny, independent expectations, actual checks, exact evidence and blocked prerequisites. Extend existing requirements/docs and validation sections with source-to-behavior/check mappings, missing/surplus scope, API/config existence checks and browser verification boundaries. Keep the four-pass shape and readiness output. No new dependencies or wrappers.
 
-Deliberately reject former implicit repair authority: prior implementation approval alone does not authorize fixing findings in this review. Explicit per-finding or explicit batch authorization remains required, followed by verification on the changed revision. Narrow verification requests retain scope limits, not whole-change readiness. “For real” and “verify completed fix” should trigger; initial diagnosis and test-first implementation should not.
+Deliberately reject former implicit repair authority: prior implementation approval alone does not authorize fixing findings in this review. Explicit per-finding or explicit batch authorization remains required, followed by verification on the changed revision. Narrow verification requests retain scope limits, not whole-change readiness. "For real" and "verify completed fix" should trigger; initial diagnosis and test-first implementation should not.
 
-Static calibration case added to `references/review-examples.md`: independently sourced expiry requirement contradicts code and passing tests; missing intent stays unverified; missing required browser checks prevent READY. Sources are user decisions, referenced specs and applicable established contracts—not inferred implementation intent. This is desk evaluation, not an executed product review or measured model benchmark.
+Static calibration case added to `references/review-examples.md`: independently sourced expiry requirement contradicts code and passing tests; missing intent stays unverified; missing required browser checks prevent READY. Sources are user decisions, referenced specs and applicable established contracts - not inferred implementation intent. This is desk evaluation, not an executed product review or measured model benchmark.
 
 Retire the canonical `for-real` skill and its verified shared/Claude links. Validation results for this merge are recorded separately below; Thermos and earlier validation entries are historical, not proof of this change. Stop source collection here: the local contracts and explicit user decision suffice; external ancestry remains unknown.
 
@@ -98,9 +98,9 @@ Absorb explicit developer-setup/feature-gate checks and stronger ownership, inva
 
 Inspected local sources: former `thermos/{SKILL.md,SOURCES.md}`, both Pi `thermo-nuclear-*/{SKILL.md,SOURCES.md}`, and both specialized agent definitions. Trust: canonical local; confidence high for instruction content, not empirical effectiveness. Remove the three redundant skill entry points and their verified live links; retain upstream consultation links below. No new dependencies or skill references required.
 
-Desk cases: ordinary review dispatches four tasks, not six; “thermos” selects the same workflow; specialist unavailable gets general/sequential fallback; worker cannot load skill uses supplied rubric or reports incomplete; security-only excludes other dimensions; a 1001-line file or `unknown` at a trust boundary alone is not a defect; no findings still requires coverage and verdict. These are static contract checks, not observed review runs.
+Desk cases: ordinary review dispatches four tasks, not six; "thermos" selects the same workflow; specialist unavailable gets general/sequential fallback; worker cannot load skill uses supplied rubric or reports incomplete; security-only excludes other dimensions; a 1001-line file or `unknown` at a trust boundary alone is not a defect; no findings still requires coverage and verdict. These are static contract checks, not observed review runs.
 
-### Local specialist agent names — upstream mapping
+### Local specialist agent names - upstream mapping
 
 User approved responsibility-based names after consolidation. Files live under `pi/dot-pi/agent/agents/` from the repository root; their filename stems and frontmatter names match the current names below. The dispatch table in `SKILL.md` uses these names. Only names, titles and routing descriptions changed; review rubrics and safeguards remain unchanged. No legacy runtime aliases are retained.
 
@@ -111,7 +111,7 @@ User approved responsibility-based names after consolidation. Files live under `
 
 For future source updates, use the original worker URLs and removal history below to locate upstream content, then apply relevant changes to the mapped local files. Preserve current local names, dispatch references, full assigned-pass coverage and approval/evidence safeguards; do not overwrite local adaptations or restore old registrations automatically. This rename did not fetch or verify upstream content anew.
 
-### Original Thermos resources — retain for future updates
+### Original Thermos resources - retain for future updates
 
 Consult these upstream resources when updating the absorbed Thermos behavior. These exact historical URLs were recorded by the former `thermos/SOURCES.md`; they are provenance, not runtime dependencies. They are mutable and may now be missing. Do not claim a fresh fetch or immutable original-content pin from this consolidation.
 
@@ -203,7 +203,7 @@ Statuses below describe documentation coverage by desk inspection, not executed 
 
 | Dimension | Status | Evidence / remaining limit |
 | --- | --- | --- |
-| Preconditions / ordered process | complete | Pin → inventory → docs → recent/deployed context → four passes → verify → verdict |
+| Preconditions / ordered process | complete | Pin -> inventory -> docs -> recent/deployed context -> four passes -> verify -> verdict |
 | Safety and failure recovery | complete | Read-only, permitted test environment, denied worker fallback, stale CI/changed worktree handling |
 | Outputs / acceptance | complete | Per-finding blocking status; coverage/source/validation ledger; BLOCKED/INCOMPLETE/READY |
 | Vulnerability classes and prerequisites | complete for general-review rubric | Auth, input/sink, privacy, supply chain and resource/business risk; actual target determines applicable classes |
@@ -219,9 +219,9 @@ Selected profiles: skill-writer `references/examples/security-review-skill.md` a
 
 ## Trigger and behavior desk checks
 
-Should trigger: “review this PR”, “review my diff exhaustively”, “find edge cases”, “check these changes against repo rules and docs”, “compare this approach with recently deployed code”, “security review this patch”, “give pasteable review comments”.
+Should trigger: "review this PR", "review my diff exhaustively", "find edge cases", "check these changes against repo rules and docs", "compare this approach with recently deployed code", "security review this patch", "give pasteable review comments".
 
-Should not trigger: “implement this feature”, “deploy this branch”, “explain this API”, “find a skill to install”, “write a PR description”, or production debugging without a review target.
+Should not trigger: "implement this feature", "deploy this branch", "explain this API", "find a skill to install", "write a PR description", or production debugging without a review target.
 
 Description change: make exhaustive/default coverage, relevant docs, recent deployed patterns and absence of later human review discoverable; retain PR/diff/review/edge-case language without provider assumptions.
 
@@ -229,7 +229,7 @@ Static expected before/after behavior (not measured model runs):
 
 | Case | New required result / delta |
 | --- | --- |
-| Plain “review this diff” | All passes + docs/history + coverage/verdict, rather than lightweight findings only |
+| Plain "review this diff" | All passes + docs/history + coverage/verdict, rather than lightweight findings only |
 | Bug only at expiration boundary | Investigate exact inputs; do not discard as merely input-dependent |
 | Authentication exists but object ownership removed | Trace middleware/policy and return confirmed finding if exposed |
 | Mandatory equivalent guard exists elsewhere | Suppress pattern-only accusation after inspecting guard/callers |
@@ -241,7 +241,7 @@ Static expected before/after behavior (not measured model runs):
 | New code follows docs but docs describe wrong framework version | Resolve locked-version facts; unknown if inaccessible |
 | Config renamed but runbook unchanged | Verify and report the concrete broken documented workflow |
 | Valid intentional departure from recent patterns | Explain justification; no taste-only finding |
-| No findings, complete appropriate checks | Scoped READY with coverage, not bare “No findings” |
+| No findings, complete appropriate checks | Scoped READY with coverage, not bare "No findings" |
 | Security-only or truncated review | No whole-change READY; identify exclusions and remaining work |
 | Explicit audit of unchanged files | Review pinned content and existing defects within that scope; do not demand a diff |
 | Focused tests pass but mandatory integration gate absent | Inventory applicable gates; missing mandatory evidence prevents READY |

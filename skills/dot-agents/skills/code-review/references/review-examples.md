@@ -36,7 +36,7 @@ invoice = Invoice.find(params[:id])
 
 Evidence required: the reachable route accepts an invoice ID; the caller authenticates but does not authorize that invoice; `Invoice` has no equivalent mandatory tenant scope; the response exposes invoice data. A recent same-endpoint protection or incident fix strengthens the history explanation, not severity by itself.
 
-Finding: P1 blocking — an authenticated user supplying another tenant's valid invoice ID can read that invoice. Cite changed lookup and the verified controller/policy/model path. State static confirmation unless reproduced in an isolated test.
+Finding: P1 blocking - an authenticated user supplying another tenant's valid invoice ID can read that invoice. Cite changed lookup and the verified controller/policy/model path. State static confirmation unless reproduced in an isolated test.
 
 Remediation: restore the verified tenant scope and applicable object-level policy. Regression check: authorized invoice succeeds; another tenant's invoice and insufficient-role access fail without exposing content. Do not run the exploit against production.
 
@@ -52,7 +52,7 @@ Input: the target branch recently introduced a new event format; this PR removes
 
 Check: trace event producers, deployment records per service, retained/queued old payloads, migration docs, and rollback consumers. A merged producer PR does not prove every producer is live or old messages are drained.
 
-- Confirmed live old producer or queued old payload plus traced decoding failure: report the compatibility regression and recommend an expand–contract transition with old/new payload tests.
+- Confirmed live old producer or queued old payload plus traced decoding failure: report the compatibility regression and recommend an expand-contract transition with old/new payload tests.
 - Only merge evidence available and live compatibility is required: report recent merged precedent, deployment unverified, exact missing revision/queue-contract evidence, INCOMPLETE.
 - Confirmed old producer retired, old data migrated, rollback contract compatible: do not invent a regression merely because the old decoder was removed.
 
@@ -82,7 +82,7 @@ If a verified wrapper already persists and reuses the key, suppress the duplicat
 
 ## 8. Completed-fix verification: requirement provenance
 
-Input: the user agreed that an expired invitation must be rejected without creating membership. The referenced PRD's “Invitation expiry” section confirms this; the changed implementation and its new test both accept expired invitations.
+Input: the user agreed that an expired invitation must be rejected without creating membership. The referenced PRD's "Invitation expiry" section confirms this; the changed implementation and its new test both accept expired invitations.
 
 Map the requirement to that conversation decision and PRD section, then trace the expiry guard and membership creation. A passing new test is not proof of intended behavior: report the traced violation, the appropriate severity/blocking rationale and a regression check using an independently chosen expired timestamp. Mark the evidence static unless the path was actually exercised. Do not fix it merely because implementation was authorized earlier; await the required finding decision.
 
@@ -90,7 +90,7 @@ If the conversation is unavailable and the PRD does not settle expiry semantics,
 
 ## 9. Anti-pattern: guessed pattern violation
 
-Bad: “All recent services use helper X, so this implementation is wrong.”
+Bad: "All recent services use helper X, so this implementation is wrong."
 
 Correct: inspect independent recent examples and their rationale. If X enforces a mandatory ownership check omitted here, cite that concrete invariant and reachable failure. If the implementations have different contracts or the departure is sound, record justified departure with no finding. Popularity, recency and deployment alone cannot prove correctness.
 
@@ -100,7 +100,7 @@ Input: a catalog panel caches availability. Six mutation paths manually invoke r
 
 Bad: report the repaired stale-data bugs as still present, or declare the architecture sound because those regressions now pass.
 
-Correct: produce an ownership trace with real source locations: persisted allocations → cached availability; list mutation writers and callback propagation; link the two inspected fixes. Establish whether callers are independent domain operations or mere adapters to an existing canonical mutation owner.
+Correct: produce an ownership trace with real source locations: persisted allocations -> cached availability; list mutation writers and callback propagation; link the two inspected fixes. Establish whether callers are independent domain operations or mere adapters to an existing canonical mutation owner.
 
 If freshness demonstrably depends on distributed caller bookkeeping, report the remaining coordination cost separately from the resolved bugs. Propose ownership at a canonical mutation boundary or a dependency-aware derived-state owner, not another forwarding wrapper. State blocking status from actual impact/rules; no invented current outage.
 
@@ -124,6 +124,6 @@ Expected finding: cite the specific coordination burden and reduced design, with
 
 Input: a quantity control now flushes a deferred write on unmount so opening a panel does not discard edits. The same control also unmounts when its record is deleted; production debounce is 300ms, while test mode bypasses it.
 
-Trace edit → pending timer → deletion/ORM removal → unmount → flush → request target. Check whether deletion finishes before cleanup, whether the request helper already suppresses missing records, and whether failures surface. A proven request against a deleted record supports a finding; unknown ordering remains a specific race hypothesis, not a claimed reproduction. Exercise deletion and navigation as well as panel opening with realistic or controlled timing. Do not globally cancel cleanup writes if valid navigation must still persist edits.
+Trace edit -> pending timer -> deletion/ORM removal -> unmount -> flush -> request target. Check whether deletion finishes before cleanup, whether the request helper already suppresses missing records, and whether failures surface. A proven request against a deleted record supports a finding; unknown ordering remains a specific race hypothesis, not a claimed reproduction. Exercise deletion and navigation as well as panel opening with realistic or controlled timing. Do not globally cancel cleanup writes if valid navigation must still persist edits.
 
 UI variant: opening the panel unmounts the original summary; a replacement column is hidden below a breakpoint. Cross mounting with responsive visibility to identify which contents/actions remain reachable. Compare the loss against acceptance criteria or established behavior; if intent is unavailable, ask the design question instead of inventing a requirement. Check nested overlays similarly: trace which layer owns Escape, without assuming multiple listeners are inherently broken.

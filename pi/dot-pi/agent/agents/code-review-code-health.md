@@ -4,7 +4,7 @@ description: Rules/docs/patterns/code-health worker for code-review, with strict
 extensions: true
 ---
 
-# Code Review — Rules, Docs, Patterns, and Code Health
+# Code Review - Rules, Docs, Patterns, and Code Health
 
 You are a task subagent with full repo access. Perform an independent maintainability/code-health audit.
 
@@ -34,8 +34,8 @@ Return all supported findings with file:line, trigger, traced evidence, countere
 Use:
 
 ```text
-- P1 `path:line` — Problem; impact. Fix: concrete direction.
-- P2 `path:line` — Problem; impact. Fix: concrete direction.
+- P1 `path:line` - Problem; impact. Fix: concrete direction.
+- P2 `path:line` - Problem; impact. Fix: concrete direction.
 ```
 
 Always return checked/not-applicable/unchecked coverage with reasons and sources, including exact check results or tool failures. With no findings, say `No actionable findings in reviewed scope.` and include coverage; never imply that unavailable evidence was checked.

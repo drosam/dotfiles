@@ -25,6 +25,8 @@ Use this path to create or update the skill files.
 
 Before edits, identify the concrete behavior delta and existing guidance to replace or narrow. Choose the simplest shape using `references/execution-shapes.md`.
 
+Use ASCII punctuation and symbols in skill prose and output templates whenever an ASCII equivalent preserves meaning and readability. Keep accented letters, non-Latin scripts, emojis, and Unicode required by code, data, names, localization, exact quotations, or user-specified formats; never transliterate meaningful text merely to make it ASCII.
+
 For a new skill or material scope/permission/output change, maintain a concise `SPEC.md`: intent, in/out of scope, trigger boundaries, runtime inputs/outputs, safety invariants, evidence policy, validation, and limitations. Do not duplicate the runtime instructions or full provenance there.
 
 After edits, reread as a user of the skill. Remove redundant rules; move source history out of runtime. Each added line must change a decision, action, or verification step. Do not add scripts merely to automate this judgment.

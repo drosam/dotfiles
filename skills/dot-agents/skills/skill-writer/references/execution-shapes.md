@@ -5,7 +5,7 @@ Choose one primary shape before choosing files.
 | Need | Shape | Required contract |
 | --- | --- | --- |
 | One policy or short sequence | Inline guidance | Preconditions, actions, output, stop/failure behavior |
-| Optional deep domain knowledge | Reference-backed expert | Explicit condition → reference routing |
+| Optional deep domain knowledge | Reference-backed expert | Explicit condition -> reference routing |
 | Repeated fragile parsing/validation | Script-backed workflow | Arguments, dependencies, structured results, failure fallback |
 | Distinct inputs need different procedures | Router | Route criteria, default, recovery from a wrong route |
 | Independent specialist checks | Parallel workers | Pinned shared input, bounded task, worker return schema, merge rule, missing-worker handling |

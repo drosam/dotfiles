@@ -19,6 +19,7 @@ Retrieved: 2026-09-24. Older source notes referenced a `plugins/sentry-skills/` 
 - Preserve existing example paths rather than perform a cosmetic flattening migration.
 - Preserve qualitative evaluation by default; label desk checks versus observed runs. Quantitative evaluation remains opt-in.
 - Reject bulk upstream replacement and wholesale evaluator/reference-tree import.
+- Apply the user's ASCII-first style to skill prose and output templates while preserving meaningful Unicode in language, names, code, data, quotations, localization, and requested formats.
 
 ## Coverage matrix
 

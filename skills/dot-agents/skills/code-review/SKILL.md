@@ -67,7 +67,7 @@ Perform this pass for every review; mark it inapplicable only with a reason, suc
 5. Identify the currently deployed revision per affected service/environment from permitted deployment/release records. Record SHA or artifact-to-SHA mapping, environment, status, timestamp, and source. Account for rollbacks, canaries, or mixed versions. A merged PR, tag, successful build, or old successful deployment alone does not prove what is currently live.
 6. Compare against both recent merged code and confirmed deployed code when available. If deployment evidence is unavailable, label it `recent merged precedent; deployment unverified`. Do not access production or broaden credentials to fill this gap.
 7. Compare semantics: canonical helper/owner, error handling, permissions, transactions, retries, query/scoping strategy, tests, flags, configuration, and observability. Decide `consistent`, `justified departure`, `risky divergence`, or `insufficient evidence`, citing path plus revision/PR and rationale.
-8. For changed runtime contracts, check coexistence with deployed producers/consumers, queued old jobs, stored payloads, caches, schema versions, and flags. Check expand–contract sequencing and rollback, not just the final all-new state.
+8. For changed runtime contracts, check coexistence with deployed producers/consumers, queued old jobs, stored payloads, caches, schema versions, and flags. Check expand-contract sequencing and rollback, not just the final all-new state.
 
 Recency and deployment are evidence of use, not proof of correctness. Do not recommend copying a recently deployed flaw. Report a pattern difference only with a violated rule/invariant or concrete maintenance/behavior cost. Unrelated old defects stay outside the change's findings; newly exposed/worsened defects belong in the review. If live-version compatibility matters and cannot be established, leave that dimension unchecked and the review incomplete.
 
@@ -194,15 +194,15 @@ Before returning the final report, save its complete durable copy:
 6. Write immutable `review.md` containing Work-ID, Review-ID, UTC creation time, repository, exact branch, branch-key, source, PR metadata, previous review link when present, exact target/base/head or local inventory, diff command/scope, and the complete report below. For any GitHub-sourced target or feedback, add a verbatim source snapshot before the agent report: preserve the exact supplied/canonical URL and exact overall review body when one exists, then every comment's stable URL, identifier, author, path/line or thread context, and complete unchanged text in source order, including code blocks. For each inline comment, include the exact annotated file line or multi-line range from the correct side and revision, labeled with path, lines, side and revision. Include no surrounding source lines. Do not persist GitHub/API `diff_hunk`, patch, or equivalent provider-generated surrounding context; use it only transiently to recover the annotated lines when necessary. If the annotated source is inaccessible, record that explicitly instead of substituting the full hunk. Record retrieval time and target SHA; retrieve all pages. If an overall body is absent, record `No overall review body`; if any content is inaccessible or truncated, name it explicitly. Redact secrets and customer data only, and mark each redaction. Never reduce provenance to only a PR number or paraphrase comment text. Re-read it and verify the saved content and all index links before claiming persistence. Never edit this file after creation; a rerun creates another review directory.
 7. Do not create `triage.md`; `review-triage` creates it on demand beside `review.md`. Rely on the managed global Git excludes rule; never stage, commit, or add per-repository ignore rules for these artifacts.
 
-If writing or verification fails, still return the complete report, state `Artifact: not saved — <reason>`, and do not claim the indexes or review are durable. A saved but unindexed report must be labeled with its exact path; never delete it or silently treat it as latest. Artifact failure does not change the technical verdict, but it is an explicit workflow gap.
+If writing or verification fails, still return the complete report, state `Artifact: not saved - <reason>`, and do not claim the indexes or review are durable. A saved but unindexed report must be labeled with its exact path; never delete it or silently treat it as latest. Artifact failure does not change the technical verdict, but it is an explicit workflow gap.
 
 ### Artifact style
 
 `review.md` is read whole by later agents (triage, fix, QA); every token costs their context. Write caveman: fragments, labels, no narration, no hedging, no restating the finding. Compress wording, never evidence or finding count.
 
 - Verbatim only where provenance requires it (GitHub source snapshot). Everything else compressed.
-- Finding: 1 headline line + `ev:` / `fix:` / `check:` lines; ≤4 lines total unless the trace is the point (security, concurrency, disputed).
-- Coverage: counts and labels, not lists of every file read; one line per bullet; `cmd → result`.
+- Finding: 1 headline line + `ev:` / `fix:` / `check:` lines; <=4 lines total unless the trace is the point (security, concurrency, disputed).
+- Coverage: counts and labels, not lists of every file read; one line per bullet; `cmd -> result`.
 - Say each fact once; metadata lives in the header only. Drop "verified"/"confirmed" filler when the evidence line shows it.
 - Keep exact `path:line`, symbols, commands, results, decisions, unknowns.
 
@@ -210,26 +210,26 @@ Use this report format; no finding cap, strict word discipline per finding:
 
 ```text
 ## Findings
-- P1 [blocking] `path:line` — trigger → impact.
+- P1 [blocking] `path:line` - trigger -> impact.
   ev: traced path/test; rule/doc/precedent; counterevidence.
   fix: smallest sound direction. check: regression scenario.
-- P2 [nonblocking: reason] `path:line` — ...
+- P2 [nonblocking: reason] `path:line` - ...
 
 ## Coverage
 - Target: base..head, diff cmd, stability.
-- Passes: behavior ✓ | security ✓ | tests ✓ | rules/docs ✓ — or `unchecked: reason`.
+- Passes: behavior checked | security checked | tests checked | rules/docs checked - or `unchecked: reason`.
 - Files: N in full diff + surrounding areas (groups, not file lists).
-- Requirements: `req (source) → verified | violated | unverified (evidence)` one line each; inferred expectations labeled.
+- Requirements: `req (source) -> verified | violated | unverified (evidence)` one line each; inferred expectations labeled.
 - Docs/rules: sources checked; stale/conflicts/missing.
 - PR/history: PR # or none/lookup unavailable; commit range; prior concerns vs current code; gaps.
-- Patterns: compared paths@rev → consistent | departure | divergence (why).
-- Ownership: authoritative → derived state/policy; writers/repair obligations, source locations and justified separations; or n/a with reason.
+- Patterns: compared paths@rev -> consistent | departure | divergence (why).
+- Ownership: authoritative -> derived state/policy; writers/repair obligations, source locations and justified separations; or n/a with reason.
 - Deployment: env/rev/source, or `n/a: reason`.
-- Validation: `cmd → result` one line each; unrun: reason.
+- Validation: `cmd -> result` one line each; unrun: reason.
 - Gaps: missing checks + next action, or none.
 
 ## Verdict
-BLOCKED | INCOMPLETE | READY — reason, scope.
+BLOCKED | INCOMPLETE | READY - reason, scope.
 ```
 
 - `BLOCKED`: at least one established blocking finding. Still report all incomplete coverage.

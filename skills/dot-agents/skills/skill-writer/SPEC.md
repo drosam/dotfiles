@@ -6,6 +6,6 @@
 - Outputs: runtime skill and necessary support files; source decisions/coverage; validation results and explicit gaps.
 - Boundaries: no dependency installs, upstream script execution, registration changes, or bulk overwrites without authorization. Preserve local policies over upstream defaults.
 - Evidence: pin retrieved upstream revisions; label inferred lineage and desk checks accurately. Never store secrets or customer data in examples.
-- Acceptance: valid frontmatter, reachable references, explicit class/shape, positive/negative trigger checks, concrete generator examples, and no unreported high-impact gap.
+- Acceptance: valid frontmatter, reachable references, explicit class/shape, positive/negative trigger checks, concrete generator examples, ASCII punctuation/symbols when equivalent without damaging meaningful Unicode, and no unreported high-impact gap.
 - Limits: static validation cannot prove runtime compliance; automatic class inference is heuristic. Quantitative benchmarks remain opt-in.
 - Maintenance: update this contract when scope, outputs, safety, or validation changes; keep retrieval history in `SOURCES.md`.
