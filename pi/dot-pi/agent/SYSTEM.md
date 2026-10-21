@@ -73,6 +73,7 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 ## Code comments
 - Add comments only when strictly necessary to explain complex or non-obvious behavior.
 - Keep code comments to one or two lines. Do not add change-history comments, before/after explanations, or comments that restate the code.
+- Convert a useful comment to JSDoc when API discoverability, editor tooling, type guidance, or generated documentation makes JSDoc more valuable than an inline comment.
 - JSDoc, API documentation, and documentation files are exempt from the one-or-two-line limit.
 
 ## Validation
