@@ -16,6 +16,7 @@ Synthetic calibration cases, not findings about the current repository or execut
 - [10. Repeated repair obligations](#10-structural-finding-repeated-repairs-reveal-ownership-cost)
 - [11. Mode and contract boundaries](#11-safe-boundaries-mode-splits-and-required-inputs)
 - [12. Lifecycle and UI composition](#12-cross-path-check-cleanup-and-responsive-capabilities)
+- [13. Independent review rounds](#13-independent-review-rounds-and-claim-verification)
 
 ## 1. Happy path: complete review without invented issues
 
@@ -127,3 +128,11 @@ Input: a quantity control now flushes a deferred write on unmount so opening a p
 Trace edit -> pending timer -> deletion/ORM removal -> unmount -> flush -> request target. Check whether deletion finishes before cleanup, whether the request helper already suppresses missing records, and whether failures surface. A proven request against a deleted record supports a finding; unknown ordering remains a specific race hypothesis, not a claimed reproduction. Exercise deletion and navigation as well as panel opening with realistic or controlled timing. Do not globally cancel cleanup writes if valid navigation must still persist edits.
 
 UI variant: opening the panel unmounts the original summary; a replacement column is hidden below a breakpoint. Cross mounting with responsive visibility to identify which contents/actions remain reachable. Compare the loss against acceptance criteria or established behavior; if intent is unavailable, ask the design question instead of inventing a requirement. Check nested overlays similarly: trace which layer owns Escape, without assuming multiple listeners are inherently broken.
+
+## 13. Independent review rounds and claim verification
+
+Happy path: a normal review announces 2 rounds and 9 discovery workers, then launches two independent samples of each existing dimension plus one intent-blind worker. `R1 behavior` and `R2 tests` report the same retry defect. The coordinator merges them because trigger, failed behavior, root cause and remedy match, records `found by 2/2 rounds`, and verifies the unique claim once against code and counterevidence. Agreement supports confidence only; traced behavior determines validity and impact.
+
+Robust variant: `R2 security` fails to start. Retry once with a permitted sequential general-worker fallback and the same pinned packet. If fallback remains blocked, record `R2 security: unchecked`; do not count it as a clean sample or hide it behind `R1 security`. Required missing coverage prevents READY. The blind worker receives code/rules, the output contract and minimum work identity metadata, but never reads selected document contents, requirements, PR rationale, commit-message rationale or earlier findings. If that isolated role is unavailable, blind coverage stays unchecked; a general worker with standing work-document requirements is not a valid fallback.
+
+Anti-pattern: run round 1, summarize its findings into round 2's prompt, then promote issues found twice or raise their severity. Correction: launch rounds independently against identical pinned inputs, preserve distinct failures, validate every unique candidate once, and use `found by x/N rounds` only as attribution and a confidence/tie-breaking signal. One supported finding remains reportable even when only one round found it.

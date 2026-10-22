@@ -32,7 +32,7 @@ Act as the primary automated reviewer. Do not assume a human reviewer will catch
 
 Documentation review is mandatory, not an optional source lookup.
 
-Inspect the target repo's `.agent-work/`: `work/<work-id>/spec.md` (requirements), `work/<work-id>/plan.md` (design), work-local `reviews/`, shared `context/` (glossaries) and `decisions/` (ADRs). Read the selected spec/plan's status, acceptance criteria, non-goals, design and testing decisions; verify reciprocal Spec/Plan links and matching Work-ID. Use an explicit user path, current-session confirmation, or validated reciprocal link to identify work. Otherwise shortlist titles/statuses/summaries and ask via question tool, even for one candidate; include creating a new Work-ID. Never choose by filename, slug, branch, or recency. If no existing work applies, propose a stable kebab-case Work-ID, obtain confirmation, then create only `.agent-work/work/<work-id>/`; do not create spec/plan merely for review storage. If asking is unavailable, report the blocker; do not guess. Clarify missing/conflicting links or requirements; do not repair docs during read-only review. No spec/plan is valid for ordinary work with explicit user intent, but every durable review belongs to a confirmed Work-ID. Include the Work-ID, exact selected paths/decisions, and absent-spec/plan markers in every worker packet; a worker lacking identity must return a clarification request. Selection does not authorize fixes.
+Inspect the target repo's `.agent-work/`: `work/<work-id>/spec.md` (requirements), `work/<work-id>/plan.md` (design), work-local `reviews/`, shared `context/` (glossaries) and `decisions/` (ADRs). Read the selected spec/plan's status, acceptance criteria, non-goals, design and testing decisions; verify reciprocal Spec/Plan links and matching Work-ID. Use an explicit user path, current-session confirmation, or validated reciprocal link to identify work. Otherwise shortlist titles/statuses/summaries and ask via question tool, even for one candidate; include creating a new Work-ID. Never choose by filename, slug, branch, or recency. If no existing work applies, propose a stable kebab-case Work-ID, obtain confirmation, then create only `.agent-work/work/<work-id>/`; do not create spec/plan merely for review storage. If asking is unavailable, report the blocker; do not guess. Clarify missing/conflicting links or requirements; do not repair docs during read-only review. No spec/plan is valid for ordinary work with explicit user intent, but every durable review belongs to a confirmed Work-ID. Include the Work-ID, exact selected paths/decisions, and absent-spec/plan markers in every sampled worker packet; a worker lacking identity must return a clarification request. For the intent-blind worker, pass required Work-ID/status/path metadata but explicitly withhold and forbid reading document contents or decision summaries per `references/review-rounds.md`. Selection does not authorize fixes.
 
 - Read applicable repository and directory-scoped agent guidance, `CONTRIBUTING`, coding standards, lint/type configurations, architecture/ADRs, and the originating issue/spec/PRD. Respect rule scope; a sibling directory's rules do not automatically apply.
 - For branch/PR review, discover any associated PR through permitted read-only hosting tools; match repository and head/base refs, not branch name alone. If multiple PRs plausibly match, resolve the ambiguity before using one as intent. When a PR exists, read its current description, linked requirements, and relevant discussion/review threads (including resolved or outdated threads that explain decisions or prior defects). Retrieve all pages needed for relevant context. Capture scope, acceptance criteria, rationale, tradeoffs, author clarifications, and unresolved concerns with source links. Use this context to guide requirements and risk checks, not to assume the implementation is correct. Distinguish confirmed no PR from unavailable lookup; missing access or truncated context is a coverage gap, not evidence that no PR/comments exist.
@@ -71,30 +71,13 @@ Perform this pass for every review; mark it inapplicable only with a reason, suc
 
 Recency and deployment are evidence of use, not proof of correctness. Do not recommend copying a recently deployed flaw. Report a pattern difference only with a violated rule/invariant or concrete maintenance/behavior cost. Unrelated old defects stay outside the change's findings; newly exposed/worsened defects belong in the review. If live-version compatibility matters and cannot be established, leave that dimension unchecked and the review incomplete.
 
-## 4. Run all review passes
+## 4. Run independent review rounds
 
-Use independent workers when available and permitted. The coordinator owns the shared scope, documentation/history packet, and final verification; workers gather additional context independently. Run these four passes in parallel in the same tool turn, or sequentially if delegation is unavailable. Thermo correctness and structural scrutiny are part of every full review, not an opt-in mode or two additional passes. Honor explicitly narrowed requests and report excluded dimensions.
+Before dispatch, read and follow `references/review-rounds.md`. It defines round selection, the preflight cost announcement, the four existing review dimensions, parallel dispatch, the single intent-blind worker, failure recovery and the unique-claim ledger.
 
-| Pass | Preferred agent if available | Required focus |
-| --- | --- | --- |
-| Behavior/spec/edge cases | `general` | Requirements, wiring, state transitions, callers and input-dependent failures |
-| Security/data/rollout | `code-review-security` | Reachable threats, tenant boundaries, persistence, migration, deployed-version coexistence, devex and feature-gate leaks |
-| Tests/reliability/performance | `general` | Behavioral test validity, failure handling, concurrency, resource limits and operational evidence |
-| Rules/docs/patterns/code health | `code-review-code-health` | Scoped rules, best practices, doc consistency, recent precedents, ownership, invariants and structural simplification |
+Default full review: 2 independent rounds x 4 dimensions, plus 1 intent-blind worker. Run spec mapping, documentation/history collection, checks and final verification once. An explicit valid round count from 1 through 3 overrides the default; a quick full-dimension or explicitly narrowed review defaults to 1. Quick full-dimension reviews retain the blind worker; narrowed reviews omit it unless explicitly included. Invalid explicit counts require correction, not silent clamping. Print the selected rounds and worker count, then start without another confirmation.
 
-Check agent availability before dispatch. Each row is one distinct worker task; general workers receive the complete assigned rubric, not just a pass name. Specialized workers must cover the full assigned row, including docs/rules when assigned code health. Pass this skill's resolved path and the relevant contract/rubric text; if a specialized agent is absent, use a general worker with the same packet or permitted sequential review. Do not dispatch a separate thermos workflow.
-
-Give each worker the exact target/commit IDs, local-change scope, relevant rules/spec/docs, comparison sources, rubric, and this return contract:
-
-```text
-Read-only review; no nested workers. Inspect beyond the diff when necessary.
-Return all supported findings with path:line, trigger, impact, evidence,
-counterevidence, fix direction, and regression-check suggestion.
-Return checked/not-applicable/unchecked coverage with reasons and sources.
-Do not assume another worker covers an omitted risk. Identify tool failures.
-```
-
-Do not require nonexistent named agents or provider-specific tools. A failed/denied worker gets a permitted sequential fallback, not repeated permission-bypassing retries. A missing pass stays unchecked until completed. Read PR intent/decision context before dispatch and include it with branch/PR history in the shared packet. Keep initial defect discovery independent of existing reviewer/bot findings, then reconcile every relevant prior concern against the pinned code before synthesis. Verify claimed fixes and unresolved concerns; validate and attribute adopted findings rather than counting comments as corroborating votes.
+Thermo correctness and structural scrutiny remain part of the same four dimensions, not extra dimensions. Repeated rounds are independent samples: workers receive identical pinned inputs but never earlier findings. Round agreement can guide confidence and tie-breaking only; it is not evidence and never changes severity. A failed required sample or blind pass remains unchecked and cannot become a clean result.
 
 ### Behavior and edge-case matrix
 
@@ -217,7 +200,7 @@ Use this report format; no finding cap, strict word discipline per finding:
 
 ## Coverage
 - Target: base..head, diff cmd, stability.
-- Passes: behavior checked | security checked | tests checked | rules/docs checked - or `unchecked: reason`.
+- Rounds: N/N complete; behavior R1..RN | security R1..RN | tests R1..RN | rules/docs R1..RN | blind checked - or `unchecked: reason`.
 - Files: N in full diff + surrounding areas (groups, not file lists).
 - Requirements: `req (source) -> verified | violated | unverified (evidence)` one line each; inferred expectations labeled.
 - Docs/rules: sources checked; stale/conflicts/missing.
