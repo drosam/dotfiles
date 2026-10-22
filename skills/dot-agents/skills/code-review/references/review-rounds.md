@@ -13,13 +13,14 @@ Before dispatch, print the selected count and cost. For a full review use this s
 
 ```text
 Review rounds: <N>
-Discovery workers: <4N+1>
+Discovery workers: <4N+2>
 - <N> x 4 review dimensions
 - 1 intent-blind worker
+- 1 whole-change simplicity worker
 Single-run work: spec mapping, docs/history, checks, verification
 ```
 
-A quick full-dimension review still includes the intent-blind worker. For an explicitly narrowed review, replace `4 review dimensions` and the total with the applicable dimension count, name excluded dimensions, and exclude the blind worker unless the user explicitly includes it. Start after printing; do not request another confirmation.
+A quick full-dimension review still includes the intent-blind and simplicity workers. For an explicitly narrowed review, replace `4 review dimensions` and the total with the applicable dimension count, name excluded dimensions, and exclude blind/simplicity unless the user explicitly includes them. Start after printing; do not request another confirmation.
 
 ## 2. Prepare shared inputs once
 
@@ -49,7 +50,7 @@ Do not execute shared validation commands or browser flows; propose checks for
 coordinator verification after claim deduplication.
 ```
 
-Launch all rounds in parallel in one tool turn when capacity permits. Otherwise use bounded waves without exposing completed findings to workers that have not started. Independent sampling is lost if a later round receives earlier findings or is asked merely to confirm them.
+Launch all round workers plus the applicable blind and simplicity workers in parallel in one tool turn when capacity permits. Otherwise use bounded waves without exposing completed findings to workers that have not started. Independent sampling is lost if a later round receives earlier findings or is asked merely to confirm them.
 
 ## 3. Run one intent-blind worker
 
@@ -57,21 +58,29 @@ Run one `code-review-blind` worker outside the rounds for every full review, inc
 
 The blind worker judges implementation behavior without author intent. It does not replace requirement fidelity and cannot decide whether unspecified behavior violates the spec. Reconcile its findings against requirements only after it returns. If `code-review-blind` is unavailable, mark blind coverage unchecked; a general worker whose standing instructions require reading selected work documents is not a valid fallback.
 
-## 4. Handle failures without bias
+## 4. Run one whole-change simplicity worker
 
-A denied or failed sampled dimension worker gets one permitted sequential fallback using the same round/dimension packet. A missing dimension specialist falls back to `general`. Do not use `general` for the blind role, retry through broader permissions or tell another sample what the failed worker found.
+Run one `code-review-simplicity` worker outside the rounds for every full review, including a quick full-dimension review. Exclude it from an explicitly narrowed review unless the user explicitly includes it. Launch it alongside the rounds after the shared scope/requirements packet is ready.
 
-If fallback cannot complete, mark that round/dimension `unchecked` with the reason and next action. A failed sample is not a clean vote and cannot disappear because another round completed. Required unchecked round or applicable blind coverage prevents `READY` unless the user explicitly narrowed it out before dispatch.
+Give it the pinned target, confirmed Work-ID and selected requirements/design context, explicit user decisions, scope/non-goals, relevant business/domain harms and the dedicated simplicity return contract. It asks whether optional capability/variation/generality can be removed or deferred, or an existing proven approach can eliminate a substantial new subsystem, while preserving confirmed requirements and safety. It reviews the whole change, not line-level style or internal ownership/lifecycle redesign, and proposes checks without executing shared validation.
 
-## 5. Build and verify the claim ledger
+Requirement-preserving simplicity proposals are candidates, not findings or votes. Tag them `simplicity`, verify the requirement and code evidence once, check user/business cost and strongest counterevidence, then classify only supported actionable proposals through the normal severity/gate rules. A proposal contradicting a confirmed requirement is an `optional scope challenge`, never a finding or readiness input; present it only for an explicit user decision. `No significant simplicity cut` completes the pass without inventing a finding. If `code-review-simplicity` is unavailable, use `general` with the same focused packet and explicit instruction not to perform the four dimension passes.
+
+## 5. Handle failures without bias
+
+A denied or failed sampled dimension worker gets one permitted sequential fallback using the same round/dimension packet. A missing dimension specialist falls back to `general`. A failed simplicity worker gets one `general` fallback with the focused simplicity packet. Do not use `general` for the blind role, retry through broader permissions or tell another sample what the failed worker found.
+
+If fallback cannot complete, mark that round/dimension or simplicity coverage `unchecked` with the reason and next action. A failed sample is not a clean vote and cannot disappear because another round completed. Required unchecked round, simplicity or applicable blind coverage prevents `READY` unless the user explicitly narrowed it out before dispatch.
+
+## 6. Build and verify the claim ledger
 
 After every worker returns:
 
-1. Record each candidate with source tags such as `R1 behavior`, `R2 code health` or `blind`.
+1. Record each candidate with source tags such as `R1 behavior`, `R2 code health`, `blind` or `simplicity`.
 2. Merge only findings with the same trigger, failed behavior, root cause and remedy. Preserve distinct failures at the same location.
-3. Record support by distinct round: `found by 1/2 rounds` or `found by 2/2 rounds`. Multiple dimensions in one round still count as one supporting round. Blind support is listed separately.
+3. Record support by distinct round: `found by 1/2 rounds` or `found by 2/2 rounds`. Multiple dimensions in one round still count as one supporting round. Blind support and simplicity proposals are listed separately, never counted as round agreement.
 4. Treat agreement only as a confidence/tie-breaking signal. It is not evidence, does not establish correctness and never raises severity.
 5. Validate every unique candidate once through the normal synthesis procedure: inspect the full path, strongest counterevidence, requirements and safe checks. Drop disproven candidates; retain consequential uncertainty as a gap.
 6. Preserve every supported actionable finding. No vote threshold and no top-N cap.
 
-Report round completion and worker failures in coverage. Perform static checks, final scope/worktree stability checks, artifact persistence and readiness synthesis once against the pinned target.
+Report round completion, blind coverage, simplicity coverage and worker failures. Perform static checks, final scope/worktree stability checks, artifact persistence and readiness synthesis once against the pinned target.

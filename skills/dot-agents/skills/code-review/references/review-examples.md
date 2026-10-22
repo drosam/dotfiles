@@ -17,6 +17,7 @@ Synthetic calibration cases, not findings about the current repository or execut
 - [11. Mode and contract boundaries](#11-safe-boundaries-mode-splits-and-required-inputs)
 - [12. Lifecycle and UI composition](#12-cross-path-check-cleanup-and-responsive-capabilities)
 - [13. Independent review rounds](#13-independent-review-rounds-and-claim-verification)
+- [14. Whole-change simplicity](#14-whole-change-simplicity-without-deleting-required-behavior)
 
 ## 1. Happy path: complete review without invented issues
 
@@ -131,8 +132,16 @@ UI variant: opening the panel unmounts the original summary; a replacement colum
 
 ## 13. Independent review rounds and claim verification
 
-Happy path: a normal review announces 2 rounds and 9 discovery workers, then launches two independent samples of each existing dimension plus one intent-blind worker. `R1 behavior` and `R2 tests` report the same retry defect. The coordinator merges them because trigger, failed behavior, root cause and remedy match, records `found by 2/2 rounds`, and verifies the unique claim once against code and counterevidence. Agreement supports confidence only; traced behavior determines validity and impact.
+Happy path: a normal review announces 2 rounds and 10 discovery workers, then launches two independent samples of each existing dimension plus one intent-blind worker and one whole-change simplicity worker. `R1 behavior` and `R2 tests` report the same retry defect. The coordinator merges them because trigger, failed behavior, root cause and remedy match, records `found by 2/2 rounds`, and verifies the unique claim once against code and counterevidence. Agreement supports confidence only; traced behavior determines validity and impact. Simplicity proposals are attributed separately.
 
 Robust variant: `R2 security` fails to start. Retry once with a permitted sequential general-worker fallback and the same pinned packet. If fallback remains blocked, record `R2 security: unchecked`; do not count it as a clean sample or hide it behind `R1 security`. Required missing coverage prevents READY. The blind worker receives code/rules, the output contract and minimum work identity metadata, but never reads selected document contents, requirements, PR rationale, commit-message rationale or earlier findings. If that isolated role is unavailable, blind coverage stays unchecked; a general worker with standing work-document requirements is not a valid fallback.
 
 Anti-pattern: run round 1, summarize its findings into round 2's prompt, then promote issues found twice or raise their severity. Correction: launch rounds independently against identical pinned inputs, preserve distinct failures, validate every unique candidate once, and use `found by x/N rounds` only as attribution and a confidence/tie-breaking signal. One supported finding remains reportable even when only one round found it.
+
+## 14. Whole-change simplicity without deleting required behavior
+
+Happy path: confirmed acceptance requires one provider integration, but the change adds a generic provider registry, adapter lifecycle and configuration DSL without another supported provider. An established direct integration already exists nearby. The simplicity worker proposes reusing it, names the subsystem removed, cites requirements/code and gives migration/regression checks. The coordinator reports the proposal only after verifying the direct path satisfies every confirmed requirement.
+
+Robust variant: removing an old decoder would simplify the code, but deployment evidence shows old queued payloads and rollback consumers remain. The simplicity worker records that counterevidence and returns no cut. Required security, tenancy, money, data integrity, availability and rollback behavior are never deleted merely because they add states or branches. If a confirmed requirement itself could be dropped, record an optional scope challenge for user decision, not a finding.
+
+Anti-pattern: redesign internal state ownership or lifecycle logic already assigned to code health, report every helper/conditional/long file as a simplicity defect, or assign P1 because a cut removes many lines. Correction: ask one whole-change scope/approach question, propose at most three requirement-preserving material cuts, quantify subsystem removed and user/business cost, then let the coordinator independently verify and classify. A sound intentional design may produce `No significant simplicity cut.`

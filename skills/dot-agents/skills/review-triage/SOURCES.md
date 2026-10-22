@@ -1,5 +1,19 @@
 # Review Triage Sources and Decisions
 
+## Rule applicability, review-induced churn and round attribution
+
+User-approved follow-up on 2026-10-22 after comparing local triage with private repository `booqable/local-spec-code-review` at pinned revision `c80707a4caeca397e31c2d9556385b27edd8dca8`. Reused the already inspected `plugins/local-spec-review/skills/run/references/triage.md` and `walk.md`; no additional retrieval. Trust/usage constraints remain secondary external pattern evidence only, high confidence for inspected pinned text, no effectiveness or lineage claim.
+
+Behavior delta: for the current item, verify the exact scope/version/precedence of any cited rule, convention, API contract or policy; a mis-citation invalidates only that rationale, while underlying behavior follows normal evidence rules. Detect code/defenses introduced by earlier review fixes and require concrete reachable harm or a broken contract before adding another defensive layer; material maintenance cost instead supports simplification/removal. Preserve `found by x/N rounds` when available but use it only to prioritize verification leads or effort within the current item, never to break an evidence/verdict tie, confirm a claim, set severity or create a vote threshold.
+
+User calibration: do not make specs hard authority. Specs/plans remain evidence of intended behavior and may be stale or incomplete; conflicts can reveal an intent gap rather than settle the triage automatically. Current explicit user decisions and mandatory external contracts carry more weight. Rejected additions: automatic spec-based rejection and a new repository noise-policy mechanism. Existing explicit evidence, safety and user-decision gates remain authoritative.
+
+Shape remains inline current-item verification guidance plus calibration examples; no new reference, worker, script, dependency or registration. Description remains unchanged because these checks refine existing-feedback assessment rather than add a trigger.
+
+Qualitative desk cases only: private symbol under a public-API naming rule -> cited rationale invalid, underlying behavior still evaluated; independent runtime defect alongside a mis-cited rule -> defect remains; earlier hypothetical guard followed by request for another fallback state -> require reachable harm and prefer simplification; serious defect in earlier-review code -> still recommend action; supported `1/2` finding -> retain; unsupported `2/2` claim -> keep unverified until independently confirmed/disproven; missing round metadata -> no penalty; spec conflict -> present as intent context, not automatic Skip. Expected: fewer false positives and less review-driven complexity without weakening serious-risk handling. No runtime benchmark establishes decision quality.
+
+Validation: targeted `git diff --check` passed. Three focused read-only code-health audits found and drove wording fixes for mis-cited-rule disposition, defense-layer gating, misuse of round agreement and unsupported-claim handling; final audit returned no actionable findings and confirmed unverified behavior remains Defer/Discuss. Strict-depth `quick_validate.py` was attempted with the workflow-process class and blocked by `ModuleNotFoundError: No module named 'yaml'`; nothing installed. No runtime triage conversation ran.
+
 ## Deterministic options and exact shaped decisions
 
 User-approved change on 2026-10-22 after comparing the local workflow with private repository `booqable/local-spec-code-review` at pinned revision `c80707a4caeca397e31c2d9556385b27edd8dca8`. Inspected remote files: `plugins/local-spec-review/skills/run/references/triage.md` and `walk.md`. Trust tier: secondary external implementation. Confidence: high for retrieved instructions at the pinned revision, not for effectiveness; the repository described itself as pre-alpha. Usage constraints: pattern evidence only, no source text copied, no license inferred and no shared-lineage claim.

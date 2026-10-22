@@ -73,11 +73,11 @@ Recency and deployment are evidence of use, not proof of correctness. Do not rec
 
 ## 4. Run independent review rounds
 
-Before dispatch, read and follow `references/review-rounds.md`. It defines round selection, the preflight cost announcement, the four existing review dimensions, parallel dispatch, the single intent-blind worker, failure recovery and the unique-claim ledger.
+Before dispatch, read and follow `references/review-rounds.md`. It defines round selection, the preflight cost announcement, the four existing review dimensions, parallel dispatch, the single intent-blind worker, the single whole-change simplicity worker, failure recovery and the unique-claim ledger.
 
-Default full review: 2 independent rounds x 4 dimensions, plus 1 intent-blind worker. Run spec mapping, documentation/history collection, checks and final verification once. An explicit valid round count from 1 through 3 overrides the default; a quick full-dimension or explicitly narrowed review defaults to 1. Quick full-dimension reviews retain the blind worker; narrowed reviews omit it unless explicitly included. Invalid explicit counts require correction, not silent clamping. Print the selected rounds and worker count, then start without another confirmation.
+Default full review: 2 independent rounds x 4 dimensions, plus 1 intent-blind worker and 1 whole-change simplicity worker. Run spec mapping, documentation/history collection, checks and final verification once. An explicit valid round count from 1 through 3 overrides the default; a quick full-dimension or explicitly narrowed review defaults to 1. Quick full-dimension reviews retain blind and simplicity; narrowed reviews omit them unless explicitly included. Invalid explicit counts require correction, not silent clamping. Print the selected rounds and worker count, then start without another confirmation.
 
-Thermo correctness and structural scrutiny remain part of the same four dimensions, not extra dimensions. Repeated rounds are independent samples: workers receive identical pinned inputs but never earlier findings. Round agreement can guide confidence and tie-breaking only; it is not evidence and never changes severity. A failed required sample or blind pass remains unchecked and cannot become a clean result.
+Thermo correctness and structural scrutiny remain part of the same four dimensions, not extra dimensions. Repeated rounds are independent samples: workers receive identical pinned inputs but never earlier findings. The simplicity worker separately challenges whole-change scope/approach and does not count as round agreement. Agreement can guide confidence and tie-breaking only; it is not evidence and never changes severity. A failed required sample, simplicity or blind pass remains unchecked and cannot become a clean result.
 
 ### Behavior and edge-case matrix
 
@@ -200,7 +200,7 @@ Use this report format; no finding cap, strict word discipline per finding:
 
 ## Coverage
 - Target: base..head, diff cmd, stability.
-- Rounds: N/N complete; behavior R1..RN | security R1..RN | tests R1..RN | rules/docs R1..RN | blind checked - or `unchecked: reason`.
+- Rounds: N/N complete; behavior R1..RN | security R1..RN | tests R1..RN | rules/docs R1..RN | blind checked | simplicity checked - or `unchecked: reason`.
 - Files: N in full diff + surrounding areas (groups, not file lists).
 - Requirements: `req (source) -> verified | violated | unverified (evidence)` one line each; inferred expectations labeled.
 - Docs/rules: sources checked; stale/conflicts/missing.
