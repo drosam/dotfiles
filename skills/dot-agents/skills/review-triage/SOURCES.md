@@ -1,5 +1,23 @@
 # Review Triage Sources and Decisions
 
+## Deterministic options and exact shaped decisions
+
+User-approved change on 2026-10-22 after comparing the local workflow with private repository `booqable/local-spec-code-review` at pinned revision `c80707a4caeca397e31c2d9556385b27edd8dca8`. Inspected remote files: `plugins/local-spec-review/skills/run/references/triage.md` and `walk.md`. Trust tier: secondary external implementation. Confidence: high for retrieved instructions at the pinned revision, not for effectiveness; the repository described itself as pre-alpha. Usage constraints: pattern evidence only, no source text copied, no license inferred and no shared-lineage claim.
+
+Behavior delta: add second-order "what the fix invites" cost to the existing evidence/value assessment; persist 2-4 concrete current-item options before asking, recommendation first; append the canonical action plus exact decisive user message as a one-line JSON string; echo the finding number/title/action/modifier before mutation or advancement; carry modifiers unchanged into implementation and validation. Ambiguous input records/echoes Discuss, never a guessed action. Unverified findings offer exactly Defer and Discuss, both with the exact settling check. Preserve one-item-at-a-time investigation and never precompute later options.
+
+Rejected remote behavior: automatic acceptance/rejection, whole-queue verification before the walk, background fix polling, parallel worktree fixes/cherry-picks/reverts, mutable finding status as authority, and applying the "closest" interpretation of an ambiguous decision. Local immutable review, append-only triage, explicit user choice, serial validated per-item commit and no-silent-skip rules remain authoritative.
+
+Shape remains inline workflow guidance; no new reference, script, dependency, worker or registration. Class: workflow-process. Selected synthesis profile: skill-writer `references/examples/workflow-process-skill.md`. Coverage: preconditions, ordered current-item flow, safety/approval boundaries, deterministic outputs, persistence failure, ambiguity recovery and implementation handoff are complete by desk inspection.
+
+Description retained: these changes refine interaction after review-triage already triggers; they do not add a new request category. Should trigger remains existing-feedback triage, worth-fixing decisions, review-comment walkthrough and post-triage replies. Should not trigger remains fresh review discovery, feature implementation without feedback, deployment and unrelated GitHub replies.
+
+Qualitative desk evaluation only: verified issue with one small repair -> Fix first with exact change; verified low-value edge -> Skip first with residual behavior; unavailable evidence -> Defer/Discuss only with settling check; shaped decision -> exact message persisted, confirmation echoed and modifier preserved; ambiguous modifier -> Discuss rather than closest interpretation; proposed guard that creates another state/guard cascade -> compare smaller invariant repair; later queue items -> no investigation or options. Expected result: clearer decisions and safer shaped fixes; no runtime benchmark establishes adherence, latency or decision quality.
+
+Validation: `git diff --check -- skills/dot-agents/skills/review-triage` passed. Shared and Claude live links resolve to the canonical repository directory. Two focused read-only code-health audits found and drove fixes for ambiguity being recorded as apparent Fix authority and unverified options still exposing Fix/Skip; final audit returned no actionable findings. Strict-depth `quick_validate.py` was attempted with `--skill-class workflow-process --strict-depth` and blocked at startup by `ModuleNotFoundError: No module named 'yaml'`; nothing installed. No runtime triage conversation or behavior benchmark ran.
+
+Retrieval stopped after the remote triage and walk contracts exposed their worth-it, option, decision and mutation semantics. More remote files would be low-yield because source capture, review discovery and fixing orchestration are outside this approved change.
+
 ## Concise GitHub replies after triage
 
 User-requested iteration from the named local session "PCO-5103 triage full review": after triage, the user may ask the agent to publish outcomes back to GitHub. The prior workflow correctly targeted inline comment threads, used a top-level PR comment for overall-review bullets, captured returned URLs, and logged publication. Its fixed-item replies were too verbose: phrases such as "applied your suggestion" and implementation summaries repeated what the commit already showed.
