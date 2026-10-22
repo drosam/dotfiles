@@ -116,7 +116,7 @@
 # alt - p: open -a /Applications/Bitwarden.app
 
 ctrl + alt + shift + cmd - return: open -a /Applications/Ghostty.app
-ctrl + alt + shift + cmd - b: open -a /Applications/Arc.app
+ctrl + alt + shift + cmd - b: open -a "/Applications/Brave Browser.app"
 ctrl + alt + shift + cmd - w: open -a /Applications/WhatsApp.app
 ctrl + alt + shift + cmd - s: open -a /Applications/Slack.app
 ctrl + alt + shift + cmd - f: open -a /System/Library/CoreServices/Finder.app
