@@ -117,6 +117,7 @@
 
 ctrl + alt + shift + cmd - return: open -a /Applications/Ghostty.app
 ctrl + alt + shift + cmd - b: open -a "/Applications/Brave Browser.app"
+ctrl + alt + shift + cmd - c: open -a "/Applications/Google Chrome.app"
 ctrl + alt + shift + cmd - w: open -a /Applications/WhatsApp.app
 ctrl + alt + shift + cmd - s: open -a /Applications/Slack.app
 ctrl + alt + shift + cmd - f: open -a /System/Library/CoreServices/Finder.app
