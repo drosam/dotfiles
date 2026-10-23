@@ -65,25 +65,57 @@ Use `common`, `uncommon`, `very rare`, `unreachable`, or `unknown`, always with 
 - Never dismiss security/privacy, data-loss, financial-integrity, or mandatory-contract failures merely because they are rare. Unknown frequency does not prevent recommending a fix for a confirmed serious defect.
 - Recommend skip for verified nonissues/already-resolved feedback or optional polish with no meaningful benefit. Recommend defer when a relevant decision/evidence is missing or work belongs outside this scope; state what would reopen it. Do not use defer to conceal a blocker.
 
-## 4. Present one point and wait
+## 4. Present one point, then ask one question
 
-Keep investigation thorough; keep the default presentation short:
+Use two distinct UI layers in this order, in the same assistant response. Never choose between a readable assessment and an interactive selector.
 
-- **Item <original identifier or position> - original feedback:** reproduce the complete original comment, unchanged, including code blocks, inline code and formatting. Never truncate or paraphrase. Redact secrets only and note the redaction. The original message is exempt from the length limit.
-- **Context:** one short line (fragments fine) stating actual behavior, with the decisive verified `path:line` (or state unavailable). Include a compact prior-session locator when the same point was previously discussed; do not repeat the old discussion.
-- **Verdict:** fix / skip / defer - one short line stating why action is or is not worthwhile. Include the smallest proposed change when recommending fix, or the missing evidence when deferring. Use a second sentence only if needed to disclose material risk or uncertainty.
+The response that calls the question tool must contain an actual visible text content block first, with the complete assessment below. A thinking/reasoning block, text from an earlier assistant response, a triage-log write, or text inside tool arguments does not count. If the current response does not contain the literal visible headings `### Item`, `**Original feedback**`, `**Context**` and `**Verdict`, do not invoke the question tool. Do not send an assessment-only response and promise to open the selector in a later turn.
 
-Use these verdict labels when supported; do not force a label onto every item:
+### A. Render the assessment as normal assistant text
+
+Use this structure in durable scrollback immediately before the question tool call in that same response:
+
+```markdown
+### Item <identifier> (<position> of <total>)
+
+**Original feedback**
+
+> <complete visible rendering of the original comment>
+
+**Context**
+
+<one to three short, clear sentences>
+
+**Verdict: <Fix | Skip | Defer> [optional calibrated label]**
+
+<one to three short, clear sentences>
+```
+
+- Render the complete original comment inside one Markdown blockquote, prefixing every line (including blank lines and fenced-code lines) with `>`. Preserve its text, code and authored formatting; the quote boundary prevents feedback-authored headings from impersonating Context/Verdict. Never truncate or paraphrase. If raw HTML, `<details>`, ANSI/control text or similar markup could collapse, hide or spoof content in the TUI, show a visible escaped transcription and note `display escaped; exact source in review.md`. Redact secrets only and note the redaction. The original feedback is exempt from the length limit. Do not squeeze it into the question prompt or an option description.
+- Write Context in clear English, not fragments. State actual behavior and the decisive verified `path:line` or say the location is unavailable. Include a compact prior-session locator when relevant; do not repeat old discussion.
+- Write Verdict in clear English. Explain why action is or is not worthwhile and include the smallest change for Fix, accepted residual behavior for Skip, or exact settling check/revisit condition for Defer. Use up to three short sentences when needed for material risk or uncertainty.
+- Do not print separate meaning, evidence, fix, likelihood, impact, worth-fixing or Options sections. Fold decisive facts into Context/Verdict; leave detailed traces and tradeoffs for Discuss. Render normal markdown, not one enclosing code fence; preserve fences inside the original comment.
+
+Use these calibrated labels only when supported:
 
 - **AI slop:** verified false positive, redundant defense, or needless abstraction with no meaningful benefit. Name the concrete flaw; this describes the suggestion's quality, not who wrote it.
 - **Rare edge, not worth fixing:** verified very rare, low-impact behavior whose repair costs more than its benefit. Name the accepted residual behavior; follow section 3's exclusions for serious risks and mandatory requirements.
 - **Real issue:** confirmed meaningful harm or broken requirement. Unknown frequency is not a reason to dismiss it.
 
-Do not print separate meaning, evidence, fix, likelihood, impact or worth-fixing fields. Fold decisive facts into context/verdict; leave detailed traces and tradeoffs for Discuss. Keep relevant unknowns explicit. Render normal markdown, not one enclosing code fence; preserve fences inside the original comment.
+### B. Invoke one short interactive question
 
-Build 2-4 concrete options for the current item only, ordered with the recommendation first. Select from **Fix** (name the smallest change), **Skip** (name the accepted residual behavior), **Defer** (include the missing prerequisite/revisit condition only when valid), and **Discuss**. Keep the canonical action in every label so durable state is unambiguous. For an unverified claim, offer exactly Defer and Discuss; both name the exact settling check. Never offer Fix/Skip, silently reject it or recommend speculative implementation.
+Build 2-4 concrete options for the current item only, ordered with the recommendation first. Select from **Fix** (name the smallest change), **Skip** (name the accepted residual behavior), **Defer** (briefly reference the settling check/revisit condition only when valid), and **Discuss**. Keep the canonical action in every label. For an unverified claim, show the exact settling check once in Verdict, then offer exactly concise Defer and Discuss options; never offer Fix/Skip, repeat the full check in every option, or silently reject it.
 
-Append and verify the presented assessment and exact ordered options in `triage.md` before asking. Then use the available question tool; otherwise ask in plain text. Do not duplicate the question in prose when using the tool. Ask only about the current item, then stop. A recommendation is not a decision; never silently skip or fix anything. Do not investigate or precompute options for later items.
+After adding that visible text block to the current response, call the question tool with exactly one question in the same response:
+
+- `header`: short item identifier, for example `B4`
+- `question`: `What should we do with item <identifier>?`
+- `options`: concise action labels; put at most one short explanatory sentence in each description
+- `multiple`: `false`
+
+Do not copy Original feedback, Context or Verdict into the tool payload. Do not hide the assessment inside a long question title or option descriptions. Fix/Skip/Defer/Discuss are mutually exclusive, so this canonical decision question is always single-select. The built-in custom-answer option handles shaped answers. A later, separate follow-up question may use `multiple: true` only when several independent modifiers or checks may validly apply together; do not use it merely because several options exist.
+
+Append and verify Context, Verdict, unknowns and exact ordered tool options in `triage.md` before rendering them; do not proactively copy Original feedback because it already lives in immutable `review.md`. The later exact decisive user-input event remains verbatim even if the user independently quotes source text. If persistence failed and the user explicitly approved continuing without durable state, state once that logging is unavailable, then render/ask without claiming anything was saved. If the question tool is unavailable, keep the same assessment structure, append the options afterward in plain text, ask one single-answer question, and stop. When the tool is available, do not print a duplicate `Options:` list or `Reply 1, 2...` prompt in prose. Ask only about the current item, then stop. A recommendation is not a decision; never silently skip/fix or investigate later items.
 
 ## 5. Apply the decision and continue
 
