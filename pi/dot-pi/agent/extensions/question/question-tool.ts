@@ -1,8 +1,13 @@
 import type { ToolDefinition } from "@mariozechner/pi-coding-agent"
-import { Text } from "@mariozechner/pi-tui"
+import { Container, Markdown, Spacer, Text } from "@mariozechner/pi-tui"
 import { Type } from "@sinclair/typebox"
-import { getQuestionHeader, normalizeQuestions, summarizeAnswers } from "./helpers.ts"
-import { createQuestionPromptComponent } from "./question-ui.ts"
+import {
+  getQuestionHeader,
+  normalizeQuestions,
+  sanitizeQuestionText,
+  summarizeAnswers,
+} from "./helpers.ts"
+import { createMarkdownTheme, createQuestionPromptComponent } from "./question-ui.ts"
 import {
   OTHER_OPTION_DISPLAY_LABEL,
   type QuestionInput,
@@ -38,9 +43,9 @@ export function createQuestionTool(): ToolDefinition<typeof QuestionParams, Ques
     name: "question",
     label: "Question",
     description:
-      "Ask the user one or more questions. Long Markdown question text is scrollable while options remain visible. Questions are single-select by default, support a type-your-own-answer option, and can allow multiple selections when multiple=true. Use this to clarify requirements or gather choices during execution.",
+      "Ask the user one or more questions. Complete Markdown prompts render above their options, and completed results retain expandable question context. Questions are single-select by default, support a type-your-own-answer option, and can allow multiple selections when multiple=true. Use this to clarify requirements or gather choices during execution.",
     promptSnippet:
-      "Ask one or more user questions with scrollable Markdown prompts, single-select by default, optional multiple selection, and a type-your-own-answer option.",
+      "Ask one or more user questions with complete Markdown prompts, single-select by default, optional multiple selection, and a type-your-own-answer option.",
     promptGuidelines: [
       "Use this tool when you need clarification, preferences, or implementation choices from the user.",
       "When a decision depends on analysis or evidence, include all background needed to decide in the question field and end with one focused question; do not rely on private reasoning or separate narration.",
@@ -116,7 +121,7 @@ export function createQuestionTool(): ToolDefinition<typeof QuestionParams, Ques
         0,
       )
     },
-    renderResult(result, _options, theme, context) {
+    renderResult(result, options, theme, context) {
       if (context.isError) {
         const msg = result.content.find((c: any) => c.type === "text")?.text || "Failed"
         return new Text(theme.fg("error", msg), 0, 0)
@@ -129,13 +134,39 @@ export function createQuestionTool(): ToolDefinition<typeof QuestionParams, Ques
       if (details.cancelled) {
         return new Text(theme.fg("warning", "Cancelled"), 0, 0)
       }
-      const lines = details.questions.map((question, index) => {
+      if (!options.expanded) {
+        const lines = details.questions.map((question, index) => {
+          const answers = details.answers[index] ?? []
+          const value = answers.length > 0 ? answers.join(", ") : "Unanswered"
+          const header = `${index + 1}. ${getQuestionHeader(question, index)}`
+          return `${theme.fg("accent", header)}: ${theme.fg("muted", sanitizeQuestionText(value))}`
+        })
+        return new Text(lines.join("\n"), 0, 0)
+      }
+
+      const container = new Container()
+      details.questions.forEach((question, index) => {
         const answers = details.answers[index] ?? []
         const value = answers.length > 0 ? answers.join(", ") : "Unanswered"
-        const header = `${index + 1}. ${getQuestionHeader(question, index)}`
-        return `${theme.fg("accent", header)}: ${theme.fg("muted", value)}`
+        container.addChild(
+          new Markdown(
+            sanitizeQuestionText(question.question),
+            0,
+            0,
+            createMarkdownTheme(theme),
+          ),
+        )
+        container.addChild(new Spacer(1))
+        container.addChild(
+          new Text(
+            `${theme.fg("success", theme.bold("Answer:"))} ${sanitizeQuestionText(value)}`,
+            0,
+            0,
+          ),
+        )
+        if (index < details.questions.length - 1) container.addChild(new Spacer(1))
       })
-      return new Text(lines.join("\n"), 0, 0)
+      return container
     },
   }
 }

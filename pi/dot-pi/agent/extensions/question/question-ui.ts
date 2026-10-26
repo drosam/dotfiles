@@ -17,9 +17,7 @@ import {
 } from "./helpers.ts"
 import { OTHER_OPTION_DISPLAY_LABEL, OTHER_OPTION_LABEL, type NormalizedQuestion } from "./types.ts"
 
-const QUESTION_PAGE_SIZE = 12
-
-function createMarkdownTheme(theme: Theme): MarkdownTheme {
+export function createMarkdownTheme(theme: Theme): MarkdownTheme {
   return {
     heading: (text) => theme.fg("mdHeading", theme.bold(text)),
     link: (text) => theme.fg("mdLink", text),
@@ -62,8 +60,6 @@ class QuestionPromptComponent {
   private readonly selected = new Map<number, Set<string>>()
   private readonly customValues = new Map<number, string>()
   private readonly questionMarkdown = new Map<number, Markdown>()
-  private readonly questionScrollTop = new Map<number, number>()
-  private currentQuestionLineCount = 0
   private cachedWidth?: number
   private cachedLines?: string[]
   private dirty = true
@@ -120,19 +116,6 @@ class QuestionPromptComponent {
 
   private getQuestionLines(width: number): string[] {
     return this.questionMarkdown.get(this.currentQuestionIndex)?.render(width) ?? []
-  }
-
-  private scrollQuestion(direction: -1 | 1) {
-    if (this.currentQuestionLineCount <= QUESTION_PAGE_SIZE) return
-
-    const current = this.questionScrollTop.get(this.currentQuestionIndex) ?? 0
-    const max = Math.max(0, this.currentQuestionLineCount - QUESTION_PAGE_SIZE)
-    const step = QUESTION_PAGE_SIZE - 1
-    this.questionScrollTop.set(
-      this.currentQuestionIndex,
-      Math.max(0, Math.min(max, current + direction * step)),
-    )
-    this.refresh()
   }
 
   private isOtherSelected(index: number): boolean {
@@ -252,15 +235,6 @@ class QuestionPromptComponent {
   }
 
   handleInput(data: string) {
-    if (matchesKey(data, Key.pageUp)) {
-      this.scrollQuestion(-1)
-      return
-    }
-    if (matchesKey(data, Key.pageDown)) {
-      this.scrollQuestion(1)
-      return
-    }
-
     if (this.editingOther) {
       if (matchesKey(data, Key.escape)) {
         this.editingOther = false
@@ -388,24 +362,7 @@ class QuestionPromptComponent {
     add(progress)
     add()
 
-    const questionLines = this.getQuestionLines(contentWidth)
-    this.currentQuestionLineCount = questionLines.length
-    const maxScrollTop = Math.max(0, questionLines.length - QUESTION_PAGE_SIZE)
-    const scrollTop = Math.min(
-      maxScrollTop,
-      this.questionScrollTop.get(this.currentQuestionIndex) ?? 0,
-    )
-    this.questionScrollTop.set(this.currentQuestionIndex, scrollTop)
-    questionLines.slice(scrollTop, scrollTop + QUESTION_PAGE_SIZE).forEach(add)
-    if (questionLines.length > QUESTION_PAGE_SIZE) {
-      const end = Math.min(questionLines.length, scrollTop + QUESTION_PAGE_SIZE)
-      add(
-        this.theme.fg(
-          "dim",
-          `Question ${scrollTop + 1}-${end}/${questionLines.length} - PgUp/PgDn scroll`,
-        ),
-      )
-    }
+    this.getQuestionLines(contentWidth).forEach(add)
     add()
 
     // multi: "▶ ✔ " = 4 chars indent; single: "▶ 1. " = 5 chars indent

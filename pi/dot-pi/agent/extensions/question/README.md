@@ -18,7 +18,8 @@ Parameters:
 
 Behavior:
 
-- long Markdown questions scroll with `Page Up` / `Page Down` while options remain visible
+- complete Markdown questions render above their options
+- completed questions show a compact answer summary and expand to full question context with Pi's `Ctrl+O` tool toggle
 - terminal and bidirectional control characters in question text are removed before rendering
 - questions are **single-select by default**
 - set `multiple: true` to allow **multi-select**

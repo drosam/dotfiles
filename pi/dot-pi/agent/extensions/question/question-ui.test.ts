@@ -13,8 +13,6 @@ const RAW: Record<string, string> = {
   [Key.down]: "\x1b[B",
   [Key.left]: "\x1b[D",
   [Key.right]: "\x1b[C",
-  [Key.pageUp]: "\x1b[5~",
-  [Key.pageDown]: "\x1b[6~",
   [Key.tab]: "\t",
   [Key.shift("tab")]: "\x1b[Z",
   [Key.ctrl("s")]: "\x13",
@@ -335,7 +333,7 @@ describe("render output", () => {
     expect(output).toContain(OTHER_OPTION_DISPLAY_LABEL)
   })
 
-  test("scrolls long Markdown while options stay visible and custom input stays intact", () => {
+  test("renders the complete long Markdown question above the options", () => {
     const evidence = Array.from({ length: 24 }, (_, index) => `- Evidence ${index + 1}`).join("\n")
     const question = makeQuestion({
       question: `### Item C6\n\n${evidence}\n\n**Choose unmistakable-final-word**`,
@@ -343,21 +341,15 @@ describe("render output", () => {
     })
     const { render, send, getResult } = setup([question])
 
-    const first = render(30).join("\n")
-    expect(first).toContain("Item C6")
-    expect(first).toContain("PgUp/PgDn scroll")
-    expect(first).toContain("A")
+    const output = render(30).join("\n")
+    expect(output).toContain("Item C6")
+    expect(output).toContain("Evidence 24")
+    expect(output).toContain("unmistakable-final-word")
+    expect(output).toContain("A")
 
     send(Key.down)
     send(Key.enter)
     for (const ch of "draft") send(ch)
-    send(Key.pageDown)
-    send(Key.pageDown)
-    send(Key.pageDown)
-    const scrolled = render(30).join("\n")
-    expect(scrolled).toContain("unmistakable-final-word")
-    expect(scrolled).toContain("A")
-
     send(Key.enter)
     expect(getResult()!.answers).toEqual([["draft"]])
   })
