@@ -9,7 +9,7 @@ Pi extension that registers a `question` tool for interactive clarification.
 Parameters:
 
 - `questions` — array of questions
-  - `question` — full prompt shown to the user
+  - `question` — full Markdown prompt shown to the user
   - `header` — short label used in progress tabs
   - `options` — predefined answer options
     - `label` — visible answer label
@@ -18,6 +18,8 @@ Parameters:
 
 Behavior:
 
+- long Markdown questions scroll with `Page Up` / `Page Down` while options remain visible
+- terminal and bidirectional control characters in question text are removed before rendering
 - questions are **single-select by default**
 - set `multiple: true` to allow **multi-select**
 - every question always includes a **`type your own answer`** option

@@ -13,6 +13,8 @@ const RAW: Record<string, string> = {
   [Key.down]: "\x1b[B",
   [Key.left]: "\x1b[D",
   [Key.right]: "\x1b[C",
+  [Key.pageUp]: "\x1b[5~",
+  [Key.pageDown]: "\x1b[6~",
   [Key.tab]: "\t",
   [Key.shift("tab")]: "\x1b[Z",
   [Key.ctrl("s")]: "\x13",
@@ -85,7 +87,6 @@ const BG_COLORS = {
 
 const theme = new Theme(FG_COLORS, BG_COLORS, "256color", { name: "test" })
 
-// Minimal TUI satisfying the component's contract: only requestRender is called.
 const tui = { requestRender() {} } as Parameters<typeof createQuestionPromptComponent>[0]["tui"]
 
 function makeQuestion(overrides: Partial<NormalizedQuestion> = {}): NormalizedQuestion {
@@ -332,6 +333,33 @@ describe("render output", () => {
     expect(output).toContain("Red")
     expect(output).toContain("Blue")
     expect(output).toContain(OTHER_OPTION_DISPLAY_LABEL)
+  })
+
+  test("scrolls long Markdown while options stay visible and custom input stays intact", () => {
+    const evidence = Array.from({ length: 24 }, (_, index) => `- Evidence ${index + 1}`).join("\n")
+    const question = makeQuestion({
+      question: `### Item C6\n\n${evidence}\n\n**Choose unmistakable-final-word**`,
+      options: [{ label: "A" }],
+    })
+    const { render, send, getResult } = setup([question])
+
+    const first = render(30).join("\n")
+    expect(first).toContain("Item C6")
+    expect(first).toContain("PgUp/PgDn scroll")
+    expect(first).toContain("A")
+
+    send(Key.down)
+    send(Key.enter)
+    for (const ch of "draft") send(ch)
+    send(Key.pageDown)
+    send(Key.pageDown)
+    send(Key.pageDown)
+    const scrolled = render(30).join("\n")
+    expect(scrolled).toContain("unmistakable-final-word")
+    expect(scrolled).toContain("A")
+
+    send(Key.enter)
+    expect(getResult()!.answers).toEqual([["draft"]])
   })
 
   test("includes option description", () => {

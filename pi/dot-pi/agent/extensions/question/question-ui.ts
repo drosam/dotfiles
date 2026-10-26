@@ -1,15 +1,42 @@
 import type { Theme } from "@mariozechner/pi-coding-agent"
 import {
   Editor,
+  Markdown,
   type EditorTheme,
+  type MarkdownTheme,
   Key,
   matchesKey,
   truncateToWidth,
   type TUI,
   wrapTextWithAnsi,
 } from "@mariozechner/pi-tui"
-import { normalizeAnswerSelection, replaceAnswerSelection } from "./helpers.ts"
+import {
+  normalizeAnswerSelection,
+  replaceAnswerSelection,
+  sanitizeQuestionText,
+} from "./helpers.ts"
 import { OTHER_OPTION_DISPLAY_LABEL, OTHER_OPTION_LABEL, type NormalizedQuestion } from "./types.ts"
+
+const QUESTION_PAGE_SIZE = 12
+
+function createMarkdownTheme(theme: Theme): MarkdownTheme {
+  return {
+    heading: (text) => theme.fg("mdHeading", theme.bold(text)),
+    link: (text) => theme.fg("mdLink", text),
+    linkUrl: (text) => theme.fg("mdLinkUrl", text),
+    code: (text) => theme.fg("mdCode", text),
+    codeBlock: (text) => theme.fg("mdCodeBlock", text),
+    codeBlockBorder: (text) => theme.fg("mdCodeBlockBorder", text),
+    quote: (text) => theme.fg("mdQuote", text),
+    quoteBorder: (text) => theme.fg("mdQuoteBorder", text),
+    hr: (text) => theme.fg("mdHr", text),
+    listBullet: (text) => theme.fg("mdListBullet", text),
+    bold: (text) => theme.bold(text),
+    italic: (text) => theme.italic(text),
+    strikethrough: (text) => theme.strikethrough(text),
+    underline: (text) => theme.underline(text),
+  }
+}
 
 interface QuestionPromptComponentInput {
   tui: TUI
@@ -34,6 +61,9 @@ class QuestionPromptComponent {
   private editingOther = false
   private readonly selected = new Map<number, Set<string>>()
   private readonly customValues = new Map<number, string>()
+  private readonly questionMarkdown = new Map<number, Markdown>()
+  private readonly questionScrollTop = new Map<number, number>()
+  private currentQuestionLineCount = 0
   private cachedWidth?: number
   private cachedLines?: string[]
   private dirty = true
@@ -45,6 +75,12 @@ class QuestionPromptComponent {
     this.onDone = onDone
     this.editor = new Editor(tui, this.getEditorTheme())
     this.editor.disableSubmit = true
+    questions.forEach((question, index) => {
+      this.questionMarkdown.set(
+        index,
+        new Markdown(sanitizeQuestionText(question.question), 0, 0, createMarkdownTheme(theme)),
+      )
+    })
     this.editor.onChange = () => {
       if (this.suppressEditorChange) return
       this.customValues.set(this.currentQuestionIndex, this.editor.getText())
@@ -80,6 +116,23 @@ class QuestionPromptComponent {
 
   private getOptionCount(): number {
     return this.getCurrentQuestion().options.length + 1
+  }
+
+  private getQuestionLines(width: number): string[] {
+    return this.questionMarkdown.get(this.currentQuestionIndex)?.render(width) ?? []
+  }
+
+  private scrollQuestion(direction: -1 | 1) {
+    if (this.currentQuestionLineCount <= QUESTION_PAGE_SIZE) return
+
+    const current = this.questionScrollTop.get(this.currentQuestionIndex) ?? 0
+    const max = Math.max(0, this.currentQuestionLineCount - QUESTION_PAGE_SIZE)
+    const step = QUESTION_PAGE_SIZE - 1
+    this.questionScrollTop.set(
+      this.currentQuestionIndex,
+      Math.max(0, Math.min(max, current + direction * step)),
+    )
+    this.refresh()
   }
 
   private isOtherSelected(index: number): boolean {
@@ -199,6 +252,15 @@ class QuestionPromptComponent {
   }
 
   handleInput(data: string) {
+    if (matchesKey(data, Key.pageUp)) {
+      this.scrollQuestion(-1)
+      return
+    }
+    if (matchesKey(data, Key.pageDown)) {
+      this.scrollQuestion(1)
+      return
+    }
+
     if (this.editingOther) {
       if (matchesKey(data, Key.escape)) {
         this.editingOther = false
@@ -277,15 +339,18 @@ class QuestionPromptComponent {
 
   invalidate() {
     this.cachedWidth = undefined
+    for (const markdown of this.questionMarkdown.values()) markdown.invalidate()
   }
 
   render(width: number): string[] {
-    if (!this.dirty && this.cachedLines && this.cachedWidth === width) return this.cachedLines
+    if (!this.dirty && this.cachedLines && this.cachedWidth === width) {
+      return this.cachedLines
+    }
 
     const lines: string[] = []
     const question = this.getCurrentQuestion()
     const px = 2
-    const contentWidth = Math.max(40, width - px * 2)
+    const contentWidth = Math.max(1, width - px * 2)
     const multiple = this.isCurrentQuestionMultiple()
     const add = (value = "") => lines.push(truncateToWidth(value, contentWidth))
 
@@ -304,7 +369,7 @@ class QuestionPromptComponent {
 
     // Wrap text, prefixing continuation lines with `prefix`.
     const wrap = (text: string, prefix = "") => {
-      const wrapWidth = Math.max(20, contentWidth - prefix.length)
+      const wrapWidth = Math.max(1, contentWidth - prefix.length)
       for (const line of wrapTextWithAnsi(text, wrapWidth)) {
         if (line === undefined) continue
         lines.push(prefix + line)
@@ -322,7 +387,25 @@ class QuestionPromptComponent {
 
     add(progress)
     add()
-    wrap(this.theme.bold(question.question))
+
+    const questionLines = this.getQuestionLines(contentWidth)
+    this.currentQuestionLineCount = questionLines.length
+    const maxScrollTop = Math.max(0, questionLines.length - QUESTION_PAGE_SIZE)
+    const scrollTop = Math.min(
+      maxScrollTop,
+      this.questionScrollTop.get(this.currentQuestionIndex) ?? 0,
+    )
+    this.questionScrollTop.set(this.currentQuestionIndex, scrollTop)
+    questionLines.slice(scrollTop, scrollTop + QUESTION_PAGE_SIZE).forEach(add)
+    if (questionLines.length > QUESTION_PAGE_SIZE) {
+      const end = Math.min(questionLines.length, scrollTop + QUESTION_PAGE_SIZE)
+      add(
+        this.theme.fg(
+          "dim",
+          `Question ${scrollTop + 1}-${end}/${questionLines.length} - PgUp/PgDn scroll`,
+        ),
+      )
+    }
     add()
 
     // multi: "▶ ✔ " = 4 chars indent; single: "▶ 1. " = 5 chars indent

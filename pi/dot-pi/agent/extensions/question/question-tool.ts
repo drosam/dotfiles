@@ -1,7 +1,7 @@
 import type { ToolDefinition } from "@mariozechner/pi-coding-agent"
 import { Text } from "@mariozechner/pi-tui"
 import { Type } from "@sinclair/typebox"
-import { normalizeQuestions, summarizeAnswers } from "./helpers.ts"
+import { getQuestionHeader, normalizeQuestions, summarizeAnswers } from "./helpers.ts"
 import { createQuestionPromptComponent } from "./question-ui.ts"
 import {
   OTHER_OPTION_DISPLAY_LABEL,
@@ -15,7 +15,9 @@ const OptionSchema = Type.Object({
 })
 
 const QuestionSchema = Type.Object({
-  question: Type.String({ description: "Complete question to ask the user" }),
+  question: Type.String({
+    description: "Complete Markdown prompt, including any background needed to decide",
+  }),
   header: Type.String({ description: "Short label for progress tabs" }),
   options: Type.Array(OptionSchema, { description: "Available predefined options" }),
   multiple: Type.Optional(
@@ -36,11 +38,13 @@ export function createQuestionTool(): ToolDefinition<typeof QuestionParams, Ques
     name: "question",
     label: "Question",
     description:
-      "Ask the user one or more questions. Questions are single-select by default, support a type-your-own-answer option, and can allow multiple selections when multiple=true. Use this to clarify requirements or gather choices during execution.",
+      "Ask the user one or more questions. Long Markdown question text is scrollable while options remain visible. Questions are single-select by default, support a type-your-own-answer option, and can allow multiple selections when multiple=true. Use this to clarify requirements or gather choices during execution.",
     promptSnippet:
-      "Ask one or more user questions with single-select by default, optional multiple selection, and a type-your-own-answer option.",
+      "Ask one or more user questions with scrollable Markdown prompts, single-select by default, optional multiple selection, and a type-your-own-answer option.",
     promptGuidelines: [
       "Use this tool when you need clarification, preferences, or implementation choices from the user.",
+      "When a decision depends on analysis or evidence, include all background needed to decide in the question field and end with one focused question; do not rely on private reasoning or separate narration.",
+      "Keep option labels and descriptions concise when the question contains detailed context.",
       "Questions are single-select by default; set multiple=true only when the user should choose more than one option.",
       "Every question supports entering a custom answer; do not simulate user answers yourself.",
     ],
@@ -128,7 +132,8 @@ export function createQuestionTool(): ToolDefinition<typeof QuestionParams, Ques
       const lines = details.questions.map((question, index) => {
         const answers = details.answers[index] ?? []
         const value = answers.length > 0 ? answers.join(", ") : "Unanswered"
-        return `${theme.fg("accent", question.header)}: ${theme.fg("muted", value)}`
+        const header = `${index + 1}. ${getQuestionHeader(question, index)}`
+        return `${theme.fg("accent", header)}: ${theme.fg("muted", value)}`
       })
       return new Text(lines.join("\n"), 0, 0)
     },
