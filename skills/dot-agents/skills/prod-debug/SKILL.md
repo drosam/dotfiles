@@ -70,15 +70,16 @@ Inspect the target repo's local `.agent-work/`: `work/<work-id>/spec.md` defines
    - Timestamp/time zone and affected release/environment
    - Recent deploy/commit
    - Logs/monitoring links or pasted output
-   - Expected vs actual behavior
+   - Expected vs actual behavior; separate supplied observations from assumptions
 3. Inspect code read-only:
    - Search relevant classes, controllers, jobs, serializers, services, models, scopes, callbacks.
    - Check recent git diff/log only if useful.
+   - Before claiming frontend/backend parity, find duplicate implementations and compare the relevant callers, inputs, and conditions; one matching function is insufficient.
 4. Form hypotheses:
-   - Map stack trace to code path.
-   - Identify data assumptions and edge cases.
-   - Rank hypotheses with evidence for/against and one discriminating observation each.
-   - Mark unverified causes as hypotheses, not confirmed root causes.
+   - Map stack trace to code path and identify data assumptions.
+   - Rank plausible causes with evidence for/against and one read-only check that could disprove each; do not invent alternatives just to meet a count.
+   - Update hypothesis status from results. Label conclusions VERIFIED or INFERRED and cite evidence type: code inspection, runtime observation, or user-supplied output.
+   - Code inspection verifies what the cited code says, not that the reported behavior occurred. Do not claim a confirmed runtime root cause or "not reproducible" from code reading alone.
 5. Request production observations only when needed.
 6. For production observations via approved read-only tools/MCP (monitoring, log search, dashboards, etc.):
    - Run directly, scoped narrowly (time/result bounds), redacting/minimizing sensitive fields.
@@ -98,7 +99,7 @@ Inspect the target repo's local `.agent-work/`: `work/<work-id>/spec.md` defines
    - On successful copy, do not print or repeat the snippet in the response; return only the terse confirmation from `Clipboard Step`.
    - Wait for user to paste result.
 9. Final output:
-   - `bug:` concise root cause.
+   - `bug:` concise conclusion labeled VERIFIED or INFERRED; leave cause unresolved when evidence is insufficient.
    - `evidence:` bullets.
    - `impact:` affected users/data/path.
    - `verify:` read-only checks.
@@ -106,6 +107,8 @@ Inspect the target repo's local `.agent-work/`: `work/<work-id>/spec.md` defines
    - `next:` ask user if ready to code.
 
 ## Rails Console Snippet Rules
+
+Before preparing any Rails snippet or SQL query, verify columns and types against `db/schema.rb` or `db/structure.sql`, and associations, scopes, methods, and enum meanings against their definitions. Cite checked file paths/lines. Never guess names or treat an integer/enum as a boolean. If definitions are unavailable or deployed schema parity is uncertain, state the gap and request the missing definition or a bounded read-only schema check before using it.
 
 When needing production data, generate snippets that:
 

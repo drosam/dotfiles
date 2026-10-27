@@ -61,21 +61,22 @@ Read relevant work artifacts under the target repo's `.agent-work/`: `work/<work
    - Error message/stack trace
    - Command/test that failed
    - Relevant IDs, params, fixture names, or timestamps
-   - Expected vs actual behavior
+   - Expected vs actual behavior; separate supplied observations from assumptions
    - Recent diff/commit if relevant
 3. Inspect code read-only:
    - Search relevant classes, controllers, jobs, serializers, services, models, scopes, callbacks, tests, and logs.
    - Check recent git diff/log only if useful.
-4. Reproduce or observe locally with safe commands:
+   - Before claiming frontend/backend parity, find duplicate implementations and compare the relevant callers, inputs, and conditions; one matching function is insufficient.
+4. Form hypotheses:
+   - Map stack trace to code path and identify data assumptions.
+   - Rank plausible causes with evidence for/against and one read-only check that could disprove each; do not invent alternatives just to meet a count.
+5. Reproduce or observe locally with safe commands:
    - Seek a fast, repeatable signal for the exact reported symptom, not merely successful startup.
    - Prefer the smallest safe command; record invocation, observed result, and expected result.
    - Bound runtime and output. Minimize inputs one at a time without changing persistent state.
    - If no safe reproduction exists, report that limit and request a redacted artifact; do not add instrumentation or fabricate verification.
-5. Form hypotheses:
-   - Map stack trace to code path.
-   - Identify data assumptions and edge cases.
-   - Rank plausible hypotheses with evidence for/against and one discriminating read-only check each.
-   - Change one observation at a time. Separate confirmed cause from untested hypothesis.
+   - Update hypothesis status from results. Label conclusions VERIFIED or INFERRED and cite evidence type: code inspection, runtime observation, or user-supplied output.
+   - Code inspection verifies what the cited code says, not that the reported behavior occurred. Do not claim a confirmed runtime root cause or "not reproducible" from code reading alone.
 6. Use Rails runner when app state inspection helps:
    - Run it yourself only against local development/test environment.
    - Keep snippet query-only and bounded unless the current user message explicitly authorizes one specific local Rails mutation under the one-shot exception.
@@ -85,13 +86,15 @@ Read relevant work artifacts under the target repo's `.agent-work/`: `work/<work
    - Report whether that one execution succeeded, failed, or was not attempted.
    - Return to read-only checks immediately.
 8. Final output:
-   - `bug:` concise likely root cause.
+   - `bug:` concise conclusion labeled VERIFIED or INFERRED; leave cause unresolved when evidence is insufficient.
    - `evidence:` bullets with commands/files.
    - `verify:` read-only checks already run or still useful.
    - `fix plan:` implementation options.
    - `next:` ask user if ready to start implementing.
 
 ## Rails Runner Rules
+
+Before preparing any Rails snippet or SQL query, verify columns and types against `db/schema.rb` or `db/structure.sql`, and associations, scopes, methods, and enum meanings against their definitions. Cite checked file paths/lines. Never guess names or treat an integer/enum as a boolean. If definitions are unavailable or deployed schema parity is uncertain, state the gap and request the missing definition or a bounded read-only schema check before using it.
 
 When needing local Rails data, generate and run snippets that:
 
