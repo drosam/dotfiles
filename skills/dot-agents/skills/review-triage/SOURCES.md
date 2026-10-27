@@ -1,5 +1,17 @@
 # Review Triage Sources and Decisions
 
+## Optional session checkpoints
+
+User-approved refinement in this session: replace the earlier rejected forced-batch proposal with an offer after 4 completed items to hand over, compact manually, or continue. Source confidence: explicit user preference, not evidence that 4 is optimal or that either transition improves correctness. Installed Pi 1.4.0 `docs/sessions.md` and `docs/compaction.md` confirm that `/new` starts a fresh session and `/compact [instructions]` summarizes older context while retaining recent messages; neither guarantees faithful recovery. No extension/API dependency was adopted.
+
+Behavior delta: intercept the existing safe advancement boundary, count only current-session/interval terminal items, and ask a separate Handover / Compact / Continue question without investigating the next item. Handover/Compact saves and verifies a dense checkpoint in existing `triage.md`, preserves exact identity and continuation state, returns manual transition instructions, and stops. Continue or explicit post-transition continuation resets the interval. Existing per-item decisions, validation/commit gates, immutable source, append-only logging and resume identity checks remain authoritative. Early user-requested checkpoints preserve active work/blockers; default offers never interrupt it. Failed persistence cannot masquerade as a saved handover.
+
+Shape: inline workflow-process guidance plus updates to existing contract/provenance docs; no new artifact, dependency, script, extension or registration change. Description unchanged: existing-feedback walkthrough and resume requests still trigger; fresh code review, unrelated feature work and standalone session-management requests do not become triage triggers.
+
+Qualitative desk checks only (expected behavior, not observed agent runs): four completed items plus a pending fifth -> session-choice question before fifth-item investigation; three completions plus a blocked fix -> preserve blocker, no automatic offer; final item completed at interval boundary -> final summary only; Continue -> next interval without immediate re-prompt; Compact chosen -> verified checkpoint and manual command, no claim of execution; handover with mismatched live branch on resume -> existing clarification gate; explicit early handover during Discuss -> preserve unresolved item and decision, never advance. No runtime adherence or effectiveness measurement.
+
+Validation: targeted `git diff --check` passed; static review confirmed the new offer intercepts advancement without weakening existing per-item gates. Strict-depth validation was not rerun because the earlier validator attempts failed at startup with `ModuleNotFoundError: No module named 'yaml'`; no dependency was installed. Live triage, handover and compaction flows remain untested.
+
 ## Readable assessment followed by one interactive decision
 
 Human-verified iteration on 2026-10-23 from user-supplied Pi screenshots in this session. Negative example A: the agent rendered Original feedback, context, recommendation and a numbered options list as plain text, ending with `Reply 1, 2 or 3`; no interactive selector appeared. Negative examples B/C: the interactive selector appeared with a short title/options, while the full Original feedback, context and verdict were absent from the active decision view.
