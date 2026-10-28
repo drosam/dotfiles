@@ -1,6 +1,20 @@
 # Review Triage Sources and Decisions
 
-## Optional session checkpoints
+## Per-item completion stops with a session-only opt-out
+
+Explicit user replacement for the checkpoint mechanism introduced in commit `4dec67d0884a`: after each item is finished and logged, return a very small outcome summary and ask whether to investigate the next numbered/titled item, then hard stop. Follow-up requirement: skip these continuation stops only when the user clearly requests it, and only for this triage session. Source confidence: explicit user preference; no measured adherence or effectiveness claim.
+
+Behavior delta: replace the four-completion counter and Handover / Compact / Continue selector with a plain-text completion boundary after every validated-and-committed fix, explicit skip or explicit defer. Read the next number/title only from the queue, log the paused continuation point, and wait for a new explicit continuation message. Keep continuation and session-control input separate from action decisions. A clear, logged no-between-item-questions waiver suppresses only continuation stops for the current session; generic batch authority is insufficient, ambiguity asks, revocation restores stops, and fresh sessions never inherit it. Same-session compaction may preserve a verified waiver. Preserve serial investigation, evidence, action approval, per-fix validation/commit, append-only state and persistence-failure gates. Retain requested handover/full-file resume without automatic compaction or session switching.
+
+Shape/class: inline workflow-process guidance; replace/narrow existing advancement rules and checkpoint section rather than add runtime references, scripts, dependencies or registration. Existing SPEC.md captures the output/control change; this section records provenance. Shared live symlink resolves to the canonical repository skill directory. No Pi API/config change.
+
+Description retained verbatim: interaction changes after triage triggers, not routing. Should trigger: `triage these comments`, `walk through existing findings`, `resume review triage`. Should not trigger: `review a new diff`, `implement a feature`, `compact this unrelated session`.
+
+Qualitative desk checks only (expected behavior, not observed agent runs): first completed fix with pending #2 -> logged outcome/hash and plain-text #2 question, no #2 investigation; Skip/Defer -> same boundary; Discuss or blocked validation/commit -> current item stays active; `continue` -> log continuation, investigate only next item, do not infer repair approval; `fix all` -> action authority only, still stop; clear `don't ask between items this session` -> log waiver, continue serially without continuation prompts, retain action/commit gates; ambiguous `don't ask` -> clarify scope; fresh session -> waiver reset even for same review; same-session compaction -> full-file validation of explicit waiver, not summary authority; last item -> final summary only; log failure -> explicit failure gate, never false `Logged.`. Preconditions, ordered flow, failure handling and safety boundaries remain covered by desk inspection.
+
+Validation: `git diff --check -- skills/dot-agents/skills/review-triage` passed. Command `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/review-triage --skill-class workflow-process --strict-depth` exited 1 at startup: `ModuleNotFoundError: No module named 'yaml'`. No dependency installed. Runtime triage, opt-out and resume behavior remain untested.
+
+## Optional session checkpoints (superseded by per-item stops above)
 
 User-approved refinement in this session: replace the earlier rejected forced-batch proposal with an offer after 4 completed items to hand over, compact manually, or continue. Source confidence: explicit user preference, not evidence that 4 is optimal or that either transition improves correctness. Installed Pi 1.4.0 `docs/sessions.md` and `docs/compaction.md` confirm that `/new` starts a fresh session and `/compact [instructions]` summarizes older context while retaining recent messages; neither guarantees faithful recovery. No extension/API dependency was adopted.
 
