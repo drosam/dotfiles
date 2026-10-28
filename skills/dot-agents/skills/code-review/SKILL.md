@@ -95,6 +95,8 @@ Trace changed inputs through callers, transformation, storage, and externally vi
 
 State the invariants: what must remain true before, during, and after the operation? Missing tests alone do not prove a bug; prove the failure path or describe the specific unprotected contract as a test gap.
 
+For changed event-driven behavior, contrast first vs repeated action on the same record, same vs different identity, and pending vs settled work where relevant. Trace whether consumers receive an operation change or only an unchanged entity ID/value: highlighting, scrolling, retrying or invalidation may need to happen again without identity changing. Cite expected/actual behavior and a discriminating assertion; do not force repeat work when the contract is intentionally idempotent.
+
 ### Security and privacy
 
 Map attacker-controlled input, identity/privilege, trust boundary, guard, and dangerous sink. Trace actual middleware/policies/callers before concluding a bypass.
@@ -131,6 +133,8 @@ Review changed responsibilities, not just individual files. Retain checks for la
 3. Compare business predicates across sibling selectors/guards, not only matching syntax. Trace callers before tightening optional contracts; ask whether the producer, constructor, schema or type can enforce an internal invariant instead of scattered consumer guards. Preserve legitimate absent values, intentional view-specific filters, corruption handling, validation and `unknown` at trust boundaries.
 4. When one discriminator repeatedly controls data source, effects and rendering, compare mode-specific ownership/lifecycles. Enumerate reset/cleanup triggers and state that must survive transitions. Split only when it removes coordination cost; preserve pending work, focus, loading/error recovery and other required continuity.
 5. For each finding, name the concrete coordination cost or violated invariant, a smaller design and a migration/regression-check boundary. Prefer canonical ownership and meaningful types over another wrapper. Check atomicity and needless sequencing; suggest parallelism only when dependencies and effects permit it and complexity decreases. Record the ownership map and justified separations in code-health coverage even when no finding remains; use not-applicable only with a reason.
+6. For new or parallel helpers, selectors, requests and business rules, search for an existing owner before accepting another implementation. Record the candidate paths and compare inputs, normalization/encoding, scope, effects, failures and caller needs. Distinguish similar style from actual reuse: show what duplication reuse removes or why separation is sound. Preserve legitimate domain/trust boundaries; an unavailable candidate or incomplete caller search is a coverage gap, not proof of safe consolidation.
+7. Trace changed producer/consumer contracts through production callers, not only tests: required vs optional inputs, null/undefined/status interpretation, callback ownership and consumed return values. Identify test-only API machinery or repeated consumer interpretation that can move to the producer; verify dynamic/external entry points before calling a value unused. Distinguish a documented/type contract from runtime enforcement at the installed framework version, and retain genuine absence/error states and necessary validation.
 
 ### Comment quality and AI-style clutter
 
@@ -152,7 +156,11 @@ For every candidate:
 6. Search relevant sibling paths for variants of a confirmed defect. If multiple fixes restore the same invariant, distinguish repaired symptoms from remaining ownership/representation costs; do not call a fixed bug still present or assume a shared root cause without tracing it. Keep untouched/unrelated occurrences separate from introduced regressions.
 7. Recheck scope/HEAD/worktree stability and ledger completeness before the verdict. Re-review fixes on their new revision; previous conclusions do not automatically transfer.
 
+On follow-up or completed-fix reviews, record repair closure at the pinned new revision: prior finding/revision -> changed owner/API -> affected consumers, discriminating tests, docs/PR claims and newly applicable rules -> evidence or exact gap. Include rules activated by the repair itself, such as an explanation required for a new safety bypass. Check both the original failure and repair-induced contract, duplication or dead-code changes. Distinguish already-caught but incompletely repaired issues from newly introduced issues and defects missed at the earlier revision; absent prior evidence is not proof of a miss. Inspect only affected surfaces, preserve unrelated work, and do not edit code or PR text under review authority.
+
 Read `references/review-examples.md` when calibrating evidence or resolving a disputed finding; use its ownership, mode-boundary and lifecycle cases when the change involves synchronized state, repeated repair callbacks or mode-dependent effects.
+
+Use that reference's reuse/contract, same-identity event and repair-closure cases for parallel helpers, repeated-action behavior or follow-up fixes. These supplement the existing review dimensions; never trade away correctness, security, tests, documentation or other code-health checks to perform them.
 
 ### Severity and gate
 
@@ -207,6 +215,9 @@ Use this report format; no finding cap, strict word discipline per finding:
 - PR/history: PR # or none/lookup unavailable; commit range; prior concerns vs current code; gaps.
 - Patterns: compared paths@rev -> consistent | departure | divergence (why).
 - Ownership: authoritative -> derived state/policy; writers/repair obligations, source locations and justified separations; or n/a with reason.
+- Code quality: reuse candidate paths + semantic comparison/decision; producer -> consumer contracts and actual use; checked | unchecked | n/a with reason.
+- Scenarios: relevant first/repeated, same/different identity and pending/settled cases -> expected/actual + code/test evidence; or n/a with reason.
+- Repair closure: prior finding@revision -> affected surfaces/checks at new revision, remaining gaps and issue provenance; or n/a with reason.
 - Deployment: env/rev/source, or `n/a: reason`.
 - Validation: `cmd -> result` one line each; unrun: reason.
 - Gaps: missing checks + next action, or none.

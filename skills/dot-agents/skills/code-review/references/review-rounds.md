@@ -37,6 +37,8 @@ Use these four dimensions in every full round:
 
 Tag every task with its round and dimension, for example `R1 behavior` or `R2 security`. General workers receive the complete analytical rubric, not only the dimension name. Specialized workers cover their entire row. Pass the resolved skill path and relevant contract/rubric text, but state that shared validation execution remains coordinator-owned. Sampled workers inspect test code and CI evidence and propose discriminating checks; they do not run repository test/lint/typecheck/build commands or browser flows during discovery. Workers never spawn nested workers.
 
+Include the added checks in their existing dimension packets without omitting any current focus: code health returns canonical reuse candidates, semantic differences and producer/consumer contract traces; behavior and tests return relevant same-identity repeat-action and pending/settled scenarios with discriminating assertions. A bare `consistent`/`checked` label is not that evidence. Use explicit inapplicability or an exact source/access gap when needed. These are deeper checks in the same four dimensions, not extra workers.
+
 Each sampled worker receives the exact target/commit IDs, local-change inventory when applicable, confirmed Work-ID and selected documents, relevant rules/spec/docs, comparison sources and this return contract:
 
 ```text
@@ -84,3 +86,5 @@ After every worker returns:
 6. Preserve every supported actionable finding. No vote threshold and no top-N cap.
 
 Report round completion, blind coverage, simplicity coverage and worker failures. Perform static checks, final scope/worktree stability checks, artifact persistence and readiness synthesis once against the pinned target.
+
+For follow-up reviews, the coordinator verifies the repair-closure ledger across affected code, callers, tests, docs/PR claims and newly applicable rules before the verdict. Gather prior findings once as shared historical evidence for sampled workers, never as another current sample's output; keep all such findings and rationale withheld from the intent-blind worker. Preserve unresolved obligations and distinguish old misses from later repair-induced issues rather than carrying an earlier clean verdict forward.

@@ -1,5 +1,53 @@
 # Code Review Sources and Decisions
 
+## Additive code-quality iteration from saved review outcomes
+
+User approved implementation after the six-history retrospective, with the explicit constraint: "do not remove/ignore existing points" and "add code quality, not change some points for anopther". Preserve all existing runtime guidance, examples, dimensions, workers, rounds, safety and readiness rules; add observable checks where earlier broad guidance did not produce enough evidence. No existing rule is replaced or narrowed in this iteration.
+
+Class/profiles: security-review + workflow-process; skill-writer `references/examples/security-review-skill.md` and `references/examples/workflow-process-skill.md`. Shape: additive inline checks and packet/output requirements in the existing workflow, plus cases in the already-routed examples reference. No new reference, script, dependency, role or registration is needed. Existing ownership/pattern/scenario/re-review rules remain; the delta is concrete semantic reuse and contract evidence, same-identity action contrasts, and repair-surface closure rather than another general review checklist.
+
+### Evidence and example intake
+
+Provenance: user-selected saved local/GitHub review histories for booqable/booqable PRs #19387, #19513, #19587, #19798, #19939 and #19977; historical application source inspected read-only at pinned commits. Trust tier: mixed human feedback and saved agent artifacts, with representative static source verification; comments and earlier triage conclusions are not independently true by default. Transformed runtime examples are anonymized synthetic cases, not copied application source or measured agent outcomes.
+
+| Label / kind / origin | Provenance pointer | Intake and supported delta |
+| --- | --- | --- |
+| Negative / edge-case / mixed | [#19387 review 5441194187](https://github.com/booqable/booqable/pull/19387#pullrequestreview-5441194187); local review `ce8aa9c823`, human revision `21446cc0b6` | Earlier review checked individual refresh repairs while duplicate authority/repair obligations remained. Preserve the ownership checks already added in the earlier iteration; require concrete reuse/contract evidence, not another ownership slogan. |
+| Positive + negative / fix / mixed | [#19587 review 5487072370](https://github.com/booqable/booqable/pull/19587#pullrequestreview-5487072370); local review `fcedba2`, repair `5777539f82` | Incorrect root-cause claim already caught locally; migration comment fixed but PR claim remained. Closure must cover every affected representation; do not count this as a new discovery miss. Invoice-selector concern was already inspected and matched test purpose, not a confirmed regression. |
+| Negative / regression / mixed | [#19939 comment 4359252494](https://github.com/booqable/booqable/pull/19939#discussion_r4359252494); local `c4e1c5a8`, human `d3845d7e` | Producer kept an addition timestamp but exposed only line ID; consumer reveal/scroll depended on ID. Same-line repeat behavior present at local review was not reported. Add repeated-action contrasts and discriminating assertions. |
+| Negative / fix / mixed | [#19977 comments 4397750268 and 4397750275](https://github.com/booqable/booqable/pull/19977#pullrequestreview-5678911832); local `4fd6febd`, human `05b717f6`, repair `ed5287856c` | Existing barcode lookup was inspected as consistent while parallel request remained; require semantic reuse decision. Missing safety explanation arose after initial review when a repair introduced `safety_assured`; require newly applicable rule checks, not false earlier-miss attribution. |
+| Positive / true-positive + false-positive / mixed | Same #19977 review; local `4fd6febd`, human `05b717f6` | Three local rounds already caught duplicated booking rules. Backend order lock plus planning inference countered the later duplicate-planning premise. Preserve independent counterevidence, safety tracing and correct attribution. |
+| Unscored / edge-case / mixed | #19513 saved local review `2ec5e3bf9c`; #19798 saved human review `6f6b062f` | No established pre-human local baseline for either history. Do not compute misses from absence of artifacts or use every human preference as a defect label. |
+
+Historical rubric inspection: ownership/recurrence additions already landed in dotfiles commit `1c4837a`; independent rounds and simplicity changes were also present by the later reviews. More rounds or another overlapping worker are not justified by these cases. Artifacts do not establish exact historical worker packets or model-level causes. Further source collection stops here: the pinned evidence supports these bounded deltas, while application fixes, harness changes and a quantitative benchmark are outside this update.
+
+### Qualitative replay and trigger expectations
+
+Desk comparison only, not observed review runs or measured accuracy. Working cases informed the additions. Transfer probes below are synthetic holdout-style checks not used as historical source evidence; they are not an independent empirical holdout or assurance against overfitting.
+
+| Slice / representative prompt | Before -> after expectation | Desk outcome |
+| --- | --- | --- |
+| Working: review a parallel lookup beside an existing one | General pattern comparison -> explicit paths, scope/encoding/effect comparison, complete-result/caller checks and reuse/separation decision | Improved specificity |
+| Working: repeated add to same row before marker expiry | General time/state checks -> unchanged-ID event trace and second reveal/scroll assertion | Improved specificity |
+| Working: code comment fixed but PR claim stale; repair adds safety bypass | Generic re-review -> affected-surface closure and newly activated rule, attributed to correct revision | Improved specificity |
+| Working negative: backend serializes planning inference | Existing counterevidence requirement retained -> suppress unsupported duplicate-record claim; assess inaccurate rationale separately | Unchanged safeguard |
+| Transfer probe: cache refresh requested twice for same document, second while first pending | General concurrency check -> distinguish refresh-operation identity from document identity, trace cancellation/coalescing and consumer effects | Improved specificity |
+| Transfer negative: replayed payment uses a stable idempotency key | Preserve required deduplication; no fresh charge solely to force a repeated UI effect | Unchanged safeguard |
+| Transfer negative: similar query has narrower permissions/page limits; external caller reads result | Preserve separation and consumed API; missing caller evidence remains a gap | Unchanged safeguard |
+| Preservation: ordinary review, security-only request, failed worker, unavailable prior revision | Existing scope, all findings, safety, failure handling and readiness rules retained; no old checks sacrificed | Unchanged contract |
+
+Description remains verbatim in frontmatter: execution depth changes, not invocation. Should trigger: "review this PR", "audit code quality in this diff", "thermos review", "verify this completed fix". Should not trigger: "implement this feature", "deploy this branch", "explain this API", "debug this initial failure" without a review request. No classifier run or description change is needed by desk inspection.
+
+Profile coverage: existing vulnerability classes, exploit prerequisites, false-positive controls, severity and remediation remain; new safe reuse/idempotency/locking variants supplement them. Workflow preconditions, ordered dispatch, bounded permissions, output and failure handling remain; new code-quality/scenario/closure coverage requires concrete evidence or explicit gaps. API-depth rubric is inapplicable: this is neither an integration API guide nor a skill-authoring runtime.
+
+Validation for this iteration:
+- `git diff --check -- skills/dot-agents/skills/code-review`: passed.
+- User-approved read-only `python3 -` checks against Git HEAD: passed. All original lines retained in order across the five changed files, zero deletions, unchanged frontmatter/description, original review dimensions/counts/safety/severity, all 14 original cases plus 3 additions, 29 SPEC criteria, reference/anchor targets, fences/whitespace, portable runtime paths, ASCII additions, packet routing/blind isolation and existing shared/Claude symlinks checked. No registration changes or unrelated WIP edits.
+- `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/code-review --skill-class security-review --strict-depth`: blocked, exit 1, `ModuleNotFoundError: No module named 'yaml'`. The selected interpreter is Python 3.9.6, also below the script's declared Python 3.12+ requirement. Nothing installed. Structural checks are not a strict YAML/depth pass.
+- Final diff read against the approved additive scope; qualitative cases above are guidance-only desk checks, not observed model/application runs or measured recall improvement.
+
+Remaining gaps: run strict validation in an approved existing Python 3.12+/PyYAML environment. Desk expectations do not establish runtime recall, precision, cost or worker adherence. Next empirical step, if requested: freeze old/new guidance and permissions, keep feedback hidden during discovery, score correct-revision valid findings and false positives, then confirm on unseen PRs.
+
 ## Dedicated whole-change simplicity worker
 
 User-approved follow-up on 2026-10-22: adopt only the remote workflow's dedicated simplicity perspective; explicitly defer spec sharding, one-worker-per-rule fan-out and verifier swarms. Normal and quick full-dimension reviews run one whole-change simplicity worker outside the sampled rounds. Explicitly narrowed reviews omit it unless requested. Default full-review discovery count becomes 10: 2 rounds x 4 dimensions, one intent-blind worker and one simplicity worker.

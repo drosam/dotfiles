@@ -18,6 +18,9 @@ Synthetic calibration cases, not findings about the current repository or execut
 - [12. Lifecycle and UI composition](#12-cross-path-check-cleanup-and-responsive-capabilities)
 - [13. Independent review rounds](#13-independent-review-rounds-and-claim-verification)
 - [14. Whole-change simplicity](#14-whole-change-simplicity-without-deleting-required-behavior)
+- [15. Reuse and consumer contracts](#15-reuse-and-consumer-contracts-beyond-pattern-consistency)
+- [16. Same-identity events](#16-repeated-action-with-unchanged-record-identity)
+- [17. Repair closure](#17-repair-closure-without-revision-confusion)
 
 ## 1. Happy path: complete review without invented issues
 
@@ -145,3 +148,29 @@ Happy path: confirmed acceptance requires one provider integration, but the chan
 Robust variant: removing an old decoder would simplify the code, but deployment evidence shows old queued payloads and rollback consumers remain. The simplicity worker records that counterevidence and returns no cut. Required security, tenancy, money, data integrity, availability and rollback behavior are never deleted merely because they add states or branches. If a confirmed requirement itself could be dropped, record an optional scope challenge for user decision, not a finding.
 
 Anti-pattern: redesign internal state ownership or lifecycle logic already assigned to code health, report every helper/conditional/long file as a simplicity defect, or assign P1 because a cut removes many lines. Correction: ask one whole-change scope/approach question, propose at most three requirement-preserving material cuts, quantify subsystem removed and user/business cost, then let the coordinator independently verify and classify. A sound intentional design may produce `No significant simplicity cut.`
+
+## 15. Reuse and consumer contracts beyond pattern consistency
+
+Input: a new exact-code lookup duplicates an existing scanner lookup's endpoint and association loading. The new request wraps the code in an array to preserve punctuation; the scanner sends a string. A booking function also returns a success boolean that only its tests consume.
+
+Bad: label the requests consistent because both use the same action, recommend a third generic wrapper, or assume every similar request can be merged.
+
+Correct: cite both request paths and callers; compare filter scope, encoding, associations, errors and normalization. Verify whether the consumer already excludes irrelevant records and whether the broader response is complete within pagination/limit rules. Recommend reuse only if the existing lookup preserves the required match set and effects, with punctuation, mixed-record and scanner regression checks. Trace all booking callers before proposing removal of an unread result; preserve promise settlement, error reporting and pending-state cleanup, and make tests assert the required effects.
+
+Robust counterexample: the new lookup's narrower server filter prevents unrelated records consuming a page limit, or the shared request has different permissions/side effects. Record the concrete separation; do not force reuse. A return value used by an external integration is not dead merely because local production callers ignore it. Unknown callers remain a search gap. Required-prop annotations also do not prove runtime enforcement; check the installed framework before claiming a missing warning or prevented crash.
+
+## 16. Repeated action with unchanged record identity
+
+Input: adding an item must reveal its section and scroll its row into view each time. A producer stores `{ id, at }` but returns only `id`; the consumer effect depends on that ID. After one add, the user collapses the section or scrolls away, then adds to the same row again before the marker clears.
+
+Trace: first add changes ID and runs reveal/scroll; second add updates the timestamp but not the exposed ID, so neither operation reruns. Contrast another-row add and same-row add after marker expiry. Report the reachable repeated-action failure and propose exposing an operation change to the consumer, preserving state that must survive updates. A discriminating check performs both adds with the same ID, hides the row between them and asserts the second reveal/scroll before expiry; an assertion that the timer restarted alone cannot detect the failure.
+
+Safe variant: a payment retry must reuse one operation's idempotency identity and must not repeat the charge. Do not create a fresh payment operation merely to force notification. Separate required per-action UI work from domain operations that intentionally deduplicate; trace pending and settled behavior independently.
+
+## 17. Repair closure without revision confusion
+
+Input: a review catches an incorrect root-cause claim in both code documentation and the PR description. The repair corrects only the code comment. Another repair introduces a migration safety bypass whose applicable rule requires a safety explanation.
+
+Correct: pin the repair revision and map each prior finding to affected code, callers, tests, docs/PR claims and newly activated rules. Report the still-stale PR claim as incomplete repair of an already-caught issue. Report the missing safety explanation as introduced by the later repair, not a defect missed before the bypass existed. Check that the explanation matches actual operations rather than accepting suggested prose. Recheck contract simplifications for leftover props, return values, fallback branches and tests that no longer exercise production behavior.
+
+Robust variant: prior code/review evidence is unavailable. Mark attribution unknown and name the missing revision/artifact; independently assess current behavior without inventing a historical miss. If a guard's rationale alleges duplicate records, inspect the backend lock and inference path before adding another guard; a verified serialized path can disprove that premise while leaving an inaccurate comment actionable. If source or locking semantics remain unavailable, retain the precise uncertainty, not a safety claim. Review authority permits neither application edits nor PR-description changes.
