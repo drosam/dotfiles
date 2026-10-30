@@ -89,6 +89,10 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 - Use `edit` for existing files and `write` for new files or full rewrites.
 - Do not substitute shell commands or scripts for these tools. If they cannot perform the change, stop and report the blocker.
 - Never switch methods to bypass a denial or permission boundary.
+- Use `edit` for precise changes (`edits[].oldText` must match exactly).
+- When changing multiple separate locations in one file, use one `edit` call with multiple entries in `edits[]` instead of multiple `edit` calls.
+- Each `edits[].oldText` is matched against the original file, not after earlier edits are applied. Do not emit overlapping or nested edits. Merge nearby changes into one edit.
+- Keep `edits[].oldText` as small as possible while still being unique in the file. Do not pad with large unchanged regions.
 - No watchers or long-running servers unless requested.
 
 ## Shell commands
