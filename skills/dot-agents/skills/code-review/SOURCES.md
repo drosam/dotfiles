@@ -1,5 +1,21 @@
 # Code Review Sources and Decisions
 
+## Plain-language feedback iteration
+
+Provenance: current user request for short, direct feedback with easy words because existing review feedback can be hard to follow. This is human-reported readability feedback, not a measured review-accuracy result. No concrete past finding was supplied; the wording pair in SKILL.md is synthetic.
+
+Class: security-review with workflow-process orchestration. Shape: replace the existing inline report-style rules and finding template; update SPEC acceptance check 25. No new reference, script, dependency, worker or registration change is needed. Existing live symlinks already point to the canonical skill directory.
+
+Behavior delta: replace mandatory dense caveman fragments, abbreviated `ev:` and a four-line limit with short complete sentences and explicit `Problem:`, `Evidence:`, `Fix:` and `Check:` labels. Explain trigger, cause and impact in everyday words; explain necessary jargon and use a concrete example when useful. Apply the same style to saved reports and pasteable comments, with a final readability check. Preserve all review dimensions, findings, evidence, exact locators, source quotations, permissions, rounds, severity and readiness rules. Historical compression decisions below are retained as provenance, not current output policy.
+
+### Qualitative checks
+
+Desk comparison only; no agent review runs or measured readability improvement. Working case: same-item repeat feedback (synthetic negative/fix pair in SKILL.md) changes from compressed identity terminology to an explicit second-addition/highlight explanation. Transfer probe: a retry after a payment timeout should explain that the first request can succeed before its response is lost, so retrying can charge twice; the provider contract still needs evidence. Negative probe: a tenant guard already enforced elsewhere must still suppress an unsupported access-control finding. Preservation probes: blocked tests remain a coverage gap, source snapshots remain verbatim, and no supported finding is removed to shorten the report. Expected: clearer explanations; unchanged evidence and safety standards. These probes are not an independent empirical holdout.
+
+Description retained verbatim: readability changes output, not invocation. Should trigger: "review this PR", "find edge cases in this diff", "verify this completed fix". Should not trigger: "implement this feature", "deploy this branch", "debug this initial failure" without a review request. Existing trigger boundaries fit these desk checks; no classifier benchmark ran.
+
+Validation: `git diff --check -- skills/dot-agents/skills/code-review` passed. Final diff inspection confirmed only the report style/template, SPEC check 25 and this provenance entry changed; frontmatter, review checks and registration are unchanged. `python3 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/code-review --skill-class security-review --strict-depth` failed at startup with `ModuleNotFoundError: No module named 'yaml'` (exit 1). Nothing installed; structural inspection is not a strict-depth pass. Remaining gaps: run the validator in an approved environment with its declared dependencies; desk checks do not establish actual reader comprehension or runtime adherence.
+
 ## Additive code-quality iteration from saved review outcomes
 
 User approved implementation after the six-history retrospective, with the explicit constraint: "do not remove/ignore existing points" and "add code quality, not change some points for anopther". Preserve all existing runtime guidance, examples, dimensions, workers, rounds, safety and readiness rules; add observable checks where earlier broad guidance did not produce enough evidence. No existing rule is replaced or narrowed in this iteration.

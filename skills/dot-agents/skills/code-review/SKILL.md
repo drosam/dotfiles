@@ -187,23 +187,30 @@ Before returning the final report, save its complete durable copy:
 
 If writing or verification fails, still return the complete report, state `Artifact: not saved - <reason>`, and do not claim the indexes or review are durable. A saved but unindexed report must be labeled with its exact path; never delete it or silently treat it as latest. Artifact failure does not change the technical verdict, but it is an explicit workflow gap.
 
-### Artifact style
+### Report style
 
-`review.md` is read whole by later agents (triage, fix, QA); every token costs their context. Write caveman: fragments, labels, no narration, no hedging, no restating the finding. Compress wording, never evidence or finding count.
+Write the returned report, `review.md`, and pasteable comments in plain language. Use short, complete sentences rather than caveman fragments or compressed shorthand. Keep feedback brief, but choose clarity over the fewest words.
 
-- Verbatim only where provenance requires it (GitHub source snapshot). Everything else compressed.
-- Finding: 1 headline line + `ev:` / `fix:` / `check:` lines; <=4 lines total unless the trace is the point (security, concurrency, disputed).
-- Coverage: counts and labels, not lists of every file read; one line per bullet; `cmd -> result`.
-- Say each fact once; metadata lives in the header only. Drop "verified"/"confirmed" filler when the evidence line shows it.
-- Keep exact `path:line`, symbols, commands, results, decisions, unknowns.
+- Give each finding a title that says what goes wrong. Explain when it happens, what the code does, and why that matters. Use a small concrete example when it makes the problem easier to follow.
+- Prefer everyday words. Explain necessary technical terms on first use; keep exact code names, paths and severity labels. Avoid unexplained acronyms and abstract labels such as "invariant violation" when you can name the broken behavior.
+- Use `Problem:`, `Evidence:`, `Fix:`, and `Check:` on separate lines. Aim for one short sentence per label; use more when needed to explain a security issue, timing problem or disputed trace. Do not pack several claims into a semicolon list or arrow chain.
+- Say each fact once. Keep coverage bullets brief with clear labels and exact command results; do not list every file read. Metadata belongs in the header.
+- Preserve every supported finding, exact `path:line`, symbol, command, result, decision and unknown. Keep required GitHub source snapshots verbatim; do not rewrite quoted feedback.
+- Before saving, read each finding on its own: can the reader tell what breaks, when, why, and what to change without reconstructing the code path? Rewrite dense wording, not the evidence or review depth.
 
-Use this report format; no finding cap, strict word discipline per finding:
+Wording example (synthetic; not an observed test result):
+- Too dense: "Same-ID re-add suppresses effect; operation/entity identity conflated."
+- Clear: "Adding the same item twice does not highlight it again. The highlight runs only when the item ID changes, so it skips the second addition."
+
+Use this report format; no finding cap:
 
 ```text
 ## Findings
-- P1 [blocking] `path:line` - trigger -> impact.
-  ev: traced path/test; rule/doc/precedent; counterevidence.
-  fix: smallest sound direction. check: regression scenario.
+- P1 [blocking] `path:line` - Short title naming the broken behavior.
+  Problem: Explain the trigger, cause and effect in plain words.
+  Evidence: Cite the code trace or test and relevant rules or counterevidence. Say if the evidence is static.
+  Fix: Give the smallest sound change.
+  Check: Describe a test that catches this problem.
 - P2 [nonblocking: reason] `path:line` - ...
 
 ## Coverage
@@ -223,7 +230,7 @@ Use this report format; no finding cap, strict word discipline per finding:
 - Gaps: missing checks + next action, or none.
 
 ## Verdict
-BLOCKED | INCOMPLETE | READY - reason, scope.
+BLOCKED | INCOMPLETE | READY - Explain the result and reviewed scope in plain words.
 ```
 
 - `BLOCKED`: at least one established blocking finding. Still report all incomplete coverage.
