@@ -48,14 +48,17 @@ Create minimal, cohesive commits from current changes.
    - Use one concise sentence for the title.
    - Prefer imperative mood.
    - Do not include a ticket or issue number unless the user explicitly requests it.
-   - No trailers.
-   - No body.
+   - No trailers, including `Co-Authored-By`.
+   - Default to a title only. Add a body only when omitting it would leave essential context unclear and a better title cannot convey that context. If in doubt, omit it.
+   - A necessary body must be one short paragraph of clear, simple English. Explain only the essential reason, constraint or consequence; do not repeat the title, list changes or add filler.
 
 6. Read the entire staged diff (`git diff --cached`) and run `git diff --cached --check`. A commit includes the whole index, not just the paths most recently staged. Confirm every hunk belongs to this commit; keep secrets and personal/customer data out of both diff and message. Then commit:
 
    ```bash
    git commit -m "Commit title"
    ```
+
+   Only when a body meets step 5's strict necessity rule, append a second `-m "Essential context"` argument.
 
 7. Report commit hash and title.
 
@@ -98,7 +101,7 @@ Use this branch when the user asks to organize commits, split changes into commi
 5. Create commits one group at a time:
    - Stage explicit files or hunks only.
    - Read `git diff --cached` and run `git diff --cached --check` before each commit; verify the entire index belongs to that group.
-   - Use title-only commit messages.
+   - Default to title-only messages. Apply the message rules in Workflow step 5 separately to each commit; a body on one commit does not justify bodies on the others.
    - Repeat until intended changes are committed.
 
 6. Finish with `git status --short` and list commit hashes/titles created.
