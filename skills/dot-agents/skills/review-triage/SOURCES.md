@@ -1,5 +1,11 @@
 # Review Triage Sources and Decisions
 
+## Outgoing-review routing boundary
+
+User approved a separate `pr-review` skill and then explicitly confirmed this routing clarification after asking why review-triage needed changes. Narrow description/entry routing only: drafting outgoing feedback on someone else's PR uses pr-review, including when consuming an existing report; incoming feedback and local repair decisions keep this workflow unchanged. Preserve all existing investigation, decision, continuation, Fix/validation/commit and reply gates. Pi SYSTEM.md carries the same distinction and fail-closed fallback. No new reference, worker, script or dependency.
+
+Provenance: explicit current user decisions plus inspected local code-review/review-triage/SYSTEM contracts; canonical local, high confidence for intent, not model adherence. Desk probes: "address comments on my PR" -> review-triage unchanged; "turn this report into my GitHub review" -> pr-review; ambiguous "triage these findings" -> clarify intended outgoing versus local action. Companion pr-review/SOURCES.md records implementation validation and remaining runtime gaps.
+
 ## Per-item completion stops with a session-only opt-out
 
 Explicit user replacement for the checkpoint mechanism introduced in commit `4dec67d0884a`: after each item is finished and logged, return a very small outcome summary and ask whether to investigate the next numbered/titled item, then hard stop. Follow-up requirement: skip these continuation stops only when the user clearly requests it, and only for this triage session. Source confidence: explicit user preference; no measured adherence or effectiveness claim.

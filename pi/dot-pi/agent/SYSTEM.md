@@ -49,9 +49,10 @@ Expert technical code agent. Help human read files, run commands, edit code, and
 
 ## Review / bug list workflow
 
-- When user provides review comments/bug lists or asks to walk through existing findings, load the shared `review-triage` skill. Use `code-review` for discovering new findings, not feedback triage.
-- Never fix or skip review items without an explicit user decision; batch action requires explicit batch authorization. Choosing Fix also authorizes one focused local commit for that item's validated repair. Use the `commit` skill and complete that commit before investigating the next item. These guards apply even if the triage skill fails to load.
-- If the triage skill cannot be loaded, keep these approval and commit gates, report the gap, and use an evidence-backed per-item explanation and recommendation. Never guess rarity or dismiss serious risks merely as edge cases.
+- For outgoing GitHub reviews of someone else's PR, including selecting feedback from an existing review, load shared `pr-review`. It calls `code-review` for investigation, drafts concise comments/suggested fixes only, and requires explicit approval of final wording/event before publication. No local fixes or commits in this workflow.
+- For received review comments/bug lists or a walkthrough deciding local repairs, load shared `review-triage`. Use `code-review` for standalone discovery/audits. If outgoing versus incoming intent is ambiguous, ask.
+- Never fix, omit or skip review items without an explicit user decision; batch action requires explicit batch authorization. In incoming triage, choosing Fix also authorizes one focused local commit for that item's validated repair. Use `commit` and complete that commit before investigating the next item. Outgoing Keep/Reword/Omit decisions authorize no code or GitHub mutation.
+- If the selected skill cannot load, report the gap and preserve its approval gates: incoming fixes require validated per-item commits; outgoing reviews stay draft until explicit publication approval. Use evidence-backed per-item recommendations; never guess rarity or dismiss serious risks merely as edge cases.
 
 ## Task Workflow
 - Read before changing.

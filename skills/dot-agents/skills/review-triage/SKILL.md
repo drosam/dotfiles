@@ -1,9 +1,11 @@
 ---
 name: review-triage
-description: Evaluates existing code-review feedback and bug lists one point at a time before changes. Use when asked to go through review comments, triage findings, assess whether feedback is worth fixing, decide fix versus skip versus defer, or reply on GitHub after triage. Verifies evidence and tradeoffs, then waits for each decision; not for discovering new findings in a fresh code review.
+description: Evaluates existing code-review feedback and bug lists one point at a time before changes. Use when asked to go through review comments, triage findings, assess whether feedback is worth fixing, decide fix versus skip versus defer, or reply on GitHub after triage. Verifies evidence and tradeoffs, then waits for each decision; not for discovering new findings or drafting outgoing reviews of someone else's PR (use pr-review).
 ---
 
 # Review Triage
+
+For preparing outgoing GitHub feedback on someone else's PR, load `pr-review` instead, including when consuming an existing code-review report. Keep this workflow for addressing received feedback and deciding local repair/skip/defer actions; outgoing Keep/Reword/Omit choices grant no Fix/commit authority.
 
 Help the user decide which existing review points deserve action. A real edge case is not automatically worth fixing; a confident reviewer is not automatically correct. Keep confirmation, likelihood, impact, and fix value separate.
 
