@@ -12,12 +12,6 @@ Inputs: pinned target/base/head or stable local-change inventory; optional expli
 
 Outputs: all distinct actionable findings with trigger, evidence, impact, location, blocking status, fix direction and regression check; round/source attribution for sampled findings and independently verified whole-change simplicity proposals; coverage/evidence ledger; BLOCKED, INCOMPLETE or READY verdict; and a verified durable copy at `.agent-work/work/<work-id>/reviews/<branch-key>/<review-id>/review.md`. Work and branch indexes retain ordered history, latest-review metadata, and per-branch active-triage state. Unconfirmed hypotheses are gaps, not established findings.
 
-## Explicit outgoing PR handoff
-
-When called by `pr-review` with `Output mode: pr-review`, confirmed Work-ID/Review-ID, repository/PR/branch identity, pinned base/head scope and exact destination, replace only default branch-series/index storage and repeated chat output. Save the complete immutable review at the caller's `review.md` path with all metadata, source snapshots, evidence, findings, coverage, checks and verdict. Create/update no indexes or triage file; return a concise handoff after verified persistence. Missing identity asks; failed persistence returns the full report and blocker. Standalone review defaults below remain unchanged. This mode does not reduce rounds/depth, delegate technical verification to the human, or grant fixes/publication authority.
-
-Acceptance: fresh outgoing runs save the full report without indexes; existing selected reports remain immutable; ordinary local/PR audits retain existing indexed persistence and full returned report. Caller `pr-review` owns feedback selection, decisions and GitHub publication approval.
-
 ## Safety and evidence invariants
 
 - No application edits, comment publication, PR approval, merge, deploy, installs or permission bypass implied by review. The sole default write is the review artifact and its root/branch review indexes.

@@ -1,11 +1,5 @@
 # Code Review Sources and Decisions
 
-## Outgoing PR handoff
-
-User-approved companion workflow: `pr-review` runs this investigation or consumes an explicitly selected complete report, then walks through concise outgoing feedback. The user explicitly retained full review.md detail while rejecting review indexes for fresh outgoing runs. Add one explicit output mode requiring confirmed Work-ID/Review-ID, repository/PR/branch, pinned scope and destination. Narrow only storage/index management and repeated chat output; preserve every investigative dimension, round, evidence/source-snapshot rule, finding, check and verdict. Add a description pointer for outgoing intent. No discovery refactor or extra worker is justified.
-
-Class remains security-review with workflow-process orchestration. Canonical provenance: current user decisions and local contracts; confidence high for requested behavior, not runtime adherence. See companion `pr-review/SOURCES.md` for public research and selected session evidence. Ordinary code-review invocation, including bare PR URLs, retains indexed persistence and full reporting; only the explicit handoff opts out. SPEC documents the exception. Qualitative desk cases: explicit complete packet -> full immutable report at supplied path and no indexes; missing identity -> ask; default local audit -> unchanged; failed persistence -> complete report plus blocker. Validation results for this implementation are recorded in the companion SOURCES.md; no runtime review/publication implied.
-
 ## Plain-language feedback iteration
 
 Provenance: current user request for short, direct feedback with easy words because existing review feedback can be hard to follow. This is human-reported readability feedback, not a measured review-accuracy result. No concrete past finding was supplied; the wording pair in SKILL.md is synthetic.

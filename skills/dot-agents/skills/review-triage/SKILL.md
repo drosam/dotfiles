@@ -5,8 +5,6 @@ description: Evaluates existing code-review feedback and bug lists one point at 
 
 # Review Triage
 
-For preparing outgoing GitHub feedback on someone else's PR, load `pr-review` instead, including when consuming an existing code-review report. Keep this workflow for addressing received feedback and deciding local repair/skip/defer actions; outgoing Keep/Reword/Omit choices grant no Fix/commit authority.
-
 Help the user decide which existing review points deserve action. A real edge case is not automatically worth fixing; a confident reviewer is not automatically correct. Keep confirmation, likelihood, impact, and fix value separate.
 
 ## Evidence rule - confirm before saying

@@ -10,7 +10,7 @@ Not an incoming-feedback repair workflow. Suggested fixes are prose or complete 
 
 Inputs: explicit PR target or selected full review, confirmed Work-ID/source identity, pinned revisions, discussion and applicable evidence, user's exact decisions and final publication authorization.
 
-Outputs: full immutable `review.md`; append-only `feedback.md` with stable IDs, proposed dispositions, source locators, evidence corrections, draft versions, exact decisions, recommendation versus chosen event, approved payload snapshot and publication outcomes. Fresh direct runs create only those two files. Existing reviews/indexes remain intact; an existing complete review is reused without copying or creating indexes.
+Outputs: full immutable `review.md`; append-only `feedback.md` with stable IDs, proposed dispositions, source locators, evidence corrections, draft versions, exact decisions, recommendation versus chosen event, approved payload snapshot and publication outcomes. A fresh run lets code-review persist normally (indexes included) and adds only `feedback.md` beside `review.md`; an existing complete review is reused without copying.
 
 ## Safety and evidence
 
@@ -23,7 +23,7 @@ Outputs: full immutable `review.md`; append-only `feedback.md` with stable IDs, 
 
 ## Acceptance checks
 
-1. Direct PR invocation calls code-review in explicit handoff mode; normal standalone code-review storage and output remain unchanged.
+1. Direct PR invocation runs code-review unchanged; this skill adds no mode or input to it.
 2. Selected existing report is read fully, retained immutably and checked against current revisions; no repeated full discovery unless changed scope or evidence requires it.
 3. Source report retains all supported findings and full coverage/results/gaps. Omission affects public feedback only; it does not resolve technical blockers.
 4. A 12-finding source can produce two selected comments without losing the other findings or their disposition history.
@@ -33,7 +33,7 @@ Outputs: full immutable `review.md`; append-only `feedback.md` with stable IDs, 
 8. Recommendation and selected APPROVE/REQUEST_CHANGES/COMMENT remain separate from technical readiness. User chooses; unverified checks do not automatically become blockers or a clean approval.
 9. Exact full preview precedes explicit publication. "Looks good" and selecting APPROVE alone post nothing. Changed base/head/text/event/relevant discussion invalidates publication approval.
 10. Stable IDs and draft versions survive omissions, corrections, restarts and revision changes. Resume reconstructs state from complete source/log, not an index or summary.
-11. New runs create only review.md and feedback.md, under a confirmed work directory. Existing files/indexes are not migrated or updated; no spec/plan scaffold is required.
+11. New runs add only feedback.md beyond what code-review itself writes. Existing files are not migrated; no spec/plan scaffold is required. feedback.md follows review-triage's triage.md log conventions.
 12. All decisions, modifiers, material corrections, approved text and publication results are recoverable in timestamp order. Failed appends are never called saved.
 13. Batched review uses exact authorized event/commit/body/comments. No own-PR failure fallback, arbitrary anchors, unrelated pending-review submission or blind retry.
 14. Closed PR, inaccessible context, failed worker/check, publication error, stale revision and logging failure have explicit stop/recovery paths.

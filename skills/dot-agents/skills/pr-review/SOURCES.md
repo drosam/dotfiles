@@ -2,7 +2,7 @@
 
 ## Provenance and scope
 
-User approved implementation of a separate outgoing-review skill after research and clarified "Suggestions only" for fixes. Preserve full code-review investigation, offer both direct and existing-report entry points, iterate on important feedback, let the user choose the review event, and publish last only after explicit approval. Persist only the source review and feedback/history, without indexes.
+User approved implementation of a separate outgoing-review skill after research and clarified "Suggestions only" for fixes. Preserve full code-review investigation, offer both direct and existing-report entry points, iterate on important feedback, let the user choose the review event, and publish last only after explicit approval. Persist the source review (code-review default storage, indexes included) plus an append-only feedback/history file.
 
 Class: workflow-process. Selected profile: skill-writer `references/examples/workflow-process-skill.md`. Shape: sequential coordinator using the existing discovery engine; two conditional references for fragile publication and calibration. No additional workers, script, dependency or copied upstream implementation. SPEC.md is a maintenance contract, not a work-artifact spec.
 
@@ -27,8 +27,9 @@ Public websearch failed with `fetch failed`; read-only `gh search code` and dire
 ## Adopted, narrowed and rejected
 
 - Add pr-review as the outgoing coordinator; do not duplicate code-review's investigative rubric.
-- Narrow code-review artifact/presentation behavior only with an explicit handoff carrying confirmed identity and destination. Standalone defaults, evidence, rounds and readiness remain unchanged.
-- Narrow review-triage/SYSTEM routing so outgoing feedback does not activate incoming Fix/commit semantics. Preserve incoming approval gates.
+- Leave code-review untouched. A first version added a caller-named `Output mode: pr-review` handoff to skip indexes; review feedback called it coupling for little payoff, and the user accepted indexes as harmless. Routing lives in pr-review's description and the SYSTEM.md authority bullets only.
+- Route via descriptions: review-triage's description excludes outgoing reviews; its body is unchanged. SYSTEM.md keeps authority gates plus "ask if ambiguous".
+- Keep pr-review SKILL.md short: only rules that change behavior relative to SYSTEM.md/code-review. feedback.md reuses review-triage's triage.md log conventions by reference instead of respecifying them.
 - Keep all source findings internally; user-authorized publication selection does not waive a requirement or prove safety.
 - Use append-only comment versions and approval snapshots in feedback.md, rather than overwriting drafts or adding index/state files.
 - Require independent current-item reachability checks before keeping historical claims. Do not equate UI-only reachability with security or frequency.
@@ -43,7 +44,7 @@ Public websearch failed with `fetch failed`; read-only `gh search code` and dire
 | Safety/permissions | complete | Suggestion-only fixes, explicit omission/publication authority, untrusted input, staged artifacts and isolated checks |
 | Outputs/acceptance | complete | Full review.md plus append-only feedback.md, stable IDs and snapshots; SPEC checks |
 | Failure/recovery | complete | Missing input/tool, stale revision, unavailable checks, anchor/pending-review conflicts, ambiguous submission and failed logging |
-| Handoff/resume | complete | Exact selected report, explicit code-review output mode, full-log reconstruction and current revision checks |
+| Handoff/resume | complete | Exact selected report, full-log reconstruction and current revision checks |
 | Examples | complete | Happy-path short comment, API security guard, corrected overclaim, suggestion boundary and retry/history cases |
 
 This workflow does not teach a general integration API or create other skills; integration/skill-authoring API-depth rubrics are not applicable.
@@ -64,13 +65,13 @@ Before/after expectations from guidance inspection, not observed agent runs:
 | --- | --- |
 | Selected session's 12 findings -> short outgoing review | Improved: retain full source, propose exclusions rather than post noise, record user decisions and concise versions |
 | Historical claim changes after reachability check | Improved: append explicit correction, preserve ID, reapprove changed wording; no unproved rarity claim |
-| Existing indexed review supplied | Improved: reuse exact report without copying or new indexes; preserve existing files |
+| Existing review supplied | Improved: reuse exact report without copying; preserve existing files |
 | User chooses APPROVE or says "looks good" | Improved: event/content agreement does not authorize publication |
 | Head moves after approval | Improved: invalidate approved snapshot, revalidate affected scope, preview and ask again |
 | API-only authorization bypass | Unchanged evidence safeguard: serious non-UI issues remain reportable |
 | Complete one-line repair versus multi-file repair | Improved: optional complete suggestion versus concise direction, no local mutation |
 | Timeout after remote creation | Improved: reconcile exact remote review before retry; no duplicate comments |
-| Baseline exhaustive local audit/incoming Fix | Unchanged: default code-review indexes and review-triage validated commit gates |
+| Baseline exhaustive local audit/incoming Fix | Unchanged: code-review and review-triage bodies untouched |
 
 ## Validation results
 
@@ -80,7 +81,7 @@ Before/after expectations from guidance inspection, not observed agent runs:
 - Retried with existing Python 3.14: `python3.14 skills/dot-agents/skills/skill-writer/scripts/quick_validate.py skills/dot-agents/skills/pr-review --skill-class workflow-process --strict-depth`: same missing-yaml startup failure. Also attempted code-review with `--skill-class security-review --strict-depth` and review-triage with `--skill-class workflow-process --strict-depth` under Python 3.14: same failure. No dependency installed or validator bypassed.
 - Installed Pi 1.5.0 CLI smoke command after reading docs/cli.md: `pi --offline --no-extensions --no-mcp --no-skills --skill ./skills/dot-agents/skills/pr-review --no-session --no-approve --help`: exit 0, help printed. This verifies supported invocation flags, not skill discovery or workflow adherence; no extensions or model task executed.
 - One read-only focused workflow-contract audit covered direct/reused reports, retention, two-file history, decisions, event/publication separation, stale revisions and recovery. It found an implicit already-published recovery branch; publication reference now explicitly returns the existing URL and stops without POST when an exact submitted snapshot is recovered. No full review or application/GitHub test ran.
-- Final diff scope: five new pr-review skill/reference/maintenance files; narrow code-review handoff/routing plus SPEC/SOURCES; review-triage routing plus SPEC/SOURCES; Pi SYSTEM review router only. Unrelated WIP untouched. No commits, app edits, artifact migrations or GitHub writes.
+- Initial commit `adf5cdf` included a code-review handoff mode and review-triage body paragraph; the follow-up simplification reverted code-review entirely, reduced review-triage to a description change, slimmed SYSTEM.md routing and cut SKILL.md to behavior-changing rules only. Same dependency-free structural checks rerun after the rewrite.
 
 ## Open gaps
 

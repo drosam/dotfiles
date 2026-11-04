@@ -2,7 +2,7 @@
 
 ## Outgoing-review routing boundary
 
-User approved a separate `pr-review` skill and then explicitly confirmed this routing clarification after asking why review-triage needed changes. Narrow description/entry routing only: drafting outgoing feedback on someone else's PR uses pr-review, including when consuming an existing report; incoming feedback and local repair decisions keep this workflow unchanged. Preserve all existing investigation, decision, continuation, Fix/validation/commit and reply gates. Pi SYSTEM.md carries the same distinction and fail-closed fallback. No new reference, worker, script or dependency.
+User approved a separate `pr-review` skill and confirmed this routing clarification. Description-only change: drafting outgoing feedback on someone else's PR uses pr-review, including when consuming an existing report. A body paragraph repeating this was dropped after review feedback flagged routing duplicated across five places; the SKILL body is unchanged from before pr-review existed. pr-review's `feedback.md` reuses this skill's `triage.md` log conventions by reference.
 
 Provenance: explicit current user decisions plus inspected local code-review/review-triage/SYSTEM contracts; canonical local, high confidence for intent, not model adherence. Desk probes: "address comments on my PR" -> review-triage unchanged; "turn this report into my GitHub review" -> pr-review; ambiguous "triage these findings" -> clarify intended outgoing versus local action. Companion pr-review/SOURCES.md records implementation validation and remaining runtime gaps.
 
