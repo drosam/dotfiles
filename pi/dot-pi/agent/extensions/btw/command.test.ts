@@ -393,7 +393,7 @@ test("panel is framed, width-capped, responsive, and keeps composer visible", as
 	assert.match(framed.at(-1)!, /^╰─+╯$/);
 	assert.match(framed.at(-3)!, /^│ btw ─+ enter send · esc close · alt\+l clear │$/);
 	assert.match(framed.at(-2)!, /^│ > /);
-	assert.ok(lines.every((line: string) => line.startsWith(theme.getBgAnsi("userMessageBg"))), "panel has solid background");
+	assert.ok(lines.every((line: string) => line.startsWith("\u001b[48;5;16m")), "panel has solid background");
 	assert.ok(lines.every((line: string) => !/\u001b\[0m(?!\u001b\[48|$)/.test(line)), "background survives inner resets");
 	for (const rows of [2, 6, 12, 40]) {
 		h.ui.rows = rows;

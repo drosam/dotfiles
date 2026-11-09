@@ -51,7 +51,7 @@ export default function (pi: ExtensionAPI) {
 					render: (width) => child.render(Math.max(1, width - 2)).map((line) => theme.fg(color, "▌") + " " + line),
 					invalidate: () => child.invalidate(),
 				});
-				const bg = theme.getBgAnsi("userMessageBg");
+				const bg = "\u001b[48;5;16m";
 				const paint = (line: string) => bg + line.replace(/\u001b\[(0|49)?m/g, (reset) => reset + bg) + "\u001b[0m";
 				// Paste places the cursor after restored text; setValue would leave it at the start.
 				const fill = (value: string) => { input.setValue(""); input.handleInput(`\u001b[200~${value}\u001b[201~`); };
