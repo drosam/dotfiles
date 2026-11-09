@@ -30,9 +30,9 @@ Use these four dimensions in every full round:
 
 | Dimension | Preferred agent if available | Required focus |
 | --- | --- | --- |
-| Behavior/spec/edge cases | `general` | Requirements, wiring, state transitions, callers and input-dependent failures |
+| Behavior/spec/edge cases | `code-review-behavior` | Requirements, wiring, state transitions, callers and input-dependent failures |
 | Security/data/rollout | `code-review-security` | Reachable threats, tenant boundaries, persistence, migration, deployed-version coexistence, devex and feature-gate leaks |
-| Tests/reliability/performance | `general` | Behavioral test validity, failure handling, concurrency, resource limits and operational evidence |
+| Tests/reliability/performance | `code-review-tests` | Behavioral test validity, failure handling, concurrency, resource limits and operational evidence |
 | Rules/docs/patterns/code health | `code-review-code-health` | Scoped rules, best practices, doc consistency, recent precedents, ownership, invariants and structural simplification |
 
 Tag every task with its round and dimension, for example `R1 behavior` or `R2 security`. General workers receive the complete analytical rubric, not only the dimension name. Specialized workers cover their entire row. Pass the resolved skill path and relevant contract/rubric text, but state that shared validation execution remains coordinator-owned. Sampled workers inspect test code and CI evidence and propose discriminating checks; they do not run repository test/lint/typecheck/build commands or browser flows during discovery. Workers never spawn nested workers.
