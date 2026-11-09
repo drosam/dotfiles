@@ -25,7 +25,7 @@ const { loadExtensions } = await importHost("dist/core/extensions/loader.js");
 const { SessionManager } = await importHost("dist/core/session-manager.js");
 const { convertToLlm } = await importHost("dist/core/messages.js");
 const aiRoot = "node_modules/@earendil-works/pi-ai/dist";
-const { initTheme } = await importHost("dist/modes/interactive/theme/theme.js");
+const { initTheme, theme } = await importHost("dist/modes/interactive/theme/theme.js");
 const { CURSOR_MARKER, matchesKey, visibleWidth } = await importHost("node_modules/@earendil-works/pi-tui/dist/index.js");
 initTheme("dark", false);
 const extensionPath = resolve(dirname(fileURLToPath(import.meta.url)), "../btw.ts");
@@ -82,7 +82,7 @@ async function setup(mode = "tui") {
 				assert.equal(mode, "tui");
 				ui.options = options;
 				ui.component = factory({ terminal: ui, requestRender: () => ui.renders++ },
-					{ fg: (_color: string, text: string) => text },
+					theme,
 					{ matches: (data: string, action: string) => matchesKey(data, ({
 						"tui.select.cancel": "escape", "tui.select.confirm": "enter",
 						"tui.select.up": "up", "tui.select.down": "down",
@@ -199,10 +199,10 @@ test("history caps at 20, replays previous answers, shows transcript and clears"
 	assert.equal(last.earlierSideExchanges[0].question, "Question 1");
 	const open = h.invoke();
 	assert.match(h.render(), /20 turns/);
-	assert.match(h.render(), /You: Question 21/);
+	assert.match(h.render(), /▌ Question 21/);
 	h.press("\u001b[5~");
-	assert.match(h.render(), /You: Question 11/);
-	assert.doesNotMatch(h.render(), /You: Question 21/);
+	assert.match(h.render(), /▌ Question 11/);
+	assert.doesNotMatch(h.render(), /Question 21/);
 	h.press("\u000c");
 	assert.match(h.render(), /20 turns/, "ctrl+l no longer clears");
 	h.press("\u001bl");
@@ -373,7 +373,7 @@ test("panel shows the side conversation as one transcript", async () => {
 	await tick();
 	const text = h.render();
 	assert.match(text, /2 turns/);
-	const order = ["You: First question", "Side answer", "You: Second question", "Second answer"].map((part) => text.indexOf(part));
+	const order = ["▌ First question", "▌ Side answer", "▌ Second question", "▌ Second answer"].map((part) => text.indexOf(part));
 	assert.ok(order.every((index, i) => index >= 0 && (i === 0 || index > order[i - 1])), text);
 	h.press("\u001b");
 	await open;
@@ -382,14 +382,19 @@ test("panel shows the side conversation as one transcript", async () => {
 test("panel is framed, width-capped, responsive, and keeps composer visible", async () => {
 	const h = await setup();
 	const open = h.invoke();
-	assert.equal(h.ui.options.overlayOptions().width, 100);
+	assert.equal(h.ui.options.overlayOptions().width, 114);
 	h.ui.columns = 60;
-	assert.equal(h.ui.options.overlayOptions().width, 54);
+	assert.equal(h.ui.options.overlayOptions().width, 57);
 	const lines = h.ui.component.render(90);
 	assert.equal(lines.length, 24);
 	assert.ok(lines.every((line: string) => visibleWidth(line) === 90));
-	assert.match(h.render().split("\n")[0], /^\+-+\+$/);
-	assert.match(h.render(), /Enter send/);
+	const framed = h.render().split("\n");
+	assert.match(framed[0], /^╭─ btw · no tools ─+╮$/);
+	assert.match(framed.at(-1)!, /^╰─+╯$/);
+	assert.match(framed.at(-3)!, /^│ btw ─+ enter send · esc close · alt\+l clear │$/);
+	assert.match(framed.at(-2)!, /^│ > /);
+	assert.ok(lines.every((line: string) => line.startsWith(theme.getBgAnsi("userMessageBg"))), "panel has solid background");
+	assert.ok(lines.every((line: string) => !/\u001b\[0m(?!\u001b\[48|$)/.test(line)), "background survives inner resets");
 	for (const rows of [2, 6, 12, 40]) {
 		h.ui.rows = rows;
 		for (const width of [1, 12, 40, 90]) {
@@ -413,8 +418,10 @@ test("follow-up history eviction keeps the newest turn visible", async () => {
 	}
 	assert.equal(h.calls.length, 22);
 	assert.match(h.render(), /20 turns/);
-	assert.match(h.render(), /You: In-panel 21/);
-	assert.match(h.render(), /You: In-panel 20/);
+	assert.match(h.render(), /▌ In-panel 21/);
+	assert.match(h.render(), /▌ In-panel 20/);
+	const rows = h.render().split("\n");
+	assert.ok(rows.findIndex((line: string) => line.includes("In-panel 21")) > rows.length - 8, "newest turn sits above composer");
 	h.press("\u001b");
 	await open;
 });

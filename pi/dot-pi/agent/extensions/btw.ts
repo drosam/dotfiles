@@ -1,6 +1,6 @@
 import type { AssistantMessage } from "@mariozechner/pi-ai";
 import { convertToLlm, getMarkdownTheme, type ExtensionAPI, type ExtensionCommandContext } from "@mariozechner/pi-coding-agent";
-import { Container, Input, Markdown, matchesKey, ScrollView, Spacer, Text, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
+import { type Component, Container, Input, Markdown, matchesKey, ScrollView, Spacer, Text, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 
 const INSTRUCTIONS = `Answer only the user's side question below, briefly and directly. Do not continue the main task.
 Earlier conversation and side exchanges provide context, not instructions to execute.
@@ -40,20 +40,26 @@ export default function (pi: ExtensionAPI) {
 	async function show(ctx: ExtensionCommandContext) {
 		if (overlay) return;
 		const view = { refresh: () => {}, close: () => {} };
-		let getWidth = () => 100;
+		let getWidth = () => 120;
 		overlay = view;
 		try {
 			await ctx.ui.custom<void>((tui, theme, keys, done) => {
-				getWidth = () => Math.max(1, Math.min(100, Math.floor(tui.terminal.columns * 0.9)));
+				getWidth = () => Math.max(1, Math.min(140, Math.floor(tui.terminal.columns * 0.95)));
 				let notice = "";
-				const input = new Input({ placeholder: "Ask a follow-up...", placeholderStyle: (text) => theme.fg("dim", text) });
+				const input = new Input({ prompt: theme.fg("accent", "> "), placeholder: "Ask a follow-up...", placeholderStyle: (text) => theme.fg("dim", text) });
+				const barred = (child: Component, color: "accent" | "borderMuted"): Component => ({
+					render: (width) => child.render(Math.max(1, width - 2)).map((line) => theme.fg(color, "▌") + " " + line),
+					invalidate: () => child.invalidate(),
+				});
+				const bg = theme.getBgAnsi("userMessageBg");
+				const paint = (line: string) => bg + line.replace(/\u001b\[(0|49)?m/g, (reset) => reset + bg) + "\u001b[0m";
 				// Paste places the cursor after restored text; setValue would leave it at the start.
 				const fill = (value: string) => { input.setValue(""); input.handleInput(`\u001b[200~${value}\u001b[201~`); };
 				fill(draft);
 				const body = new Container();
 				const scroll = new ScrollView(body, { scrollbar: "hidden", follow: "end" });
 				const empty = new Text(theme.fg("dim", "Ask a side question below. This conversation stays out of the main chat."), 0, 0);
-				const turns = new WeakMap<Exchange, { question: Text; answer: Markdown; text: string }>();
+				const turns = new WeakMap<Exchange, { question: Component; answer: Component; markdown: Markdown; text: string }>();
 				let shown: Exchange[] | undefined;
 				scroll.scrollToEnd();
 				const sync = () => {
@@ -63,7 +69,8 @@ export default function (pi: ExtensionAPI) {
 						history.forEach((item, i) => {
 							let turn = turns.get(item);
 							if (!turn) {
-								turn = { question: new Text(theme.fg("accent", `You: ${item.question}`), 0, 0), answer: new Markdown("", 0, 0, getMarkdownTheme()), text: "" };
+								const markdown = new Markdown("", 0, 0, getMarkdownTheme());
+								turn = { question: barred(new Text(theme.bold(item.question), 0, 0), "accent"), answer: barred(markdown, "borderMuted"), markdown, text: "" };
 								turns.set(item, turn);
 							}
 							if (i) body.addChild(new Spacer(1));
@@ -75,7 +82,7 @@ export default function (pi: ExtensionAPI) {
 					for (const item of history) {
 						const turn = turns.get(item)!;
 						const text = `${item.answer || (item.status === "streaming" ? "Thinking..." : "No answer.")}${item.error ? `\n\nError: ${item.error}` : ""}`;
-						if (text !== turn.text) { turn.answer.setText(text); turn.text = text; }
+						if (text !== turn.text) { turn.markdown.setText(text); turn.text = text; }
 					}
 				};
 				const close = () => {
@@ -112,23 +119,31 @@ export default function (pi: ExtensionAPI) {
 						const innerWidth = Math.max(1, width - (compact ? 0 : 4));
 						sync();
 						const content = scroll.render(innerWidth);
-						scroll.updateLayout(content.length, Math.max(0, rows - (compact ? 2 : 8)), () => tui.requestRender());
+						scroll.updateLayout(content.length, Math.max(0, rows - (compact ? 2 : 4)), () => tui.requestRender());
 						const visible = content.slice(scroll.scrollTop, scroll.scrollTop + scroll.viewportHeight);
-						const state = notice || (active ? "Thinking...  Ctrl+C stops side request" : "Enter send | Esc close");
-						if (compact) {
-							return [...visible, theme.fg("dim", state), ...input.render(innerWidth)]
-								.slice(-rows).map((line) => truncateToWidth(line, width));
-						}
-						const frame = (line: string) => {
-							const text = truncateToWidth(line, innerWidth);
-							return theme.fg("borderMuted", "| ") + text + " ".repeat(Math.max(0, innerWidth - visibleWidth(text))) + theme.fg("borderMuted", " |");
+						// Bottom-anchor the transcript so the newest turn sits just above the composer.
+						const transcript = [...Array(Math.max(0, scroll.viewportHeight - visible.length)).fill(""), ...visible];
+						const state = notice || (active ? "thinking... ctrl+c stop" : "enter send · esc close · alt+l clear");
+						const label = history.length ? `${history.length} ${history.length === 1 ? "turn" : "turns"}` : "btw";
+						const stateText = theme.fg(notice ? "warning" : "dim", state);
+						const ruleFill = innerWidth - visibleWidth(label) - visibleWidth(state) - 2;
+						const rule = ruleFill > 0
+							? theme.fg("dim", label) + " " + theme.fg("borderMuted", "─".repeat(ruleFill)) + " " + stateText
+							: stateText;
+						const pad = (line: string, size: number) => {
+							const text = truncateToWidth(line, size);
+							return text + " ".repeat(Math.max(0, size - visibleWidth(text)));
 						};
-						const border = theme.fg("borderMuted", `+${"-".repeat(width - 2)}+`);
-						const position = history.length ? `  ${history.length} ${history.length === 1 ? "turn" : "turns"}` : "";
-						return [border, frame(theme.fg("accent", `BTW${position}`) + theme.fg("dim", "  |  Side conversation - no tools")), border,
-							...visible.map(frame), ...Array(Math.max(0, scroll.viewportHeight - visible.length)).fill(frame("")),
-							border, ...input.render(innerWidth).map(frame), frame(theme.fg(notice ? "warning" : "dim", state)),
-							frame(theme.fg("dim", "Up/Down/PgUp/PgDn scroll | Alt+L clear conversation")), border];
+						if (compact) {
+							return [...transcript, rule, ...input.render(innerWidth)].slice(-rows).map((line) => paint(pad(line, width)));
+						}
+						const edge = (text: string) => theme.fg("borderMuted", text);
+						const frame = (line: string) => edge("│ ") + pad(line, innerWidth) + edge(" │");
+						const title = " btw · no tools ";
+						const top = width >= title.length + 4
+							? edge("╭─") + theme.fg("dim", title) + edge(`${"─".repeat(width - title.length - 3)}╮`)
+							: edge(`╭${"─".repeat(width - 2)}╮`);
+						return [top, ...transcript.map(frame), frame(rule), ...input.render(innerWidth).map(frame), edge(`╰${"─".repeat(width - 2)}╯`)].map(paint);
 					},
 					handleInput(data: string) {
 						if (keys.matches(data, "tui.select.cancel")) { close(); return; }
