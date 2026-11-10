@@ -158,8 +158,7 @@ set("n", "<leader>uct", function ()
   vim.notify("Treesitter-context disable", vim.log.levels.INFO)
 end, { desc = "Disable treesitter-context", remap = true })
 set("n", "<leader>ut", function()
-  require'nano_tests'.open_terminal()
-  vim.cmd("TmuxNavigateDown")
+  require'nano_tests'.open_terminal(true)
 end, { desc = "Open terminal" })
 
 -- Clear search
