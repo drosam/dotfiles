@@ -113,8 +113,8 @@ auto_switch = false
 # focus_pane_down = "prefix+j"
 # focus_pane_up = "prefix+k"
 # focus_pane_right = "prefix+l"
-# cycle_pane_next = "prefix+tab"
-# cycle_pane_previous = "prefix+shift+tab"
+cycle_pane_next = ""      # prefix+tab -> lastfocus.last-tab
+cycle_pane_previous = ""  # prefix+shift+tab -> lastfocus.last-workspace
 # last_pane = ""          # optional, unset by default; bind e.g. "prefix+tab" for global back-and-forth
 # split_vertical = "prefix+v"
 # split_horizontal = "prefix+minus"
@@ -142,6 +142,18 @@ auto_switch = false
 # type = "popup" opens a session-modal terminal without changing the tab layout.
 # Popup width and height accept terminal cells or percentages such as "80%".
 # On Windows, command strings run through cmd.exe /d /c.
+[[keys.command]]
+key = "prefix+tab"
+type = "plugin_action"
+command = "lastfocus.last-tab"
+description = "last tab"
+
+[[keys.command]]
+key = "prefix+shift+tab"
+type = "plugin_action"
+command = "lastfocus.last-workspace"
+description = "last workspace"
+
 # [[keys.command]]
 # key = "prefix+alt+g"
 # type = "popup"

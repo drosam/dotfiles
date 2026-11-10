@@ -44,12 +44,15 @@ brew install herdr
 ./bin/dot-bin/install-dotfiles
 herdr integration install pi
 herdr integration status
+herdr plugin link ~/.config/herdr-plugins/lastfocus
 ```
 
 Notes:
 - Run `install-dotfiles` before the first `herdr` launch. Herdr onboarding writes `~/.config/herdr/config.toml`, which blocks the stow link; remove that file and rerun the script if it already exists.
 - The Pi integration writes `herdr-agent-state.ts` into `pi/dot-pi/agent/extensions/` through the stowed symlink.
 - Apply config edits to a running server with `herdr server reload-config`.
+- `lastfocus` plugin (`herdr/dot-config/herdr-plugins/lastfocus/`): tmux-style toggles. `prefix+tab` jumps to the last tab in the current workspace, `prefix+shift+tab` to the last workspace. These keys replace the default `cycle_pane_next`/`cycle_pane_previous`. Event hooks on `tab.focused`/`workspace.focused` record current/previous ids in `~/.local/state/herdr/plugins/lastfocus/`; requires `jq`. Debug with `herdr plugin log list --plugin lastfocus`.
+- Local plugins live in `~/.config/herdr-plugins/`, not `~/.config/herdr/plugins/`. Herdr treats `~/.config/herdr/plugins/<id>` as a legacy config location and copies its contents into `~/.config/herdr/plugins/config/<id>` on link.
 
 Booqable worktrees:
 ```bash
