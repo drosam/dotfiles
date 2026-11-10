@@ -19,7 +19,7 @@ Install dotfiles:
 Notes:
 - The script removes `~/.zshrc` so Stow can replace the oh-my-zsh generated file with the repo-managed symlink.
 - In Docker/dev containers the script skips GUI-only config: Alacritty, Ghostty, skhd, and Herdr.
-- Stowed config includes shell, git/delta, Neovim, tmux/tmuxinator, Herdr, Starship, Lazygit, opencode, pi agent config, Claude Code settings/scripts, skills, and `~/bin`.
+- Stowed config includes shell, git/delta, Neovim, tmux/tmuxinator, Herdr, Starship, Lazygit, pi agent config, Claude Code settings/scripts, skills, and `~/bin`.
 - Pi work-artifact layout, spec/plan links, and cross-session selection: [Pi guide](pi/README.md).
 
 Installation MacOS

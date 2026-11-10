@@ -15,44 +15,29 @@ rm -f "$HOME/.claude/settings.json"
 # links config.toml only instead of folding the whole directory into the repo.
 mkdir -p "$HOME/.config/herdr"
 
+folders=(
+  "delta"
+  "gitconfig"
+  "nvim"
+  "tmux"
+  "tmuxinator"
+  "zshrc"
+  "bin"
+  "starship"
+  "lazygit"
+  "pi"
+  "skills"
+  "agents"
+  "claude"
+)
+
 # Docker/dev containers do not need GUI app config.
-if [ -f /.dockerenv ]; then
-  folders=(
-    "delta"
-    "gitconfig"
-    "nvim"
-    "tmux"
-    "tmuxinator"
-    "zshrc"
-    "bin"
-    "starship"
-    "opencode"
-    "lazygit"
-    "pi"
-    "skills"
-    "agents"
-    "claude"
-  )
-else
-  folders=(
+if [ ! -f /.dockerenv ]; then
+  folders+=(
     "alacritty"
     "ghostty"
-    "delta"
-    "gitconfig"
-    "nvim"
     "skhd"
     "herdr"
-    "tmux"
-    "tmuxinator"
-    "zshrc"
-    "bin"
-    "starship"
-    "opencode"
-    "lazygit"
-    "pi"
-    "skills"
-    "agents"
-    "claude"
   )
 fi
 
