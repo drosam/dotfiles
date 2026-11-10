@@ -232,6 +232,16 @@
             "command": "bash ~/.claude/session-autorename.sh"
           }
         ]
+      },
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/david/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -304,15 +314,15 @@
       "effortLevel": "medium"
     },
     "claude-opus-5-5": {
-      "effortLevel": "high"
+      "effortLevel": "medium"
     }
   },
-  "tui": "fullscreen",
   "pluginConfigs": {
     "cc-plugin-agents-md@builtin": {
       "options": {
         "instructionFiles": "claude-md-and-agents-md"
       }
     }
-  }
+  },
+  "tui": "fullscreen"
 }
