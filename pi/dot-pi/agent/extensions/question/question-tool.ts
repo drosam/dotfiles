@@ -1,4 +1,4 @@
-import type { ToolDefinition } from "@mariozechner/pi-coding-agent"
+import type { ExtensionAPI, ToolDefinition } from "@mariozechner/pi-coding-agent"
 import { Container, Markdown, Spacer, Text } from "@mariozechner/pi-tui"
 import { Type } from "@sinclair/typebox"
 import {
@@ -38,7 +38,9 @@ const QuestionParams = Type.Object({
   }),
 })
 
-export function createQuestionTool(): ToolDefinition<typeof QuestionParams, QuestionResultDetails> {
+export function createQuestionTool(
+  pi: ExtensionAPI,
+): ToolDefinition<typeof QuestionParams, QuestionResultDetails> {
   return {
     name: "question",
     label: "Question",
@@ -83,10 +85,16 @@ export function createQuestionTool(): ToolDefinition<typeof QuestionParams, Ques
       }
 
       const questions = normalizeQuestions(params.questions as QuestionInput[])
-      const result = await ctx.ui.custom<{ cancelled: boolean; answers: string[][] }>(
-        (tui, theme, _kb, done) =>
-          createQuestionPromptComponent({ tui, theme, questions, onDone: done }),
-      )
+      let result: { cancelled: boolean; answers: string[][] }
+      pi.events.emit("herdr:blocked", { active: true, label: "Waiting for answer" })
+      try {
+        result = await ctx.ui.custom<{ cancelled: boolean; answers: string[][] }>(
+          (tui, theme, _kb, done) =>
+            createQuestionPromptComponent({ tui, theme, questions, onDone: done }),
+        )
+      } finally {
+        pi.events.emit("herdr:blocked", { active: false })
+      }
 
       const details: QuestionResultDetails = {
         cancelled: result.cancelled,
