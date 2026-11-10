@@ -28,14 +28,9 @@ elif [[ $SELECTED == *"booqable-worktree"* ]]; then
     exit 0
   fi
 
-  WORKTREE_DIR="$HOME/Developer/booqable/$WORKTREE_NAME"
-  if [ ! -d "$WORKTREE_DIR" ]; then
-    if ! git -C "$HOME/Developer/booqable" worktree add "$WORKTREE_NAME"; then
-      tmux display-message "git worktree add failed"
-      exit 1
-    else
-      "$HOME/.bin/setup-booqable-worktree" "$WORKTREE_DIR"
-    fi
+  if ! WORKTREE_DIR=$("$HOME/.bin/new-booqable-worktree" "$WORKTREE_NAME"); then
+    tmux display-message "Worktree creation/setup failed"
+    exit 1
   fi
 
   tmux new-session -d -s "$WORKTREE_NAME" -c "$WORKTREE_DIR" -n server

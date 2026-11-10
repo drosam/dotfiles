@@ -50,3 +50,15 @@ Notes:
 - Run `install-dotfiles` before the first `herdr` launch. Herdr onboarding writes `~/.config/herdr/config.toml`, which blocks the stow link; remove that file and rerun the script if it already exists.
 - The Pi integration writes `herdr-agent-state.ts` into `pi/dot-pi/agent/extensions/` through the stowed symlink.
 - Apply config edits to a running server with `herdr server reload-config`.
+
+Booqable worktrees:
+```bash
+new-booqable-worktree my-task
+# Omit the name to prompt. Prints the checkout path; reuses existing worktrees.
+
+# Create/setup the checkout, then open it in Herdr:
+worktree=$(new-booqable-worktree my-task) &&
+  herdr worktree open --cwd "$HOME/Developer/booqable/develop" --path "$worktree" --focus
+```
+
+The tmux `booqable-worktree` action uses the same helper, then creates its usual windows.

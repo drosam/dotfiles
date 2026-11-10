@@ -1,0 +1,36 @@
+#!/bin/bash
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || $# -gt 1 ]]; then
+  printf 'Usage: new-booqable-worktree [name]\nCreates and sets up a Booqable worktree; prints its path to stdout.\n' >&2
+  [[ $# -le 1 ]] && exit 0
+  exit 1
+fi
+
+WORKTREE_NAME="${1:-}"
+if [[ -z "$WORKTREE_NAME" ]]; then
+  read -r -p "Worktree name: " WORKTREE_NAME
+fi
+
+case "$WORKTREE_NAME" in
+  ""|/*|.|..|./*|../*|*/./*|*/../*|*/.|*/..)
+    printf 'Invalid worktree name: %s\n' "$WORKTREE_NAME" >&2
+    exit 1
+    ;;
+esac
+git check-ref-format --branch "$WORKTREE_NAME" >/dev/null
+
+REPO_DIR="$HOME/Developer/booqable"
+WORKTREE_DIR="$REPO_DIR/$WORKTREE_NAME"
+
+if [[ -e "$WORKTREE_DIR" ]]; then
+  if [[ ! -e "$WORKTREE_DIR/.git" ]]; then
+    printf 'Not a worktree: %s\n' "$WORKTREE_DIR" >&2
+    exit 1
+  fi
+else
+  git -C "$REPO_DIR" worktree add "$WORKTREE_DIR" >&2
+  "$(dirname "${BASH_SOURCE[0]}")/setup-booqable-worktree" "$WORKTREE_DIR" >&2
+fi
+
+printf '%s\n' "$WORKTREE_DIR"
