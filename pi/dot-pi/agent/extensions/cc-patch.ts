@@ -1,7 +1,7 @@
 /**
  * CC Prompt Patch — patches pi's built-in provider (no token swap)
  *
- * Uses pi's OWN OAuth token. Patches the request payload and Claude Code version:
+ * Uses pi's OWN OAuth token. Only patches the request payload:
  * 1. Sanitizes trigger phrases from system prompt (trips the API classifier)
  * 2. Adds billing header for subscription rate-limit bucket
  * 3. Strips the separate identity prefix block that triggers detection
@@ -14,7 +14,7 @@
 
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
-const claudeCodeVersion = "2.1.321";
+const claudeCodeVersion = "2.1.322";
 
 function isAnthropicTarget(
 	payload: Record<string, any>,
@@ -49,14 +49,6 @@ function sanitizeSystemPrompt(text: string): string {
 }
 
 export default function (pi: ExtensionAPI) {
-	pi.on("before_provider_headers", (event, ctx) => {
-		if (ctx.model?.provider !== "anthropic") return;
-		const userAgent = Object.keys(event.headers).find((key) => key.toLowerCase() === "user-agent");
-		if (userAgent && event.headers[userAgent]?.startsWith("claude-cli/")) {
-			event.headers[userAgent] = `claude-cli/${claudeCodeVersion}`;
-		}
-	});
-
 	pi.on("before_provider_request", async (event, ctx) => {
 		const payload = event.payload as Record<string, any>;
 		if (!payload || typeof payload !== "object") return;

@@ -1,6 +1,9 @@
 {
   "providers": {
     "anthropic": {
+      "compat": {
+        "supportsMessageThreads": false
+      },
       "modelOverrides": {
         "claude-opus-5-5": {
           "contextWindow": 250000
@@ -8,7 +11,7 @@
         "claude-sonnet-5-5": {
           "contextWindow": 250000
         },
-        "claude-fable-5-1": {
+        "claude-fable-5-2": {
           "contextWindow": 250000
         }
       }
