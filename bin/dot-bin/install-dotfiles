@@ -60,6 +60,12 @@ fi
 
 stow --dotfiles -t "$HOME" "${folders[@]}"
 
+if command -v npm >/dev/null; then
+  npm ci --prefix "$repo_dir/pi/dot-pi/agent/extensions/web-tools"
+else
+  printf 'npm not found; skipping Pi web-tools dependencies\n' >&2
+fi
+
 mkdir -p "$HOME/.claude/skills"
 for skill_dir in "$HOME/.agents/skills/"* "$HOME/.pi/agent/skills/"*; do
   [ -f "$skill_dir/SKILL.md" ] || continue
