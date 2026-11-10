@@ -31,6 +31,7 @@ if [ -f /.dockerenv ]; then
     "lazygit"
     "pi"
     "skills"
+    "agents"
     "claude"
   )
 else
@@ -52,8 +53,25 @@ else
     "lazygit"
     "pi"
     "skills"
+    "agents"
     "claude"
   )
 fi
 
 stow --dotfiles -t "$HOME" "${folders[@]}"
+
+mkdir -p "$HOME/.claude/skills"
+for skill_dir in "$HOME/.agents/skills/"* "$HOME/.pi/agent/skills/"*; do
+  [ -f "$skill_dir/SKILL.md" ] || continue
+  target="$HOME/.claude/skills/${skill_dir##*/}"
+
+  if [ -L "$target" ] && [ "$target" -ef "$skill_dir" ]; then
+    continue
+  fi
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    printf 'Claude skill link conflict: %s (expected %s)\n' "$target" "$skill_dir" >&2
+    exit 1
+  fi
+
+  ln -s "$skill_dir" "$target"
+done

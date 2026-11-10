@@ -1,0 +1,1 @@
+../../../agents/dot-agents/agents/translator.md
