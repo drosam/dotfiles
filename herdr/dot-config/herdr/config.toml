@@ -1,0 +1,16 @@
+onboarding = false
+
+[theme]
+name = "catppuccin"
+
+auto_switch = false
+[ui]
+pane_borders = "always"
+pane_outer_borders = true
+pane_gaps = true
+
+[ui.toast]
+delivery = "system"
+
+[ui.sound]
+enabled = false

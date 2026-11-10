@@ -11,6 +11,10 @@ rm -f "$HOME/.zshrc"
 # so stow can own the link; other ~/.claude state is left untouched.
 rm -f "$HOME/.claude/settings.json"
 
+# ~/.config/herdr also holds sockets, logs and sessions. Create it so stow
+# links config.toml only instead of folding the whole directory into the repo.
+mkdir -p "$HOME/.config/herdr"
+
 # Docker/dev containers do not need GUI app config.
 if [ -f /.dockerenv ]; then
   folders=(
@@ -37,6 +41,7 @@ else
     "gitconfig"
     "nvim"
     "skhd"
+    "herdr"
     "tmux.conf"
     "tmux"
     "tmuxinator"
