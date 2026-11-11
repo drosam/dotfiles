@@ -2,7 +2,23 @@
 set -euo pipefail
 
 repo_dir="${DOTFILES_DIR:-$HOME/Developer/dotfiles}"
+dev_dir="$HOME/Developer"
+agents_dir="$dev_dir/agents"
+pi_config_dir="$dev_dir/pi-config"
 cd "$repo_dir"
+
+clone_if_missing() {
+  [ -d "$2" ] || git clone "$1" "$2"
+}
+
+clone_if_missing "${AGENTS_REPO_URL:-git@github.com:drosam/agents.git}" "$agents_dir"
+clone_if_missing "${PI_CONFIG_REPO_URL:-git@github.com:drosam/pi-config.git}" "$pi_config_dir"
+
+# Real directories make stow link each item, so runtime files such as
+# npx-installed skills, auth and sessions never land in a repository.
+mkdir -p "$HOME/.agents/skills" "$HOME/.pi/agent"
+stow -d "$dev_dir" -t "$HOME/.agents" agents
+stow -d "$dev_dir" -t "$HOME/.pi/agent" pi-config
 
 # ~/.zshrc is commonly created by oh-my-zsh. Remove it so stow can own the link.
 rm -f "$HOME/.zshrc"
@@ -15,6 +31,19 @@ rm -f "$HOME/.claude/settings.json"
 # links config.toml only instead of folding the whole directory into the repo.
 mkdir -p "$HOME/.config/herdr"
 
+# ~/.claude/agents used to link to this repo. Keep it a real directory so
+# agents created in Claude's /agents UI stay out of the shared repository.
+claude_agents="$HOME/.claude/agents"
+if [ -L "$claude_agents" ]; then
+  if [ ! -e "$claude_agents" ] || [ "$claude_agents" -ef "$repo_dir/claude/dot-claude/agents" ]; then
+    rm "$claude_agents"
+  else
+    printf 'Claude agents link conflict: %s\n' "$claude_agents" >&2
+    exit 1
+  fi
+fi
+mkdir -p "$claude_agents" "$HOME/.claude/skills"
+
 folders=(
   "delta"
   "gitconfig"
@@ -25,9 +54,6 @@ folders=(
   "bin"
   "starship"
   "lazygit"
-  "pi"
-  "skills"
-  "agents"
   "claude"
 )
 
@@ -44,23 +70,35 @@ fi
 stow --dotfiles -t "$HOME" "${folders[@]}"
 
 if command -v npm >/dev/null; then
-  npm ci --prefix "$repo_dir/pi/dot-pi/agent/extensions/web-tools"
+  npm ci --prefix "$pi_config_dir/extensions/web-tools"
 else
   printf 'npm not found; skipping Pi web-tools dependencies\n' >&2
 fi
 
-mkdir -p "$HOME/.claude/skills"
-for skill_dir in "$HOME/.agents/skills/"* "$HOME/.pi/agent/skills/"*; do
-  [ -f "$skill_dir/SKILL.md" ] || continue
-  target="$HOME/.claude/skills/${skill_dir##*/}"
+# Link $1 to $2 unless it already points there. Replaces dangling links and
+# links into this repo's old skills/ package; any other existing file is a conflict.
+link_item() {
+  local source=$1 target=$2
 
-  if [ -L "$target" ] && [ "$target" -ef "$skill_dir" ]; then
-    continue
+  if [ -L "$target" ] && [ "$target" -ef "$source" ]; then
+    return
   fi
-  if [ -e "$target" ] || [ -L "$target" ]; then
-    printf 'Claude skill link conflict: %s (expected %s)\n' "$target" "$skill_dir" >&2
+  if [ -L "$target" ] && { [ ! -e "$target" ] || [[ "$(readlink "$target")" == "$repo_dir/skills/"* ]]; }; then
+    rm "$target"
+  elif [ -e "$target" ] || [ -L "$target" ]; then
+    printf 'Claude link conflict: %s (expected %s)\n' "$target" "$source" >&2
     exit 1
   fi
 
-  ln -s "$skill_dir" "$target"
+  ln -s "$source" "$target"
+}
+
+for skill_dir in "$HOME/.agents/skills/"*; do
+  [ -f "$skill_dir/SKILL.md" ] || continue
+  link_item "$skill_dir" "$HOME/.claude/skills/${skill_dir##*/}"
+done
+
+for agent in "$HOME/.agents/agents/"*.md; do
+  [ -f "$agent" ] || continue
+  link_item "$agent" "$claude_agents/${agent##*/}"
 done
