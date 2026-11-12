@@ -103,6 +103,17 @@ setup_worktree() {
   fi
   ln -sf "$MAIN_DIR/.bundle" "$WORKTREE_DIR/.bundle"
 
+  # CarrierWave stores dev uploads on disk; the dev database is shared, so share them too.
+  local dir
+  for dir in uploads documents operation_artifacts onboarding_uploads; do
+    mkdir -p "$MAIN_DIR/public/$dir"
+    if [[ -e "$WORKTREE_DIR/public/$dir" && ! -L "$WORKTREE_DIR/public/$dir" ]]; then
+      printf 'Skipping public/%s: already exists in the worktree\n' "$dir"
+      continue
+    fi
+    ln -sfn "$MAIN_DIR/public/$dir" "$WORKTREE_DIR/public/$dir"
+  done
+
   mise trust "$WORKTREE_DIR"
 }
 
