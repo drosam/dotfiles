@@ -24,20 +24,62 @@ REPO_DIR="$HOME/Developer/booqable"
 MAIN_DIR="$REPO_DIR/develop"
 WORKTREE_DIR="$REPO_DIR/$WORKTREE_NAME"
 
+# The bare repo's git files share $REPO_DIR with the worktrees.
+first_component="${WORKTREE_NAME%%/*}"
+case "$(printf '%s' "$first_component" | tr '[:upper:]' '[:lower:]')" in
+  branches|hooks|info|lfs|logs|modules|objects|refs|rr-cache|worktrees)
+    printf 'Invalid worktree name (git directory): %s\n' "$WORKTREE_NAME" >&2
+    exit 1
+    ;;
+esac
+if [[ -f "$REPO_DIR/$first_component" ]] \
+  || { [[ "$WORKTREE_NAME" == */* ]] && [[ -e "$REPO_DIR/$first_component/.git" ]]; }; then
+  printf 'Invalid worktree name (conflicts with %s): %s\n' "$REPO_DIR/$first_component" "$WORKTREE_NAME" >&2
+  exit 1
+fi
+
+add_worktree() {
+  if git -C "$REPO_DIR" show-ref --verify --quiet "refs/heads/$WORKTREE_NAME"; then
+    git -C "$REPO_DIR" worktree add "$WORKTREE_DIR" "$WORKTREE_NAME"
+  elif git -C "$REPO_DIR" show-ref --verify --quiet "refs/remotes/origin/$WORKTREE_NAME"; then
+    git -C "$REPO_DIR" worktree add --track -b "$WORKTREE_NAME" "$WORKTREE_DIR" "origin/$WORKTREE_NAME"
+  else
+    git -C "$REPO_DIR" worktree add -b "$WORKTREE_NAME" "$WORKTREE_DIR"
+  fi
+}
+
+# Smallest offset >= 1 not used by an existing worktree's Vite port (develop is 0).
+next_port_offset() {
+  local used=" " line path port offset=1
+  while IFS= read -r line; do
+    [[ "$line" == "worktree "* ]] || continue
+    path="${line#worktree }"
+    [[ -f "$path/config/vite.json" ]] || continue
+    port=$(awk '/"port"/ { gsub(/[^0-9]/, ""); print; exit }' "$path/config/vite.json")
+    if [[ -n "$port" ]]; then
+      used+="$(( port - 3036 )) "
+    fi
+  done < <(git -C "$REPO_DIR" worktree list --porcelain)
+
+  while [[ "$used" == *" $offset "* ]]; do
+    offset=$(( offset + 1 ))
+  done
+  printf '%s\n' "$offset"
+}
+
 setup_worktree() {
   cp "$MAIN_DIR/.env.local" "$WORKTREE_DIR/.env.local" 2>/dev/null || true
   cp "$MAIN_DIR/.env.test.local" "$WORKTREE_DIR/.env.test.local" 2>/dev/null || true
 
-  # Number of non-main worktrees, including this one; offsets ports per worktree.
-  local worktree_count
-  worktree_count=$(( $(git -C "$WORKTREE_DIR" worktree list | wc -l | tr -d ' ') - 1 ))
+  local port_offset
+  port_offset=$(next_port_offset)
 
-  local vite_port=$(( 3036 + worktree_count ))
+  local vite_port=$(( 3036 + port_offset ))
   sed -i '' "s/\"port\": 3036/\"port\": $vite_port/g" "$WORKTREE_DIR/config/vite.json"
-  sed -i '' "s/port: 3036/port: $vite_port/g" "$WORKTREE_DIR/vite.config.mts"
+  sed -i '' -e "s/port: 3036/port: $vite_port/g" -e "s#localhost:3036#localhost:$vite_port#g" "$WORKTREE_DIR/vite.config.mts"
 
-  # Uncomment and offset every *PORT* variable.
-  awk -v offset="$worktree_count" '
+  # Uncomment and offset every *PORT* variable; stride 2 keeps adjacent base ports unique.
+  awk -v offset="$(( port_offset * 2 ))" '
     /^#+[[:space:]]*[A-Za-z0-9_]*PORT[A-Za-z0-9_]*=[0-9]/ {
       sub(/^#+[[:space:]]*/, "")
       n = index($0, "=")
@@ -48,14 +90,17 @@ setup_worktree() {
   ' "$WORKTREE_DIR/.env.local" > "$WORKTREE_DIR/.env.local.tmp" \
     && mv "$WORKTREE_DIR/.env.local.tmp" "$WORKTREE_DIR/.env.local"
 
-  awk -v value="$worktree_count" '
+  awk -v value="$port_offset" '
     /^#+[[:space:]]*TEST_ENV_NUMBER=/ { print "TEST_ENV_NUMBER=" value; next }
     { print }
   ' "$WORKTREE_DIR/.env.test.local" > "$WORKTREE_DIR/.env.test.local.tmp" \
     && mv "$WORKTREE_DIR/.env.test.local.tmp" "$WORKTREE_DIR/.env.test.local"
 
   ln -sf "$MAIN_DIR/config/master.key" "$WORKTREE_DIR/config/master.key"
-  ln -sf "$MAIN_DIR/.claude" "$WORKTREE_DIR/.claude"
+  if [[ -f "$MAIN_DIR/.claude/settings.local.json" ]]; then
+    mkdir -p "$WORKTREE_DIR/.claude"
+    ln -sf "$MAIN_DIR/.claude/settings.local.json" "$WORKTREE_DIR/.claude/settings.local.json"
+  fi
   ln -sf "$MAIN_DIR/.bundle" "$WORKTREE_DIR/.bundle"
 
   mise trust "$WORKTREE_DIR"
@@ -67,7 +112,7 @@ if [[ -e "$WORKTREE_DIR" ]]; then
     exit 1
   fi
 else
-  git -C "$REPO_DIR" worktree add "$WORKTREE_DIR" >&2
+  add_worktree >&2
   setup_worktree >&2
 fi
 
