@@ -154,6 +154,14 @@ type = "plugin_action"
 command = "lastfocus.last-workspace"
 description = "last workspace"
 
+[[keys.command]]
+key = "prefix+shift+b"
+type = "popup"
+command = "$HOME/.bin/new-booqable-herdr-worktree"
+description = "new booqable worktree"
+width = "80%"
+height = "60%"
+
 # [[keys.command]]
 # key = "prefix+alt+g"
 # type = "popup"

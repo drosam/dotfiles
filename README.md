@@ -63,7 +63,9 @@ new-booqable-worktree my-task
 
 # Create/setup the checkout, then open it in Herdr:
 worktree=$(new-booqable-worktree my-task) &&
-  herdr worktree open --cwd "$HOME/Developer/booqable/develop" --path "$worktree" --focus
+  herdr worktree open --cwd "$HOME/Developer/booqable" --path "$worktree" --focus
 ```
 
 The tmux `booqable-worktree` action uses the same helper, then creates its usual windows.
+
+In Herdr, `prefix+shift+b` opens a popup that runs `new-booqable-herdr-worktree`: it prompts for the name, creates the worktree with the helper, opens it from the `booqable` bare-root workspace (Herdr rejects linked worktrees as the source) and builds the develop layout (`server`, `code` with `nvim`, `π` with Pi as `<name>-pi`). If the worktree is already open, it focuses that workspace.

@@ -1,0 +1,65 @@
+#!/bin/bash
+set -euo pipefail
+
+# Creates a Booqable worktree and opens it in Herdr with the develop layout:
+# server (shell), code (nvim), π (Pi). Bound to a Herdr popup key.
+
+# Herdr opens linked worktrees only from the repo parent (bare root) workspace.
+REPO_DIR="$HOME/Developer/booqable"
+
+# Keep the popup open on failure so the error stays readable.
+on_exit() {
+  local status=$?
+  if (( status != 0 )) && [[ -t 0 ]]; then
+    read -r -n 1 -s -p "Failed (exit $status). Press any key to close..." || true
+  fi
+}
+trap on_exit EXIT
+
+WORKTREE_NAME="${1:-}"
+if [[ -z "$WORKTREE_NAME" ]]; then
+  read -r -p "Booqable worktree name: " WORKTREE_NAME
+fi
+[[ -n "$WORKTREE_NAME" ]] || exit 0
+
+WORKTREE_DIR=$("$(dirname "$0")/new-booqable-worktree" "$WORKTREE_NAME")
+
+open_workspace_id() {
+  herdr worktree list --cwd "$REPO_DIR" \
+    | jq -r --arg path "$WORKTREE_DIR" '.result.worktrees[] | select(.path == $path) | .open_workspace_id // empty'
+}
+
+workspace_id=$(open_workspace_id)
+if [[ -n "$workspace_id" ]]; then
+  herdr workspace focus "$workspace_id" >/dev/null
+  exit 0
+fi
+
+herdr worktree open --cwd "$REPO_DIR" --path "$WORKTREE_DIR" --label "$WORKTREE_NAME" --no-focus >/dev/null
+workspace_id=$(open_workspace_id)
+if [[ -z "$workspace_id" ]]; then
+  printf 'Herdr workspace for %s not found after opening it.\n' "$WORKTREE_DIR" >&2
+  exit 1
+fi
+
+server_tab=$(herdr tab list --workspace "$workspace_id" | jq -r '.result.tabs[0].tab_id')
+herdr tab rename "$server_tab" server >/dev/null
+
+new_tab_pane() {
+  herdr tab create --workspace "$workspace_id" --cwd "$WORKTREE_DIR" --label "$1" --no-focus \
+    | jq -r '.result.root_pane.pane_id'
+}
+
+code_pane=$(new_tab_pane code)
+herdr pane run "$code_pane" nvim >/dev/null
+
+pi_pane=$(new_tab_pane π)
+
+herdr workspace focus "$workspace_id" >/dev/null
+herdr tab focus "$server_tab" >/dev/null
+
+# Agent names must match [a-z][a-z0-9_-]{0,31}.
+agent_name=$(printf '%s' "$WORKTREE_NAME" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_-' '-')
+[[ "$agent_name" =~ ^[a-z] ]] || agent_name="wt-$agent_name"
+agent_name="${agent_name:0:29}-pi"
+herdr agent start "$agent_name" --kind pi --pane "$pi_pane" >/dev/null
