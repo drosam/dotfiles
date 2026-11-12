@@ -8,13 +8,15 @@ All paths are under `~/Developer`. Every pane uses its workspace directory as cw
 
 | # | Workspace | Directory | Tabs, in order |
 | --- | --- | --- | --- |
-| 1 | `booqable` | `booqable/develop` | `server` (shell), `code` (`nvim`), `π` (Pi) |
+| 1 | `develop` | `booqable/develop` | `server` (shell), `code` (`nvim`), `π` (Pi) |
 | 2 | `dotfiles` | `dotfiles` | `code` (`nvim`), `π` (Pi) |
 | 3 | `agents` | `agents` | `code` (`nvim`), `π` (Pi) |
 | 4 | `pi-config` | `pi-config` | `code` (`nvim`), `π` (Pi) |
+| 5 | `booqable` | `booqable` | `1` (shell) |
 
 - One pane per tab.
-- `server` is a plain shell; I start the dev server myself.
+- `server` and `1` are plain shells; I start the dev server myself.
+- `booqable` is the bare repo root, the parent of every Booqable worktree.
 - Pi tabs run the Pi agent through Herdr, named `<workspace>-pi` (for example `dotfiles-pi`).
 
 ## Recreate it (instructions for an agent)
