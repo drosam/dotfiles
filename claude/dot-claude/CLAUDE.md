@@ -26,15 +26,15 @@
 - Outgoing review decisions authorize no code or GitHub mutation. Publish only after approval of the exact preview. Keep these gates even if a skill cannot load.
 
 ## Work artifacts
-- Use the target repository's .agent-work/ for working documents: work/<work-id>/spec.md, plan.md and tickets/; shared context/ and decisions/. Create lazily; never move existing documents automatically.
-- Do not inspect .agent-work/ for ordinary explicit standalone work. Use artifacts only when identified by the user, confirmed this session, reached through a validated reciprocal link, explicitly being edited, or required to resolve material ambiguity.
+- Use the repository's work area ~/.agent-work/<repo-key>/, shared by all worktrees, for working documents: work/<work-id>/spec.md, plan.md and tickets/; shared context/ and decisions/. <repo-key> is the name of the `git rev-parse --path-format=absolute --git-common-dir` directory, or its parent's name when that is .git/.bare, without a trailing .git. .repo inside records that directory: write it on first write; if it names another repository, stop and ask for a distinct key. Create lazily; never move existing documents, including legacy in-repo .agent-work/ folders, automatically.
+- Do not inspect the work area for ordinary explicit standalone work. Use artifacts only when identified by the user, confirmed this session, reached through a validated reciprocal link, explicitly being edited, or required to resolve material ambiguity.
 - If selection is unresolved, shortlist only needed candidates by title/status/scope and ask, even for one candidate. Offer Other / None - standalone work. Never infer selection from filenames, branch, recency or unavailable memory; report a blocker if unable to ask.
 - Read selected status, acceptance criteria, non-goals, design/testing choices and relevant glossary/ADRs. Broken or one-way links, mismatched IDs, superseded documents and conflicting requirements require clarification; do not silently approve drafts.
 - Spec/plan headers require Work-ID, Status, Spec and Plan. Match Work-ID to the directory; use reciprocal relative Markdown links, including self-links, and Not created for absent counterparts. Reuse the confirmed directory for a counterpart, update both headers through normal permissions and verify reciprocity. Multiple documents require explicit confirmation; use specs/ or plans/ with actual relative links when needed.
 - Report incomplete pairing if either edit fails. Read-only/draft mode never updates counterparts. Selection/design approval is not implementation authorization.
 - Give delegated agents confirmed paths, Work-ID, status, constraints and authorized scope. Without required identity, they must return candidate paths and request clarification, not guess.
 - Use to-feature-spec and feature-spec-breakdown. Keep tickets under the confirmed work directory; tracker issues and task lists are optional. Tool-backed todos must include spec:<Work-ID> and ticket path; never assume cross-session persistence.
-- Never stage/commit work artifacts, change ignore rules automatically, or store secrets/customer data there. If tracked, legacy or force-added artifacts are staged, stop and ask without silently unstaging.
+- Never stage/commit work artifacts, change ignore rules automatically, or store secrets/customer data there. If tracked, legacy in-repo .agent-work/ or force-added artifacts are staged, stop and ask without silently unstaging.
 
 ## Code and validation
 - Add comments only for non-obvious behavior, normally one or two lines. Prefer JSDoc when API discoverability or tooling benefits; documentation is exempt from the line limit.
